@@ -1,0 +1,157 @@
+<aside class="right-side">
+	<!-- Content Header (Page header) -->
+	<section class="content-header">
+		<h1><?php echo $liu['name']; ?><small> <?php _e('Edit profile'); ?></small></h1>
+		<ol class="breadcrumb"><li><a href="?route=dashboard"><i class="fa fa-dashboard"></i> <?php _e('Home'); ?></a></li><li class="active"><?php _e('My Profile'); ?></li></ol>
+	</section>
+
+	<!-- Main content -->
+	<section class="content">
+		<?php if(!empty($statusmessage)): ?>
+				<div class="row"><div class='col-md-12'><div class="alert alert-<?php print $statusmessage["type"]; ?> alert-auto" role="alert"><?php print __($statusmessage["message"]); ?></div></div></div>
+		<?php endif; ?>
+		<div class="row">
+			<div class="col-xs-12">
+				<div class="box box-default">
+                    <div class="box-body">
+						<div class="container-fluid">
+						<div class="row">
+							<form role="form" enctype="multipart/form-data" method="post">
+
+								<div class="col-md-6">
+
+									<div class="form-group">
+										<label for="name"><?php _e('Name'); ?> *</label>
+										<input type="text" class="form-control" id="name" name="name" value="<?php echo $liu['name']; ?>" required>
+									</div>
+
+									<div class="form-group">
+										<label for="email"><?php _e('Email Address'); ?> *</label>
+										<input type="email" class="form-control" id="email" name="email" value="<?php echo $liu['email']; ?>" required>
+									</div>
+
+									<div class="form-group">
+										<label for="mobile"><?php _e('Mobile Number'); ?></label>
+										<input type="text" class="form-control" id="mobile" name="mobile" value="<?php echo $liu['mobile']; ?>">
+									</div>
+
+									<div class="form-group">
+										<label for="title"><?php _e('Job Title'); ?></label>
+										<input type="text" class="form-control" id="title" value="<?php echo $liu['title']; ?>" autocomplete="off" name="title">
+									</div>
+
+									<div class="form-group">
+										<label for="password"><?php _e('Change Password'); ?></label>
+										<input type="password" class="form-control" id="password" name="password" placeholder="<?php _e('Enter only if you want to change'); ?>">
+									</div>
+
+									<div class="form-group">
+										<label for="signature"><?php _e('Signature'); ?></label>
+										<textarea class="form-control" id="signature" rows="3" name="signature"><?php echo $liu['signature']; ?></textarea>
+									</div>
+
+									<div class="form-group">
+										<label for="password"><?php _e('Confirm Password'); ?></label>
+										<input type="password" class="form-control" id="confirmpassword" name="confirmpassword" required>
+										<p class="help-block"><?php _e('Please confirm your current password to make changes to your profile.'); ?></p>
+									</div>
+
+								</div>
+
+								<div class="col-md-6">
+
+									<div class="form-group">
+										<label for="lang"><?php _e('Language'); ?></label>
+										<select class="form-control select2 select2-hidden-accessible" id="lang" name="lang" style="width: 100%;" tabindex="-1" aria-hidden="true">
+											<?php foreach ($languages as $language) { ?>
+												<option <?php if($liu['lang'] == $language['code']) echo 'selected'; ?> value="<?php echo $language['code']; ?>"><?php echo $language['name']; ?></option>
+											<?php } ?>
+										</select>
+									</div>
+
+									<?php if($isAdmin) { ?>
+										<div class="form-group">
+											<label for="ticketsnotification"><?php _e('Receive Tickets Notifications'); ?></label>
+											<select class="form-control select2 select2-hidden-accessible" id="ticketsnotification" name="ticketsnotification" style="width: 100%;" tabindex="-1" aria-hidden="true">
+												<option value="1" <?php if($liu['ticketsnotification']=="1") echo "selected"; ?>><?php _e('Yes'); ?></option>
+												<option value="0" <?php if($liu['ticketsnotification']=="0") echo "selected"; ?>><?php _e('No'); ?></option>
+											</select>
+										</div>
+									<?php } ?>
+									<?php if(!$isAdmin) { ?><input type="hidden" name="ticketsnotification" value="0"><?php } ?>
+
+									<div class="form-group">
+										<label for="theme"><?php _e('Theme'); ?></label>
+										<select class="form-control select2 select2-hidden-accessible" id="theme" name="theme" style="width: 100%;" tabindex="-1" aria-hidden="true">
+											<option value="skin-blue" <?php if($liu['theme']=="skin-blue") echo "selected"; ?>><?php _e('Blue'); ?></option>
+											<option value="skin-black" <?php if($liu['theme']=="skin-black") echo "selected"; ?>><?php _e('Black'); ?></option>
+											<option value="skin-purple" <?php if($liu['theme']=="skin-purple") echo "selected"; ?>><?php _e('Purple'); ?></option>
+											<option value="skin-green" <?php if($liu['theme']=="skin-green") echo "selected"; ?>><?php _e('Green'); ?></option>
+											<option value="skin-red" <?php if($liu['theme']=="skin-red") echo "selected"; ?>><?php _e('Red'); ?></option>
+											<option value="skin-yellow" <?php if($liu['theme']=="skin-yellow") echo "selected"; ?>><?php _e('Yellow'); ?></option>
+											<option value="skin-blue-light" <?php if($liu['theme']=="skin-blue-light") echo "selected"; ?>><?php _e('Blue Light'); ?></option>
+											<option value="skin-black-light" <?php if($liu['theme']=="skin-black-light") echo "selected"; ?>><?php _e('Black Light'); ?></option>
+											<option value="skin-purple-light" <?php if($liu['theme']=="skin-purple-light") echo "selected"; ?>><?php _e('Purple Light'); ?></option>
+											<option value="skin-green-light" <?php if($liu['theme']=="skin-green-light") echo "selected"; ?>><?php _e('Green Light'); ?></option>
+											<option value="skin-red-light" <?php if($liu['theme']=="skin-red-light") echo "selected"; ?>><?php _e('Red Light'); ?></option>
+											<option value="skin-yellow-light" <?php if($liu['theme']=="skin-yellow-light") echo "selected"; ?>><?php _e('Yellow Light'); ?></option>
+										</select>
+									</div>
+
+									<div class="form-group">
+										<label for="sidebar"><?php _e('Sidebar'); ?></label>
+										<select class="form-control select2 select2-hidden-accessible" id="sidebar" name="sidebar" style="width: 100%;" tabindex="-1" aria-hidden="true">
+											<option value="opened" <?php if($liu['sidebar']=="opened") echo "selected"; ?>><?php _e('Opened'); ?></option>
+											<option value="collapsed" <?php if($liu['sidebar']=="collapsed") echo "selected"; ?>><?php _e('Collapsed'); ?></option>
+										</select>
+									</div>
+
+									<div class="form-group">
+										<label for="layout"><?php _e('Layout'); ?></label>
+										<select class="form-control select2 select2-hidden-accessible" id="layout" name="layout" style="width: 100%;" tabindex="-1" aria-hidden="true">
+											<option value="" <?php if($liu['layout']== "") echo "selected"; ?>><?php _e('Standard'); ?></option>
+											<option value="fixed" <?php if($liu['layout']=="fixed") echo "selected"; ?>><?php _e('Fixed'); ?></option>
+											<option value="layout-boxed" <?php if($liu['layout']=="layout-boxed") echo "selected"; ?>><?php _e('Boxed'); ?></option>
+										</select>
+									</div>
+
+
+
+									<div class="form-group">
+										<label for="avatar"><?php _e('Avatar'); ?></label>
+											<input type="file" name="avatar" accept="image/jpeg">
+											<p class="help-block"><?php _e('Square JPG image only, recommended size: 128x128px.'); ?></p>
+											<p><a href="?qa=removeAvatar"><?php _e('Remove Avatar Image'); ?></a></p>
+									</div>
+
+								</div>
+
+								<div class="col-md-12">
+									<div class="form-group">
+										<button type="submit" class="btn btn-success"><i class="fa fa-save"></i> <?php _e('Save'); ?></button>
+									</div>
+								</div>
+
+								<input type="hidden" name="action" value="editProfile">
+								<input type="hidden" name="route" value="profile">
+
+								<input type="hidden" name="id" value="<?php echo $liu['id']; ?>">
+
+
+
+							</form><!-- /.form -->
+						</div>
+					</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+
+
+
+
+
+
+	</section><!-- /.content -->
+</aside><!-- /.right-side -->

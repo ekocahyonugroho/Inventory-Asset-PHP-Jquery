@@ -1,0 +1,96 @@
+<!-- Right side column. Contains the navbar and content of the page -->
+<aside class="right-side">
+	<!-- Content Header (Page header) -->
+	<section class="content-header">
+		<h1 class="pull-left"><?php _e('Tickets'); ?><small> <?php _e('Awaiting reply'); ?></small></h1>
+		<div class="pull-right"><?php if(in_array("addTicket",$perms)) { ?><a onClick='showM("index.php?modal=tickets/add&reroute=tickets/ar&routeid=&section=");return false' data-toggle="modal" class="btn btn-primary btn-sm"><i class="fa fa-tag"></i> <?php _e('NEW TICKET'); ?></a><?php } ?></div>
+		<div style="clear:both"></div>
+	</section>
+	<!-- Main content -->
+	<section class="content">
+		<?php if(!empty($statusmessage)): ?>
+				<div class="row"><div class='col-md-12'><div class="alert alert-<?php print $statusmessage["type"]; ?> alert-auto" role="alert"><?php print __($statusmessage["message"]); ?></div></div></div>
+		<?php endif; ?>
+		<div class="row">
+			<div class="col-xs-12">
+				<div class="box box-primary">
+                    <div class="box-body">
+						<div class="table-responsive">
+	                        <table id="dataTablesFullNoOrder" class="table table-striped table-hover">
+	                            <thead>
+	                                <tr>
+										<th class="no-sort" style="width:5px;"></th>
+										<th><?php _e('Ticket #'); ?></th>
+										<th><?php _e('Department'); ?></th>
+										<th><?php _e('Subject'); ?></th>
+										<th><?php _e('Submitter'); ?></th>
+										<th><?php _e('Assigned To'); ?></th>
+										<th><?php _e('Related Entities'); ?></th>
+										<th><?php _e('Status'); ?></th>
+										<th><?php _e('Last Reply'); ?></th>
+										<th class="text-right"></th>
+	                                </tr>
+	                            </thead>
+								<tbody>
+									<?php foreach ($tickets as $ticket) { ?>
+										<tr>
+											<td>
+												<?php if($ticket['priority'] == "High") echo "<i class='fa fa-flag text-red' data-toggle='tooltip' title='".__("High priority")."'></i>"; ?>
+												<?php if($ticket['priority'] == "Normal") echo "<i class='fa fa-flag text-yellow' data-toggle='tooltip' title='".__("Normal priority")."'></i>"; ?>
+												<?php if($ticket['priority'] == "Low") echo "<i class='fa fa-flag text-blue' data-toggle='tooltip' title='".__("Low priority")."'></i>"; ?>
+											</td>
+											<td><?php if(in_array("manageTicket",$perms)) { ?><a href='?route=tickets/manage&id=<?php echo $ticket['id']; ?>'><?php echo $ticket['ticket']; ?></a><?php } else echo $ticket['ticket']; ?></td>
+											<td>
+												<?php
+													if($ticket['departmentid'] != 0) echo getSingleValue("tickets_departments","name",$ticket['departmentid']);
+													elseif($ticket['departmentid'] == 0) echo '<span class="text-muted">' . __('None') . '</span>';
+													else echo '<span class="text-muted">' . __('None') . '</span>';
+												?>
+											</td>
+											<td><?php if(in_array("manageTicket",$perms)) { ?><a href='?route=tickets/manage&id=<?php echo $ticket['id']; ?>'><?php echo $ticket['subject']; ?></a><?php } else echo $ticket['subject']; ?></td>
+											<td>
+												<?php
+													if($ticket['userid'] != 0) echo getSingleValue("people","name",$ticket['userid']);
+													else echo $ticket['email'];
+												?>
+											</td>
+											<td><?php if($ticket['adminid'] != 0) echo getSingleValue("people","name",$ticket['adminid']); else echo "<span class='text-muted'>".__("Nobody")."</span>"; ?></td>
+											<td>
+												<?php if($ticket['clientid'] != 0) { ?>
+													<a href='<?php if(in_array("manageClient",$perms)) { ?>?route=clients/manage&id=<?php echo $ticket['clientid']; ?><?php } else echo "#"; ?>'>
+														<span class='label' style="background-color:#FFF;color:#0073b7;border:1px solid #0073b7;"> <?php echo getSingleValue("clients","name",$ticket['clientid']); ?> </span>
+													</a>&nbsp;
+												<?php } ?>
+
+												<?php if($ticket['assetid'] != 0) { ?>
+													<a href='<?php if(in_array("manageAsset",$perms)) { ?>?route=inventory/assets/manage&id=<?php echo $ticket['assetid']; ?><?php } else echo "#"; ?>'>
+														<span class='label' style="background-color:#FFF;color:#001F3F;border:1px solid #001F3F;"><i class='fa fa-barcode'></i> <?php echo getSingleValue("assets","tag",$ticket['assetid']); ?> </span>
+													</a>
+												<?php } ?>
+											</td>
+											<td>
+												<?php if($ticket['status'] == "Open") echo "<span class='badge bg-green'>".__("Open")."</span>"; ?>
+												<?php if($ticket['status'] == "In Progress") echo "<span class='badge bg-navy'>".__("In Progress")."</span>"; ?>
+												<?php if($ticket['status'] == "Answered") echo "<span class='badge bg-teal'>".__("Answered")."</span>"; ?>
+												<?php if($ticket['status'] == "Reopened") echo "<span class='badge bg-orange'>".__("Reopened")."</span>"; ?>
+												<?php if($ticket['status'] == "Closed") echo "<span class='badge bg-gray'>".__("Closed")."</span>"; ?>
+											</td>
+											<td><?php echo Ticket::lastReply($ticket['id']); ?></td>
+											<td>
+												<div class='pull-right'>
+												  <?php if(in_array("manageTicket",$perms)) { ?><a href='?route=tickets/manage&id=<?php echo $ticket['id']; ?>' class='btn-right text-dark'><i class='fa fa-eye'></i></a>&nbsp;<?php } ?>
+	  											  <?php if(in_array("editTicket",$perms)) { ?><a href="#" onClick='showM("index.php?modal=tickets/edit&reroute=tickets/ar&routeid=&id=<?php echo $ticket['id']; ?>&section=");return false' class='btn-right text-dark'><i class='fa fa-edit'></i></a>&nbsp;<?php } ?>
+	  											  <?php if(in_array("deleteTicket",$perms)) { ?><a href="#" onClick='showM("index.php?modal=tickets/delete&reroute=tickets/ar&routeid=&id=<?php echo $ticket['id']; ?>&section=");return false' class='btn-right text-red'><i class='fa fa-trash-o'></i></a><?php } ?>
+	  										  	</div>
+											</td>
+										</tr>
+									<?php } ?>
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section><!-- /.content -->
+</aside><!-- /.right-side -->

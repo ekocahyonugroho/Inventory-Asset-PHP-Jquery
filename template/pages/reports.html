@@ -1,0 +1,167 @@
+<!-- Right side column. Contains the navbar and content of the page -->
+<aside class="right-side">
+	<!-- Content Header (Page header) -->
+	<section class="content-header">
+		<h1><?php _e('Reports'); ?><small> <?php _e('Generare and view reports'); ?></small></h1>
+		<ol class="breadcrumb"><li><a href="?route=dashboard"><i class="fa fa-dashboard"></i> <?php _e('Home'); ?></a></li><li class="active"><?php _e('Reports'); ?></li></ol>
+	</section>
+
+	<!-- Main content -->
+	<section class="content">
+		<?php if(!empty($statusmessage)): ?>
+				<div class="row"><div class='col-md-12'><div class="alert alert-<?php print $statusmessage["type"]; ?> alert-auto" role="alert"><?php print __($statusmessage["message"]); ?></div></div></div>
+		<?php endif; ?>
+		<div class="row">
+			<div class="col-xs-6">
+				<div class="box box-primary">
+          			<div class="box-header with-border"><h3 class="box-title"><?php _e('Timesheet'); ?></h3></div><!-- /.box-header -->
+					<form role="form" method="get" action="" target="_blank">
+	                    <div class="box-body">
+							<p><?php _e('Generate a report with all the tasks in the selected period.'); ?></p>
+
+							<?php if($isAdmin) { ?>
+								<div class="form-group">
+									<label for="clientid" class="control-label"><?php _e('Client'); ?></label>
+									<select class="form-control select2 select2-hidden-accessible" id="clientid" name="clientid" style="width: 100%;" tabindex="-1" aria-hidden="true">
+										<option value="0">- <?php _e('ALL'); ?> -</option>
+										<?php foreach ($clients as $client) { echo "<option value='".$client['id']."'>".$client['name']."</option>"; } ?>
+									</select>
+								</div>
+							<?php } ?>
+							<?php if(!$isAdmin) { ?> <input type="hidden" name="clientid" value="<?php echo $liu['clientid']; ?>"> <?php } ?>
+
+							<div class="form-group">
+								<label for="startDate"><?php _e('Start Date'); ?></label>
+								<div class="input-group">
+									<input type="text" class="form-control" id="startDate" name="startDate" required>
+									<span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+								</div>
+							</div>
+							<div class="form-group">
+								<label for="endDate"><?php _e('End Date'); ?></label>
+								<div class="input-group">
+									<input type="text" class="form-control" id="endDate" name="endDate" required>
+									<span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+								</div>
+							</div>
+							<input type="hidden" name="report" value="timesheet">
+							<input type="hidden" name="route" value="reports/view">
+						</div>
+						<div class="box-footer"><button type="submit" class="btn btn-primary"><?php _e('Generate'); ?></button></div>
+					</form>
+				</div>
+			</div>
+
+			<div class="col-xs-6">
+				<div class="box box-primary">
+          			<div class="box-header with-border"><h3 class="box-title"><?php _e('Timesheet With Summary'); ?></h3></div><!-- /.box-header -->
+					<form role="form" method="get" action="" target="_blank">
+	                    <div class="box-body">
+							<p><?php _e('Generate a report with all the tasks in the selected period and a summary of all assets and licenses.'); ?></p>
+							<?php if($isAdmin) { ?>
+								<div class="form-group">
+									<label for="clientid" class="control-label"><?php _e('Client'); ?></label>
+									<select class="form-control select2 select2-hidden-accessible" id="clientid" name="clientid" style="width: 100%;" tabindex="-1" aria-hidden="true">
+										<option value="0">- <?php _e('ALL'); ?> -</option>
+										<?php foreach ($clients as $client) { echo "<option value='".$client['id']."'>".$client['name']."</option>"; } ?>
+									</select>
+								</div>
+							<?php } ?>
+							<?php if(!$isAdmin) { ?> <input type="hidden" name="clientid" value="<?php echo $liu['clientid']; ?>"> <?php } ?>
+
+							<div class="form-group">
+								<label for="startDate"><?php _e('Start Date'); ?></label>
+								<div class="input-group">
+									<input type="text" class="form-control" id="startDate" name="startDate" required>
+									<span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+								</div>
+							</div>
+							<div class="form-group">
+								<label for="endDate"><?php _e('End Date'); ?></label>
+								<div class="input-group">
+									<input type="text" class="form-control" id="endDate" name="endDate" required>
+									<span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+								</div>
+							</div>
+							<input type="hidden" name="report" value="timesheetSummary">
+							<input type="hidden" name="route" value="reports/view">
+						</div>
+						<div class="box-footer"><button type="submit" class="btn btn-primary"><?php _e('Generate'); ?></button></div>
+					</form>
+				</div>
+			</div>
+		</div>
+
+
+		<div class="row">
+
+			<div class="col-xs-6">
+				<div class="box box-primary">
+          			<div class="box-header with-border"><h3 class="box-title"><?php _e('Client Summary'); ?></h3></div><!-- /.box-header -->
+					<form role="form" method="get" action="" target="_blank">
+	                    <div class="box-body">
+							<p><?php _e('Generate a report with a summary of all assets and licenses assigned to a client.'); ?></p>
+							<?php if($isAdmin) { ?>
+								<div class="form-group">
+									<label for="clientid" class="control-label">Client</label>
+									<select class="form-control select2 select2-hidden-accessible" id="clientid" name="clientid" style="width: 100%;" tabindex="-1" aria-hidden="true">
+										<option value="0">- <?php _e('ALL'); ?> -</option>
+										<?php foreach ($clients as $client) { echo "<option value='".$client['id']."'>".$client['name']."</option>"; } ?>
+									</select>
+								</div>
+							<?php } ?>
+							<?php if(!$isAdmin) { ?> <input type="hidden" name="clientid" value="<?php echo $liu['clientid']; ?>"> <?php } ?>
+
+							<input type="hidden" name="report" value="summary">
+							<input type="hidden" name="route" value="reports/view">
+						</div>
+						<div class="box-footer"><button type="submit" class="btn btn-primary"><?php _e('Generate'); ?></button></div>
+					</form>
+				</div>
+
+				<div class="box box-primary">
+					<div class="box-header with-border"><h3 class="box-title"><?php _e('User Summary'); ?></h3></div><!-- /.box-header -->
+					<form role="form" method="get" action="" target="_blank">
+						<div class="box-body">
+							<p><?php _e('Generate a report with a summary of all assets assigned to a user.'); ?></p>
+							<?php if($isAdmin) { ?>
+								<div class="form-group">
+									<label for="userid" class="control-label">User</label>
+									<select class="form-control select2 select2-hidden-accessible" id="userid" name="userid" style="width: 100%;" tabindex="-1" aria-hidden="true">
+										<option value="0">- <?php _e('ALL'); ?> -</option>
+										<?php foreach ($users as $user) { echo "<option value='".$user['id']."'>".$user['name']."</option>"; } ?>
+									</select>
+								</div>
+							<?php } ?>
+							<?php if(!$isAdmin) { ?> <input type="hidden" name="userid" value="<?php echo $liu['id']; ?>"> <?php } ?>
+
+							<input type="hidden" name="report" value="userSummary">
+							<input type="hidden" name="route" value="reports/view">
+						</div>
+						<div class="box-footer"><button type="submit" class="btn btn-primary"><?php _e('Generate'); ?></button></div>
+					</form>
+				</div>
+
+			</div>
+
+			<div class="col-xs-6">
+				<div class="box box-primary">
+          			<div class="box-header with-border"><h3 class="box-title"><?php _e('Other Reports'); ?></h3></div><!-- /.box-header -->
+
+	                    <div class="box-body">
+
+
+							<p><a href="?route=reports/assets" class="btn btn-default"><?php _e('Assets (Detailed List)'); ?></a></p>
+							<p><a href="?route=reports/licenses" class="btn btn-default"><?php _e('Licenses (Detailed List)'); ?></a></p>
+
+							<p></p>
+						</div>
+
+
+				</div>
+			</div>
+
+		</div>
+
+	</section><!-- /.content -->
+</aside><!-- /.right-side -->

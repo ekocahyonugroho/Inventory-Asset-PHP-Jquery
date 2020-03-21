@@ -1,0 +1,51 @@
+<aside class="right-side">
+	<!-- Content Header (Page header) -->
+	<section class="content-header">
+		<h1 class="pull-left"><?php _e('Models'); ?>  <small> <?php _e('Manage asset models'); ?></small></h1>
+		<div class="pull-right"><a onClick='showM("index.php?modal=models/add&reroute=inventory/attributes/models");return false' data-toggle="modal" class="btn btn-primary btn-sm"><i class="fa fa-plus"></i> <?php _e('NEW MODEL'); ?></a></div>
+		<div style="clear:both"></div>
+	</section>
+	<!-- Main content -->
+	<section class="content">
+		<?php if(!empty($statusmessage)): ?>
+				<div class="row"><div class='col-md-12'><div class="alert alert-<?php print $statusmessage["type"]; ?> alert-auto" role="alert"><?php print __($statusmessage["message"]); ?></div></div></div>
+		<?php endif; ?>
+		<div class="row">
+			<div class="col-xs-12">
+				<div class="box box-primary">
+                    <div class="box-body">
+						<div class="table-responsive">
+	                        <table id="dataTablesFull" class="table table-striped table-hover">
+	                            <thead>
+	                                <tr>
+	                                    <th><?php _e('ID'); ?></th>
+
+	                                    <th><?php _e('Model Name'); ?></th>
+										<th class="text-right"></th>
+	                                </tr>
+	                            </thead>
+	                            <tbody>
+									<?php
+									foreach ($models as $model) {
+	                                echo "<tr>";
+	                                    echo "<td>".$model['id']."</td>";
+						
+	                                    echo "<td>".$model['name']."</td>";
+										echo "<td>
+												<div class='btn-group pull-right'>
+													<a href='#' onClick='showM(\"?modal=models/edit&reroute=inventory/attributes/models&id=".$model['id']."\");return false' class='btn-right text-dark'><i class='fa fa-edit'></i></a>&nbsp;
+													<a href='#' onClick='showM(\"?modal=models/delete&reroute=inventory/attributes/models&id=".$model['id']."\");return false' class='btn-right text-red'><i class='fa fa-trash-o'></i></a>
+												</div>
+											  </td>";
+	                                echo "</tr>";
+									}
+									?>
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section><!-- /.content -->
+</aside><!-- /.right-side -->

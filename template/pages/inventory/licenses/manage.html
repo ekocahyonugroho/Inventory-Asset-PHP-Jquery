@@ -1,0 +1,225 @@
+<aside class="right-side">
+	<!-- Content Header (Page header) -->
+	<section class="content-header">
+		<h1><?php echo $license['tag']; ?></h1>
+		<ol class="breadcrumb">
+			<li><a href="?route=dashboard"><i class="fa fa-dashboard"></i> <?php _e('Home'); ?></a></li>
+			<li><a href="?route=licenses"><?php _e('Licenses'); ?></a></li>
+			<li class="active"><?php echo $license['tag']; ?></li></ol>
+	</section>
+
+	<!-- Main content -->
+	<section class="content">
+		<?php if(!empty($statusmessage)): ?>
+				<div class="row"><div class='col-md-12'><div class="alert alert-<?php print $statusmessage["type"]; ?> alert-auto" role="alert"><?php print __($statusmessage["message"]); ?></div></div></div>
+		<?php endif; ?>
+		<div class="row">
+		<div class="col-md-12">
+          <!-- Custom Tabs (Pulled to the right) -->
+          <div class="nav-tabs-custom">
+            <ul class="nav nav-tabs">
+              <li <?php if ($section == "") echo 'class="active"'; ?>><a href="#tab-summary" data-toggle="tab"><?php _e('Summary'); ?></a></li>
+              <?php if(in_array("editLicense",$perms)) { ?><li <?php if ($section == "edit") echo 'class="active"'; ?>><a href="#tab-edit" data-toggle="tab"><?php _e('Edit License'); ?></a></li><?php } ?>
+
+			  <div class="btn-group pull-right" style="padding:6px;">
+                    <?php if(in_array("assetLicense",$perms)) { ?><a data-toggle='tooltip' title='<?php _e('Assign Asset'); ?>' class="btn btn-default btn-sm " href="#" onClick='showM("?modal=licenses/assignAsset&reroute=inventory/licenses/manage&routeid=<?php echo $license['id']; ?>");return false'><i class="fa fa-thumb-tack"></i> Assign Asset</a><?php } ?>
+              </div>
+
+            </ul>
+
+            <div class="tab-content">
+              <div class="tab-pane <?php if ($section == "") echo 'active'; ?>" id="tab-summary">
+				  <div class="row">
+		  	  		<div class="col-xs-4">
+						<div class="box box-primary">
+		                    <div class="box-body">
+								<table id="clientTable" class="table table-striped table-hover">
+									<tbody>
+										<tr>
+											<td><b><?php _e('Status'); ?></b></td>
+											<td><span class='badge' style='background-color:<?php echo getSingleValue("labels","color",$license['statusid']); ?>'><?php echo getSingleValue("labels","name",$license['statusid']); ?></span></td>
+										</tr>
+										<tr>
+											<td><b><?php _e('Client'); ?></b></td>
+											<td><?php echo getSingleValue('clients','name',$license['clientid']); ?></td>
+										</tr>
+										<tr>
+											<td><b><?php _e('Category'); ?></b></td>
+											<td><span class='label' style='background-color:#FFF;color:<?php echo getSingleValue("licensecategories","color",$license['categoryid']); ?>;border:1px solid <?php echo getSingleValue("licensecategories","color",$license['categoryid']); ?>'><?php echo getSingleValue('licensecategories','name',$license['categoryid']); ?></span></td>
+										</tr>
+										<tr>
+											<td><b><?php _e('License Name'); ?></b></td>
+											<td><?php echo $license['name']; ?></td>
+										</tr>
+										<tr>
+											<td><b><?php _e('License Tag'); ?></b></td>
+											<td><?php echo $license['tag']; ?></td>
+										</tr>
+										<tr>
+											<td><b><?php _e('Serial'); ?></b></td>
+											<td><?php echo mc_decrypt($license['serial']); ?></td>
+										</tr>
+										<tr>
+											<td><b><?php _e('Supplier'); ?></b></td>
+											<td><a href='#' onClick='showM("index.php?modal=suppliers/view&id=<?php echo $license['supplierid']; ?>");return false'><?php echo getSingleValue('suppliers','name',$license['supplierid']); ?></a></td>
+										</tr>
+										<tr>
+											<td><b><?php _e('Notes'); ?></b></td>
+											<td><?php echo $license['notes']; ?></td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+						</div>
+
+					</div>
+
+					<div class="col-xs-8">
+						<div class="box box-primary">
+		                    <div class="box-header">
+								<h3 class="box-title"><?php _e('Assigned Assets'); ?></h3>
+								<div class="pull-right box-tools">
+									<button type="button" class="btn btn-default btn-sm" data-widget="collapse" data-toggle="tooltip" title="Collapse"><i class="fa fa-minus"></i></button>
+				                </div>
+							</div>
+		                    <div class="box-body">
+								<div class="table-responsive">
+			                        <table class="table table-striped table-hover">
+			                            <thead>
+			                                <tr>
+			                                    <th><?php _e('Tag'); ?></th>
+												<th><?php _e('Category'); ?></th>
+			                                    <th><?php _e('Model'); ?></th>
+												<th><?php _e('Name'); ?></th>
+												<th class="text-right"></th>
+			                                </tr>
+			                            </thead>
+			                            <tbody>
+											<?php
+											foreach ($assignedassets as $item) {
+											$asset = getRowById("assets",$item['assetid']);
+
+											$manufacturerid = getSingleValue("models","manufacturerid",$asset['modelid']);
+											$modelid = getSingleValue("assets","modelid",$item['assetid']);
+
+			                                echo "<tr>";
+												echo "<td>";
+													if(in_array("manageAsset",$perms))
+														echo "<a href='?route=inventory/assets/manage&id=".$asset['id']."'>".$asset['tag']."</a>";
+													else echo $asset['tag'];
+												echo "</td>";
+			                                    echo "<td>".getSingleValue("assetcategories","name",$asset['categoryid'])."</td>";
+			                                    echo "<td>".getSingleValue("manufacturers","name",$manufacturerid)." ".getSingleValue("models","name",$asset['modelid'])."</td>";
+												echo "<td>";
+													if(in_array("manageAsset",$perms))
+														echo "<a href='?route=inventory/assets/manage&id=".$asset['id']."'>".$asset['name']."</a>";
+													else echo $asset['name'];
+												echo "</td>";
+												echo "<td><div class='btn-group pull-right'>";
+														if(in_array("assetLicense",$perms)) echo "<a href='#' onClick='showM(\"?modal=licenses/unassignAsset&reroute=inventory/licenses/manage&routeid=".$license['id']."&id=".$item['id']."\");return false' data-toggle='modal' class='btn-right text-red'><i class='fa fa-trash-o'></i></a>";
+												echo "</div></td>";
+			                                echo "</tr>";
+											}
+											?>
+										</tbody>
+									</table>
+								</div>
+								<?php if(empty($assignedassets)) _e("There are no assigned assets to display."); ?>
+							</div>
+						</div>
+					</div>
+				</div>
+              </div>
+              <!-- /.tab-pane -->
+			  <?php if(in_array("editLicense",$perms)) { ?>
+              <div class="tab-pane <?php if ($section == "edit") echo 'active'; ?>" id="tab-edit">
+				  <div class="row">
+		  			<div class="col-xs-12">
+				  		<form role="form" method="post" class="form-horizontal">
+							<?php if($isAdmin) { ?>
+								<div class="form-group">
+									<label for="clientid" class="col-sm-2 control-label"><?php _e('Client'); ?> *</label>
+									<div class="col-sm-8">
+										<select class="form-control select2 select2-hidden-accessible" id="clientid" name="clientid" style="width: 100%;" tabindex="-1" aria-hidden="true">
+											<option value="0"><?php _e('None'); ?></option>
+											<?php foreach ($clients as $client) { echo "<option value='".$client['id']."'"; if($license['clientid']==$client['id']) echo " selected"; echo ">".$client['name']."</option>"; } ?>
+										</select>
+									</div>
+								</div>
+							<?php } ?>
+							<?php if(!$isAdmin) { ?><input type="hidden" name="clientid" value="<?php echo $liu['clientid']; ?>"><?php } ?>
+							<div class="form-group">
+								<label for="categoryid" class="col-sm-2 control-label"><?php _e('Category'); ?> *</label>
+								<div class="col-sm-8">
+									<select class="form-control select2 select2-hidden-accessible" id="categoryid" name="categoryid" style="width: 100%;" tabindex="-1" aria-hidden="true">
+										<option value="0"><?php _e('None'); ?></option>
+										<?php foreach ($categories as $category) { echo "<option value='".$category['id']."'"; if($license['categoryid']==$category['id']) echo " selected"; echo ">".$category['name']."</option>"; } ?>
+									</select>
+								</div>
+							</div>
+							<div class="form-group">
+								<label for="tag" class="col-sm-2 control-label"><?php _e('License Tag'); ?> *</label>
+								<div class="col-sm-8">
+									<input type="text" class="form-control" id="tag" name="tag" value="<?php echo $license['tag']; ?>" required>
+								</div>
+							</div>
+							<div class="form-group">
+								<label for="name" class="col-sm-2 control-label"><?php _e('License Name'); ?> *</label>
+								<div class="col-sm-8">
+									<input type="text" class="form-control" id="name" name="name" value="<?php echo $license['name']; ?>" required>
+								</div>
+							</div>
+							<div class="form-group">
+								<label for="serial" class="col-sm-2 control-label"><?php _e('Serial'); ?></label>
+								<div class="col-sm-8">
+									<input type="text" class="form-control" id="serial" name="serial" value="<?php echo mc_decrypt($license['serial']); ?>">
+								</div>
+							</div>
+							<div class="form-group">
+								<label for="statusid" class="col-sm-2 control-label"><?php _e('Status'); ?> *</label>
+								<div class="col-sm-8">
+									<select class="form-control select2 select2-hidden-accessible" id="statusid" name="statusid" style="width: 100%;" tabindex="-1" aria-hidden="true">
+										<?php foreach ($labels as $label) { echo "<option value='".$label['id']."'"; if($license['statusid']==$label['id']) echo " selected"; echo ">".$label['name']."</option>"; } ?>
+									</select>
+								</div>
+							</div>
+							<div class="form-group">
+								<label for="supplierid" class="col-sm-2 control-label"><?php _e('Supplier'); ?></label>
+								<div class="col-sm-8">
+									<select class="form-control select2 select2-hidden-accessible" id="supplierid" name="supplierid" style="width: 100%;" tabindex="-1" aria-hidden="true">
+										<option value="0"><?php _e('None'); ?></option>
+										<?php foreach ($suppliers as $supplier) { echo "<option value='".$supplier['id']."'"; if($license['supplierid']==$supplier['id']) echo " selected"; echo ">".$supplier['name']."</option>"; } ?>
+									</select>
+								</div>
+							</div>
+							<div class="form-group">
+								<label for="notes" class="col-sm-2 control-label"><?php _e('Notes'); ?></label>
+								<div class="col-sm-8">
+									<textarea class="form-control summernote" rows="5" id="notes" name="notes"><?php echo $license['notes']; ?></textarea>
+								</div>
+							</div>
+
+							<input type="hidden" name="action" value="editLicense">
+							<input type="hidden" name="route" value="inventory/licenses/manage">
+							<input type="hidden" name="routeid" value="<?php echo $license['id']; ?>">
+							<input type="hidden" name="section" value="edit">
+							<input type="hidden" name="id" value="<?php echo $license['id']; ?>">
+
+							<div class="col-sm-2"></div><div class="col-sm-8"><button type="submit" class="btn btn-success"><i class="fa fa-save"></i> <?php _e('Save'); ?></button></div>
+						</form>
+		  			</div>
+		  		</div>
+              </div>
+              <!-- /.tab-pane -->
+			  <?php } ?>
+            </div>
+            <!-- /.tab-content -->
+          </div>
+          <!-- nav-tabs-custom -->
+        </div>
+        <!-- /.col -->
+		</div>
+	</section><!-- /.content -->
+</aside><!-- /.right-side -->
+
+<!-- <a href="?route=clients" class="btn btn-default"><i class="fa fa-times"></i> Cancel</a> -->

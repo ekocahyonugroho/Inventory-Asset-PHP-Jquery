@@ -1,0 +1,55 @@
+<!-- Right side column. Contains the navbar and content of the page -->
+<aside class="right-side">
+	<!-- Content Header (Page header) -->
+	<section class="content-header">
+			<h1 class="pull-left"><?php _e('Licenses'); ?><small> <?php _e('Manage licenses'); ?></small></h1>
+			<div class="pull-right"><?php if(in_array("addLicense",$perms)) { ?><a class="btn btn-primary btn-sm" href="?route=inventory/licenses/create"><i class="fa fa-certificate"></i> <?php _e('NEW LICENSE'); ?></a><?php } ?></div>
+			<div style="clear:both"></div>
+	</section>
+	<!-- Main content -->
+	<section class="content">
+		<?php if(!empty($statusmessage)): ?>
+				<div class="row"><div class='col-md-12'><div class="alert alert-<?php print $statusmessage["type"]; ?> alert-auto" role="alert"><?php print __($statusmessage["message"]); ?></div></div></div>
+		<?php endif; ?>
+		<div class="row">
+			<div class="col-xs-12">
+				<div class="box box-primary">
+                    <div class="box-body">
+						<div class="table-responsive">
+	                        <table id="dataTablesFull" class="table table-striped table-hover">
+	                            <thead>
+	                                <tr>
+										<th><?php _e('Tag'); ?></th>
+										<th><?php _e('Category'); ?></th>
+										<th><?php _e('Client'); ?></th>
+										<th><?php _e('Name'); ?></th>
+										<th><?php _e('Status'); ?></th>
+										<th class="text-right"></th>
+	                                </tr>
+	                            </thead>
+	                            <tbody>
+									<?php
+									foreach ($licenses as $license) { ?>
+		                                <tr>
+											<td><?php if(in_array("manageLicense",$perms)) { ?><a href='?route=inventory/licenses/manage&id=<?php echo $license['id']; ?>'><?php echo $license['tag']; ?></a><?php } else echo $license['tag']; ?></td>
+											<td><span class='label' style='background-color:#FFF;color:<?php echo getSingleValue("licensecategories","color",$license['categoryid']); ?>;border:1px solid <?php echo getSingleValue("licensecategories","color",$license['categoryid']); ?>'><?php echo getSingleValue("licensecategories","name",$license['categoryid']); ?></span></td>
+											<td><?php if($license['clientid'] != 0) { ?> <a href='<?php if(in_array("manageClient",$perms)) { ?>?route=clients/manage&id=<?php echo $license['clientid']; ?><?php } else echo "#"; ?>'><span class='label' style="background-color:#FFF;color:#0073b7;border:1px solid #0073b7;"><?php echo getSingleValue("clients","name",$license['clientid']); ?></span></a> <?php } ?></td>
+											<td><?php if(in_array("manageLicense",$perms)) { ?><a href='?route=inventory/licenses/manage&id=<?php echo $license['id']; ?>'><?php echo $license['name']; ?></a><?php } else echo $license['name']; ?></td>
+											<td><span class='badge' style='background-color:<?php echo getSingleValue("labels","color",$license['statusid']); ?>'><?php echo getSingleValue("labels","name",$license['statusid']); ?></span></td>
+											<td>
+													<div class='btn-group pull-right'>
+														<?php if(in_array("manageLicense",$perms)) { ?><a href='?route=inventory/licenses/manage&id=<?php echo $license['id']; ?>' class='btn-right text-dark'><i class='fa fa-eye'></i></a>&nbsp;<?php } ?>
+														<?php if(in_array("deleteLicense",$perms)) { ?><a href='#' onClick='showM("?modal=licenses/delete&reroute=inventory/licenses&routeid=&id=<?php echo $license['id']; ?>&section=");return false' class='btn-right text-red'><i class='fa fa-trash-o'></i></a><?php } ?>
+													</div>
+											</td>
+		                                </tr>
+									<?php } ?>
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section><!-- /.content -->
+</aside><!-- /.right-side -->

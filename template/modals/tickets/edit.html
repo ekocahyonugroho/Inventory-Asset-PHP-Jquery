@@ -1,0 +1,162 @@
+<div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button><h4 class="modal-title"><?php _e('Edit Ticket'); ?></h4></div>
+<div class="modal-body">
+
+    <div class="row">
+
+
+        <div class="col-xs-8">
+            <div class="form-group">
+                <label for="subject"><?php _e('Subject'); ?> *</label>
+                <input type="text" class="form-control" id="subject" name="subject" value="<?php echo $ticket['subject']; ?>" required>
+            </div>
+        </div>
+
+        <div class="col-xs-4">
+            <div class="form-group">
+                <label for="departmentid"><?php _e('Department'); ?></label>
+                <select class="form-control select2 select2-hidden-accessible" id="departmentid" name="departmentid" style="width: 100%;" tabindex="-1" aria-hidden="true">
+                    <option value="0"><?php _e('None'); ?></option>
+                    <?php foreach ($departments as $department) { ?>
+                        <option value='<?php echo $department['id']; ?>' <?php if($ticket['departmentid'] == $department['id']) echo "selected"; ?> ><?php echo $department['name']; ?></option>
+                    <?php } ?>
+                </select>
+            </div>
+        </div>
+
+
+        <div class="col-xs-6">
+            <?php if($isAdmin) { ?>
+                <div class="form-group">
+                    <label for="clientid"><?php _e('Client'); ?></label>
+                    <select class="form-control select2 select2-hidden-accessible" id="clientid" name="clientid" style="width: 100%;" tabindex="-1" aria-hidden="true">
+                        <option value="0">None</option>
+                        <?php foreach ($clients as $client) { ?>
+                            <option value='<?php echo $client['id']; ?>' <?php if($ticket['clientid'] == $client['id']) echo "selected"; ?>><?php echo $client['name']; ?></option>
+                        <?php } ?>
+                    </select>
+                </div>
+            <?php } ?>
+            <?php if(!$isAdmin) { ?><input type="hidden" name="clientid" value="<?php echo $ticket['clientid']; ?>"><?php } ?>
+
+        </div>
+        <div class="col-xs-6">
+            <?php if(in_array("manageTicketAssignment",$perms)) { ?>
+                <div class="form-group">
+                    <label for="adminid"><?php _e('Assigned To'); ?></label>
+                    <select class="form-control select2 select2-hidden-accessible" id="adminid" name="adminid" style="width: 100%;" tabindex="-1" aria-hidden="true">
+                        <option value="0">Nobody</option>
+                        <?php foreach ($admins as $admin) { ?>
+                            <option value='<?php echo $admin['id']; ?>' <?php if($ticket['adminid'] == $admin['id']) echo "selected"; ?>><?php echo $admin['name']; ?></option>
+                        <?php } ?>
+                    </select>
+                </div>
+            <?php } ?>
+            <?php if(!in_array("manageTicketAssignment",$perms)) { ?><input type="hidden" name="adminid" value="<?php echo $ticket['adminid']; ?>"><?php } ?>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-xs-6">
+            <?php if($isAdmin) { ?>
+                <div class="form-group">
+                    <label for="userid"><?php _e('User'); ?></label>
+                    <select class="form-control select2 select2-hidden-accessible" id="userid" name="userid" style="width: 100%;" tabindex="-1" aria-hidden="true">
+                        <option value="0"><?php _e('None'); ?></option>
+                        <?php foreach ($users as $user) { ?>
+                            <option value='<?php echo $user['id']; ?>' <?php if($ticket['userid'] == $user['id']) echo "selected"; ?>><?php echo $user['name']; ?></option>
+                        <?php } ?>
+                    </select>
+                </div>
+            <?php } ?>
+            <?php if(!$isAdmin) { ?><input type="hidden" name="userid" value="<?php echo $ticket['userid']; ?>"><?php } ?>
+        </div>
+        <div class="col-xs-6">
+            <?php if($isAdmin) { ?>
+                <div class="form-group">
+                    <label for="email"><?php _e('Email Address'); ?> *</label>
+                    <input type="email" class="form-control" id="email" name="email" value="<?php echo $ticket['email']; ?>" required>
+                </div>
+            <?php } ?>
+            <?php if(!$isAdmin) { ?><input type="hidden" name="email" value="<?php echo $ticket['email']; ?>"><?php } ?>
+        </div>
+    </div>
+
+
+
+    <div class="form-group">
+        <label for="assetid"><?php _e('Asset'); ?></label>
+        <select class="form-control select2" id="assetid" name="assetid" style="width: 100%;">
+            <option value="0"><?php _e('None'); ?></option>
+
+            <?php foreach ($assets as $asset) { ?>
+                <option value='<?php echo $asset['id']; ?>' <?php if($ticket['assetid'] == $asset['id']) echo "selected"; ?>>
+                    <?php
+                        echo $asset['tag']." ".$asset['name'];
+                        if ($asset['clientid'] != "0") echo " [" .getSingleValue("clients","name",$asset['clientid']). "] ";
+                     ?>
+                </option>
+            <?php } ?>
+
+            <?php
+            ?>
+        </select>
+    </div>
+
+
+
+
+
+    <div class="row">
+        <div class="col-xs-6">
+            <div class="form-group">
+                <label for="priority">Priority *</label>
+                <select class="form-control select2" id="priority" name="priority" style="width: 100%;">
+                    <option value="Low" <?php if($ticket['priority'] == "Low") echo "selected"; ?>><?php _e('Low'); ?></option>
+                    <option value="Normal" <?php if($ticket['priority'] == "Normal") echo "selected"; ?>><?php _e('Normal'); ?></option>
+                    <option value="High" <?php if($ticket['priority'] == "High") echo "selected"; ?>><?php _e('High'); ?></option>
+                </select>
+            </div>
+        </div>
+        <div class="col-xs-6">
+            <div class="form-group">
+                <label for="status">Status *</label>
+                <select class="form-control select2" id="status" name="status" style="width: 100%;">
+                    <option value="Open" <?php if($ticket['status'] == "Open") echo "selected"; ?>><?php _e('Open'); ?></option>
+                    <option value="In Progress" <?php if($ticket['status'] == "In Progress") echo "selected"; ?>><?php _e('In Progress'); ?></option>
+                    <option value="Answered" <?php if($ticket['status'] == "Answered") echo "selected"; ?>><?php _e('Answered'); ?></option>
+                    <option value="Reopened" <?php if($ticket['status'] == "Reopened") echo "selected"; ?>><?php _e('Reopened'); ?></option>
+                    <option value="Closed" <?php if($ticket['status'] == "Closed") echo "selected"; ?>><?php _e('Closed'); ?></option>
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="form-group">
+                <label for="ccs"><?php _e('CC Recipients'); ?></label>
+                <select class="form-control select2" id="ccs" name="ccs[]" style="width: 100%;" multiple>
+                    <?php foreach ($contacts as $contact) { ?>
+                        <option value='<?php echo $contact['email']; ?>' <?php if(in_array($contact['email'],$ccs)) echo "selected"; ?> ><?php echo $contact['email']; ?></option>
+                    <?php } ?>
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <input type="hidden" name="id" value="<?php echo $ticket['id']; ?>">
+    <input type="hidden" name="action" value="editTicket">
+    <input type="hidden" name="route" value="<?php echo $_GET['reroute']; ?>">
+    <input type="hidden" name="routeid" value="<?php echo $_GET['routeid']; ?>">
+    <input type="hidden" name="section" value="<?php echo $_GET['section']; ?>">
+</div>
+<div class="modal-footer">
+    <button type="button" class="btn btn-default" data-dismiss="modal"><i class="fa fa-times"></i> <?php _e('Cancel'); ?></button>
+    <button type="submit" class="btn btn-success"><i class="fa fa-save"></i> <?php _e('Save'); ?></button>
+</div>
+
+<script type="text/javascript">
+        $(function() {
+            $(".select2").select2();
+        });
+</script>

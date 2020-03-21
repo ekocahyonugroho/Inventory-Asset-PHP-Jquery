@@ -1,0 +1,61 @@
+<aside class="right-side">
+	<!-- Content Header (Page header) -->
+	<section class="content-header">
+		<h1 class="pull-left"><?php _e('Roles'); ?><small> <?php _e('Manage user roles'); ?></small></h1>
+		<div class="pull-right"><?php if(in_array("addRole",$perms)) { ?><a href='?route=people/roles/add' class="btn btn-primary btn-sm"><i class="fa fa-plus"></i> <?php _e('NEW ROLE'); ?></a><?php } ?></div>
+		<div style="clear:both"></div>
+	</section>
+	<!-- Main content -->
+	<section class="content">
+		<?php if(!empty($statusmessage)): ?>
+				<div class="row"><div class='col-md-12'><div class="alert alert-<?php print $statusmessage["type"]; ?> alert-auto" role="alert"><?php print __($statusmessage["message"]); ?></div></div></div>
+		<?php endif; ?>
+		<div class="row">
+			<div class="col-xs-12">
+				<div class="box box-primary">
+                    <div class="box-body">
+						<div class="table-responsive">
+	                        <table id="dataTablesFull" class="table table-striped table-hover">
+	                            <thead>
+	                                <tr>
+	                                    <th><?php _e('ID'); ?></th>
+										<th><?php _e('Role Type'); ?></th>
+	                                    <th><?php _e('Role Name'); ?></th>
+										<th class="text-right"></th>
+	                                </tr>
+	                            </thead>
+	                            <tbody>
+									<?php
+									foreach ($roles as $role) {
+	                                echo "<tr>";
+	                                    echo "<td>".$role['id']."</td>";
+
+										echo "<td>";
+											if($role['type'] == "user") echo "User"; else echo "Staff";
+										echo "</td>";
+	                                    echo "<td>".$role['name']."</td>";
+										echo "<td>";
+										if($role['id'] != 1) {
+											echo "<div class='pull-right'>";
+
+														if(in_array("editRole",$perms)) echo "<a href='?route=people/roles/edit&id=".$role['id']."' class='btn-right text-dark'><i class='fa fa-edit'></i></a>&nbsp;";
+														if(in_array("deleteRole",$perms)) echo "<a href='#' onClick='showM(\"index.php?modal=roles/delete&reroute=people/roles&id=".$role['id']."\");return false' class='btn-right text-red'><i class='fa fa-trash-o'></i></a>";
+											echo "</div>";
+										}else{
+											echo "<div class='pull-right'>";
+											if(in_array("editRole",$perms)) echo "<a href='?route=people/roles/edit&id=".$role['id']."' class='btn-right text-dark'><i class='fa fa-edit'></i></a>&nbsp;";
+											echo "</div>";
+										}
+										echo "</td>";
+	                                echo "</tr>";
+									}
+									?>
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section><!-- /.content -->
+</aside><!-- /.right-side -->

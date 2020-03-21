@@ -1,0 +1,57 @@
+<aside class="right-side">
+	<!-- Content Header (Page header) -->
+	<section class="content-header">
+		<h1 class="pull-left"><?php _e('Users'); ?><small> <?php _e('Manage user accounts'); ?></small></h1>
+		<div class="pull-right"><?php if(in_array("addUser",$perms)) { ?><a onClick='showM("index.php?modal=users/add&reroute=people/users&routeid=&section=");return false' data-toggle="modal" class="btn btn-primary btn-sm"><i class="fa fa-user"></i> <?php _e('ADD USER ACCOUNT'); ?></a><?php } ?></div>
+		<div style="clear:both"></div>
+	</section>
+	<!-- Main content -->
+	<section class="content">
+		<?php if(!empty($statusmessage)): ?>
+				<div class="row"><div class='col-md-12'><div class="alert alert-<?php print $statusmessage["type"]; ?> alert-auto" role="alert"><?php print __($statusmessage["message"]); ?></div></div></div>
+		<?php endif; ?>
+		<div class="row">
+			<div class="col-xs-12">
+				<div class="box box-primary">
+                    <div class="box-body">
+						<div class="table-responsive">
+	                        <table id="dataTablesFull" class="table table-striped table-hover">
+	                            <thead>
+	                                <tr>
+	                                    <th><?php _e('ID'); ?></th>
+										<th><?php _e('Client'); ?></th>
+	                                    <th><?php _e('Name'); ?></th>
+										<th><?php _e('Email'); ?></th>
+										<th><?php _e('Role'); ?></th>
+										<th class="text-right"></th>
+	                                </tr>
+	                            </thead>
+	                            <tbody>
+									<?php
+									foreach ($users as $user) {
+	                                echo "<tr>";
+	                                    echo "<td>".$user['id']."</td>";
+										echo "<td>";
+											if(in_array("manageClient",$perms))
+												echo "<a href='?route=clients/manage&id=".$user['clientid']."'>".getSingleValue("clients","name",$user['clientid'])."</a>";
+											else echo getSingleValue("clients","name",$user['clientid']);
+										echo "</td>";
+	                                    echo "<td>".$user['name']."</td>";
+										echo "<td>".$user['email']."</td>";
+										echo "<td>".getSingleValue("roles","name",$user['roleid'])."</td>";
+										echo "<td><div class='pull-right'>";
+											if(in_array("editUser",$perms)) echo "<a href='?route=people/users/edit&id=".$user['id']."' class='btn-right text-dark'><i class='fa fa-edit'></i></a>&nbsp;";
+											if(in_array("deleteUser",$perms)) echo "<a href='#' onClick='showM(\"?modal=users/delete&reroute=people/users&routeid=&id=".$user['id']."&section=\");return false' class='btn-right text-red'><i class='fa fa-trash-o'></i></a>";
+										echo "</div></td>";
+	                                echo "</tr>";
+									}
+									?>
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section><!-- /.content -->
+</aside><!-- /.right-side -->

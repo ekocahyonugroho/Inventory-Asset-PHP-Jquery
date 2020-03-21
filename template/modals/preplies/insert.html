@@ -1,0 +1,22 @@
+<div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button><h4 class="modal-title"><?php _e('Insert Predefined Reply'); ?></h4></div>
+<div class="modal-body">
+
+    <?php foreach($preplies as $reply) { ?>
+
+        <script>
+
+        </script>
+
+        <a href="#" onclick="var node = $('<?php echo escapeJavaScriptText($reply['content']); ?>'); $('.summernote').summernote( 'insertNode', node[0] );" data-dismiss="modal"><?php echo $reply['name']; ?></a><br>
+
+    <?php } ?>
+
+
+
+</div>
+<div class="modal-footer">
+
+    <p class="help-block pull-left text-left" style="font-size:12px;"><?php _e("Click on any predefined reply to insert it's content."); ?><br><?php _e('Content will be added at cursor point.'); ?></p>
+    <button type="button" class="btn btn-default" data-dismiss="modal"><?php _e('Close'); ?></button>
+
+</div>

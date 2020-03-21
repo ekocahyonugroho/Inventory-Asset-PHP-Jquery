@@ -1,0 +1,119 @@
+<aside class="right-side">
+	<!-- Content Header (Page header) -->
+	<section class="content-header">
+		<h1><?php _e('Logs'); ?><small> <?php _e('View application logs'); ?></small></h1>
+		<ol class="breadcrumb"><li><a href="?route=dashboard"><i class="fa fa-dashboard"></i> <?php _e('Home'); ?></a></li><li><?php _e('System'); ?></li><li class="active"><?php _e('Logs'); ?></li></ol>
+	</section>
+
+	<!-- Main content -->
+	<section class="content">
+		<?php if(!empty($statusmessage)): ?>
+				<div class="row"><div class='col-md-12'><div class="alert alert-<?php print $statusmessage["type"]; ?> alert-auto" role="alert"><?php print __($statusmessage["message"]); ?></div></div></div>
+		<?php endif; ?>
+	    <div class='row'>
+            <div class='col-md-12'>
+                <!-- Custom Tabs -->
+                <div class="nav-tabs-custom">
+                    <ul class="nav nav-tabs">
+                        <li class="active"><a href="#system" data-toggle="tab"><?php _e('System Log'); ?></a></li>
+						<li><a href="#email" data-toggle="tab"><?php _e('Email Message Log'); ?></a></li>
+						<li><a href="#sms" data-toggle="tab"><?php _e('SMS Message Log'); ?></a></li>
+
+                    </ul>
+                    <div class="tab-content">
+                        <div class="tab-pane active" id="system">
+							<div class="table-responsive">
+								<table id="dataTablesFullDesc" class="table table-hover">
+									<thead>
+										<tr>
+											<th><?php _e('ID'); ?></th>
+											<th><?php _e('User/Admin'); ?></th>
+											<th><?php _e('IP Address'); ?></th>
+											<th><?php _e('Description'); ?></th>
+											<th><?php _e('Timestamp'); ?></th>
+										</tr>
+									</thead>
+									<tbody>
+										<?php
+										foreach ($systemLog as $log) {
+										echo "<tr>";
+											echo "<td>".$log['id']."</td>";
+											echo "<td>".getSingleValue("people","name",$log['peopleid'])."</td>";
+											echo "<td>".$log['ipaddress']."</td>";
+											echo "<td>".$log['description']."</td>";
+											echo "<td>".$log['timestamp']."</td>";
+										echo "</tr>";
+										}
+										?>
+									</tbody>
+								</table>
+							</div>
+						</div><!-- /.tab-pane -->
+                        <div class="tab-pane" id="email">
+							<div class="table-responsive">
+								<table id="dataTablesFull" class="table table-hover">
+									<thead>
+										<tr>
+											<th><?php _e('ID'); ?></th>
+											<th><?php _e('User/Admin'); ?></th>
+											<th><?php _e('Client'); ?></th>
+											<th><?php _e('Email'); ?></th>
+											<th><?php _e('Subject'); ?></th>
+											<th><?php _e('Timestamp'); ?></th>
+										</tr>
+									</thead>
+									<tbody>
+										<?php
+										foreach ($emailLog as $log) {
+										echo "<tr>";
+											echo "<td>".$log['id']."</td>";
+											echo "<td>".getSingleValue("people","name",$log['peopleid'])."</td>";
+											echo "<td>".getSingleValue("clients","name",$log['clientid'])."</td>";
+											echo "<td>".$log['to']."</td>";
+											echo "<td>".$log['subject']."</td>";
+											echo "<td>".$log['timestamp']."</td>";
+										echo "</tr>";
+										}
+										?>
+									</tbody>
+								</table>
+							</div>
+                        </div><!-- /.tab-pane -->
+						<div class="tab-pane" id="sms">
+							<div class="table-responsive">
+								<table id="dataTablesFull" class="table table-hover">
+									<thead>
+										<tr>
+											<th><?php _e('ID'); ?></th>
+											<th><?php _e('User/Admin'); ?></th>
+											<th><?php _e('Client'); ?></th>
+											<th><?php _e('Mobile'); ?></th>
+											<th><?php _e('Text'); ?></th>
+											<th><?php _e('Timestamp'); ?></th>
+										</tr>
+									</thead>
+									<tbody>
+										<?php
+										foreach ($SMSLog as $log) {
+										echo "<tr>";
+											echo "<td>".$log['id']."</td>";
+											echo "<td>".getSingleValue("people","name",$log['peopleid'])."</td>";
+											echo "<td>".getSingleValue("clients","name",$log['clientid'])."</td>";
+											echo "<td>".$log['mobile']."</td>";
+											echo "<td>".$log['sms']."</td>";
+											echo "<td>".$log['timestamp']."</td>";
+										echo "</tr>";
+										}
+										?>
+									</tbody>
+								</table>
+							</div>
+                        </div><!-- /.tab-pane -->
+                    </div><!-- /.tab-content -->
+                </div><!-- nav-tabs-custom -->
+            </div><!-- /.col-->
+        </div><!-- ./row -->
+
+
+	</section><!-- /.content -->
+</aside><!-- /.right-side -->

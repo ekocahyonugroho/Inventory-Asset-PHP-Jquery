@@ -1,0 +1,174 @@
+<div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button><h4 class="modal-title"><?php _e('Add Ticket'); ?></h4></div>
+<div class="modal-body">
+
+
+
+    <div class="row">
+
+        <div class="col-xs-8">
+            <div class="form-group">
+                <label for="subject"><?php _e('Subject'); ?> *</label>
+                <input type="text" class="form-control" id="subject" name="subject" value="" required>
+            </div>
+        </div>
+
+        <div class="col-xs-4">
+            <div class="form-group">
+                <label for="departmentid"><?php _e('Department'); ?></label>
+                <select class="form-control select2 select2-hidden-accessible" id="departmentid" name="departmentid" style="width: 100%;" tabindex="-1" aria-hidden="true">
+                    <option value="0"><?php _e('None'); ?></option>
+                    <?php foreach ($departments as $department) { ?>
+                        <option value='<?php echo $department['id']; ?>'><?php echo $department['name']; ?></option>
+                    <?php } ?>
+                </select>
+            </div>
+        </div>
+
+        <div class="col-xs-6">
+            <?php if($isAdmin) { ?>
+                <div class="form-group">
+                    <label for="email"><?php _e('User or Email Address'); ?> *</label>
+                    <select class="form-control select2tag select2-hidden-accessible" id="email" name="email" style="width: 100%;" tabindex="-1" aria-hidden="true" multiple required>
+                        <?php foreach ($users as $user) { ?>
+                            <option value='<?php echo $user['email']; ?>'><?php echo $user['name']; ?> (<?php echo $user['email']; ?>)</option>
+                        <?php } ?>
+                    </select>
+                </div>
+            <?php } ?>
+            <?php if(!$isAdmin) { ?><input type="hidden" name="email" value="<?php echo $liu['email']; ?>"><?php } ?>
+
+        </div>
+        <div class="col-xs-6">
+            <?php if(in_array("manageTicketAssignment",$perms)) { ?>
+                <div class="form-group">
+                    <label for="adminid"><?php _e('Assign To'); ?></label>
+                    <select class="form-control select2 select2-hidden-accessible" id="adminid" name="adminid" style="width: 100%;" tabindex="-1" aria-hidden="true">
+                        <option value="0"><?php _e('Nobody'); ?></option>
+                        <?php foreach ($admins as $admin) { ?>
+                            <option value='<?php echo $admin['id']; ?>' <?php if(isset($liu['id'])) { if($liu['id'] == $admin['id']) echo "selected"; }  ?>><?php echo $admin['name']; ?></option>
+                        <?php } ?>
+                    </select>
+                </div>
+            <?php } ?>
+            <?php if(!in_array("manageTicketAssignment",$perms)) { ?><input type="hidden" name="adminid" value="0"><?php } ?>
+
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-xs-6">
+            <?php if($isAdmin) { ?>
+                <div class="form-group">
+                    <label for="clientid"><?php _e('Client'); ?></label>
+                    <select class="form-control select2 select2-hidden-accessible" id="clientid" name="clientid" style="width: 100%;" tabindex="-1" aria-hidden="true">
+                        <option value="0"><?php _e('None'); ?></option>
+                        <?php foreach ($clients as $client) { ?>
+                            <option value='<?php echo $client['id']; ?>' <?php if(isset($_GET['clientid'])) { if($_GET['clientid'] == $client['id']) echo "selected"; }  ?>><?php echo $client['name']; ?></option>
+                        <?php } ?>
+                    </select>
+                </div>
+            <?php } ?>
+            <?php if(!$isAdmin) { ?><input type="hidden" name="clientid" value="<?php echo $liu['clientid']; ?>"><?php } ?>
+
+        </div>
+        <div class="col-xs-6">
+            <div class="form-group">
+                <label for="assetid"><?php _e('Asset'); ?></label>
+                <select class="form-control select2" id="assetid" name="assetid" style="width: 100%;">
+                    <option value="0">None</option>
+                    <?php foreach ($assets as $asset) {  ?>
+                        <option value='<?php echo $asset['id']; ?>' <?php if(isset($_GET['assetid'])) { if($_GET['assetid'] == $asset['id']) echo "selected"; }  ?>>
+                            <?php
+                                echo $asset['tag']." ".$asset['name'];
+                                if ($asset['clientid'] != "0") echo " [" .getSingleValue("clients","name",$asset['clientid']). "] ";
+                             ?>
+                        </option>
+                    <?php } ?>
+
+                    <?php
+                    ?>
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="form-group">
+                <label for="ccs"><?php _e('CC Recipients'); ?></label>
+                <select class="form-control select2tags select2-hidden-accessible" id="ccs" name="ccs[]" style="width: 100%;" multiple>
+                    <?php foreach ($contacts as $contact) { ?>
+                        <option value='<?php echo $contact['email']; ?>'><?php echo $contact['email']; ?></option>
+                    <?php } ?>
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label for="message" class="control-label"><?php _e('Message'); ?></label>
+        <textarea class="form-control summernote-modal" id="message" name="message"></textarea>
+    </div>
+
+    <div class="row">
+
+        <div class="col-xs-4">
+            <?php if($isAdmin) { ?>
+                <div class="form-group"><div class="checkbox"><label><input type="checkbox" name="notification" value="true" checked="yes"> <?php _e('Send New Ticket Notification'); ?></label></div></div>
+            <?php } ?>
+            <?php if(!$isAdmin) { ?><input type="hidden" name="notification" value="false"><?php } ?>
+        </div>
+
+        <div class="col-xs-4">
+            <div class="form-group">
+                <input class="fileinput" type="file" id="file" name="file[]" multiple>
+            </div>
+        </div>
+
+        <div class="col-xs-4">
+            <div class="form-group">
+
+                <select class="form-control select2" id="priority" name="priority" style="width: 100%;">
+                    <option value="Low"><?php _e('Low'); ?></option>
+                    <option value="Normal" selected><?php _e('Normal'); ?></option>
+                    <option value="High"><?php _e('High'); ?></option>
+                </select>
+            </div>
+        </div>
+
+
+    </div>
+
+    <input type="hidden" name="action" value="addTicket">
+    <input type="hidden" name="route" value="<?php echo $_GET['reroute']; ?>">
+    <input type="hidden" name="routeid" value="<?php echo $_GET['routeid']; ?>">
+    <input type="hidden" name="section" value="<?php echo $_GET['section']; ?>">
+</div>
+<div class="modal-footer">
+    <button type="button" class="btn btn-default" data-dismiss="modal"><i class="fa fa-times"></i> <?php _e('Cancel'); ?></button>
+    <button type="submit" class="btn btn-primary"><i class="fa fa-check"></i> <?php _e('Create'); ?></button>
+</div>
+
+<script type="text/javascript">
+
+        $(function() { $(".select2").select2(); });
+
+        $(function() { $(".select2tag").select2({
+            tags: true,
+            maximumSelectionLength: 1
+        }); });
+
+        $(function() { $(".select2tags").select2({
+            tags: true
+        }); });
+
+
+
+        $(document).ready(function() { $('.summernote-modal').summernote({height: 200}); });
+
+        //function userEmail(_this) {
+        //    var emailaddr = $(_this).find(':selected').data("emailaddr");
+        //    document.getElementById("email").value = emailaddr;
+        //}
+
+</script>

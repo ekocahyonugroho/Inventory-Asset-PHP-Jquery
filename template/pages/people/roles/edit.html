@@ -1,0 +1,259 @@
+<!-- Right side column. Contains the navbar and content of the page -->
+<aside class="right-side">
+	<!-- Content Header (Page header) -->
+	<section class="content-header">
+		<h1><?php _e('Roles'); ?><small> <?php _e('Manage roles'); ?></small></h1>
+		<ol class="breadcrumb"><li><a href="?route=dashboard"><i class="fa fa-dashboard"></i> <?php _e('Home'); ?></a></li><li><?php _e('People'); ?></li><li><a href="?route=people/roles"><?php _e('Roles'); ?></a></li><li class="active"><?php _e('Edit'); ?></li></ol>
+	</section>
+
+	<!-- Main content -->
+	<section class="content">
+		<?php if(!empty($statusmessage)): ?>
+				<div class="row"><div class='col-md-12'><div class="alert alert-<?php print $statusmessage["type"]; ?> alert-auto" role="alert"><?php print __($statusmessage["message"]); ?></div></div></div>
+		<?php endif; ?>
+		<div class="row">
+			<div class="col-xs-12">
+				<div class="box box-primary">
+          			<div class="box-header with-border"><h3 class="box-title"><?php _e('Edit Role'); ?></h3></div><!-- /.box-header -->
+                    <div class="box-body">
+
+
+						<div class="row roles">
+
+							<form role="form" method="post" class="form-horizontal" style="padding:15px;" name="roleForm">
+								<div class="col-md-12">
+								    <div class="form-group">
+								        <label for="name"><?php _e('Name'); ?> *</label>
+								        <input type="text" class="form-control" id="name" name="name" value="<?php echo $role['name']; ?>" required>
+								    </div>
+								</div>
+								<div class="col-md-12">
+									<div class="form-group">
+										<label for="type"><?php _e('Role Type'); ?></label>
+										<select class="form-control select2 select2-hidden-accessible" id="type" name="type" style="width: 100%;" tabindex="-1" aria-hidden="true">
+											<option value="admin" <?php if($role['type']=="admin") echo "selected"; ?>><?php _e('Staff'); ?></option>
+											<option value="user" <?php if($role['type']=="user") echo "selected"; ?>><?php _e('User'); ?></option>
+										</select>
+									</div>
+								</div>
+								<div class="col-md-3">
+									<h4>Clients <small>(staff only)</small></h4>
+									<div class="checkbox"><label><input type="checkbox" name="perms[]" value="addClient" <?php if(in_array("addClient",$roleperms)) echo "checked"; ?> > <?php _e('Add'); ?></label></div>
+									<div class="checkbox"><label><input type="checkbox" name="perms[]" value="editClient" <?php if(in_array("editClient",$roleperms)) echo "checked"; ?> > <?php _e('Edit'); ?></label></div>
+									<div class="checkbox"><label><input type="checkbox" name="perms[]" value="deleteClient" <?php if(in_array("deleteClient",$roleperms)) echo "checked"; ?> > <?php _e('Delete'); ?></label></div>
+									<div class="checkbox"><label><input type="checkbox" name="perms[]" value="manageClient" <?php if(in_array("manageClient",$roleperms)) echo "checked"; ?> > <?php _e('Manage'); ?></label></div>
+									<div class="checkbox"><label><input type="checkbox" name="perms[]" value="adminsClient" <?php if(in_array("adminsClient",$roleperms)) echo "checked"; ?> > <?php _e('Assign/Unassign Staff'); ?></label></div>
+									<div class="checkbox"><label><input type="checkbox" name="perms[]" value="viewClients" <?php if(in_array("viewClients",$roleperms)) echo "checked"; ?> > <?php _e('View Clients'); ?></label></div>
+									<br>
+								</div>
+								<div class="col-md-3">
+									<h4>Assets</h4>
+									<div class="checkbox"><label><input type="checkbox" name="perms[]" value="addAsset" <?php if(in_array("addAsset",$roleperms)) echo "checked"; ?> > <?php _e('Add'); ?></label></div>
+									<div class="checkbox"><label><input type="checkbox" name="perms[]" value="editAsset" <?php if(in_array("editAsset",$roleperms)) echo "checked"; ?> > <?php _e('Edit'); ?></label></div>
+									<div class="checkbox"><label><input type="checkbox" name="perms[]" value="deleteAsset" <?php if(in_array("deleteAsset",$roleperms)) echo "checked"; ?> > <?php _e('Delete'); ?></label></div>
+									<div class="checkbox"><label><input type="checkbox" name="perms[]" value="manageAsset" <?php if(in_array("manageAsset",$roleperms)) echo "checked"; ?> > <?php _e('Manage'); ?></label></div>
+									<div class="checkbox"><label><input type="checkbox" name="perms[]" value="licenseAsset" <?php if(in_array("licenseAsset",$roleperms)) echo "checked"; ?> > <?php _e('Assign/Unassign License'); ?></label></div>
+									<div class="checkbox"><label><input type="checkbox" name="perms[]" value="viewAssets" <?php if(in_array("viewAssets",$roleperms)) echo "checked"; ?> > <?php _e('View Assets'); ?></label></div>
+									<div class="checkbox"><label><input type="checkbox" name="perms[]" value="updateBorrowStatus" <?php if(in_array("updateBorrowStatus",$roleperms)) echo "checked"; ?> > <?php _e('Update Borrow Status'); ?></label></div>
+									<div class="checkbox"><label><input type="checkbox" name="perms[]" value="addBorrowRecordManual" <?php if(in_array("addBorrowRecordManual",$roleperms)) echo "checked"; ?> > <?php _e('Manual Borrow Record'); ?></label></div>
+									<br>
+								</div>
+								<div class="col-md-3">
+									<h4>Non Assets</h4>
+									<div class="checkbox"><label><input type="checkbox" name="perms[]" value="addNonAsset" <?php if(in_array("addNonAsset",$roleperms)) echo "checked"; ?> > <?php _e('Add'); ?></label></div>
+									<div class="checkbox"><label><input type="checkbox" name="perms[]" value="editNonAsset" <?php if(in_array("editNonAsset",$roleperms)) echo "checked"; ?>> <?php _e('Edit'); ?></label></div>
+									<div class="checkbox"><label><input type="checkbox" name="perms[]" value="deleteNonAsset" <?php if(in_array("deleteNonAsset",$roleperms)) echo "checked"; ?>> <?php _e('Delete'); ?></label></div>
+									<div class="checkbox"><label><input type="checkbox" name="perms[]" value="manageNonAsset" <?php if(in_array("manageNonAsset",$roleperms)) echo "checked"; ?>> <?php _e('Manage'); ?></label></div>
+									<div class="checkbox"><label><input type="checkbox" name="perms[]" value="viewNonAsset" <?php if(in_array("viewNonAsset",$roleperms)) echo "checked"; ?>> <?php _e('View Non Assets'); ?></label></div>
+									<div class="checkbox"><label><input type="checkbox" name="perms[]" value="addStockNonAsset" <?php if(in_array("addStockNonAsset",$roleperms)) echo "checked"; ?>> <?php _e('Add Stock Non Assets'); ?></label></div>
+									<div class="checkbox"><label><input type="checkbox" name="perms[]" value="addStock" <?php if(in_array("addStock",$roleperms)) echo "checked"; ?>> <?php _e('Submit Add Stock'); ?></label></div>
+									<div class="checkbox"><label><input type="checkbox" name="perms[]" value="addStockOutNonAsset" <?php if(in_array("addStockOutNonAsset",$roleperms)) echo "checked"; ?>> <?php _e('Add Stock Out'); ?></label></div>
+									<div class="checkbox"><label><input type="checkbox" name="perms[]" value="addStockOut" <?php if(in_array("addStockOut",$roleperms)) echo "checked"; ?>> <?php _e('Submit Add Stock Out'); ?></label></div>
+									<div class="checkbox"><label><input type="checkbox" name="perms[]" value="viewCirculation" <?php if(in_array("viewCirculation",$roleperms)) echo "checked"; ?>> <?php _e('View Circulation Data'); ?></label></div>
+									<div class="checkbox"><label><input type="checkbox" name="perms[]" value="deleteNonAssetCirculation" <?php if(in_array("deleteNonAssetCirculation",$roleperms)) echo "checked"; ?>> <?php _e('Delete Circulation Data'); ?></label></div>
+									<br>
+								</div>
+								<div class="col-md-3">
+									<h4>Licenses</h4>
+									<div class="checkbox"><label><input type="checkbox" name="perms[]" value="addLicense" <?php if(in_array("addLicense",$roleperms)) echo "checked"; ?> > <?php _e('Add'); ?></label></div>
+									<div class="checkbox"><label><input type="checkbox" name="perms[]" value="editLicense" <?php if(in_array("editLicense",$roleperms)) echo "checked"; ?> > <?php _e('Edit'); ?></label></div>
+									<div class="checkbox"><label><input type="checkbox" name="perms[]" value="deleteLicense" <?php if(in_array("deleteLicense",$roleperms)) echo "checked"; ?> > <?php _e('Delete'); ?></label></div>
+									<div class="checkbox"><label><input type="checkbox" name="perms[]" value="manageLicense" <?php if(in_array("manageLicense",$roleperms)) echo "checked"; ?> > <?php _e('Manage'); ?></label></div>
+									<div class="checkbox"><label><input type="checkbox" name="perms[]" value="assetLicense" <?php if(in_array("assetLicense",$roleperms)) echo "checked"; ?> > <?php _e('Assign/Unassign Asset'); ?></label></div>
+									<div class="checkbox"><label><input type="checkbox" name="perms[]" value="viewLicenses" <?php if(in_array("viewLicenses",$roleperms)) echo "checked"; ?> > <?php _e('View Licenses'); ?></label></div>
+									<br>
+								</div>
+								<div class="col-md-3">
+									<h4>Projects</h4>
+									<div class="checkbox"><label><input type="checkbox" name="perms[]" value="addProject" <?php if(in_array("addProject",$roleperms)) echo "checked"; ?> > <?php _e('Add'); ?></label></div>
+									<div class="checkbox"><label><input type="checkbox" name="perms[]" value="editProject" <?php if(in_array("editProject",$roleperms)) echo "checked"; ?> > <?php _e('Edit'); ?></label></div>
+									<div class="checkbox"><label><input type="checkbox" name="perms[]" value="deleteProject" <?php if(in_array("deleteProject",$roleperms)) echo "checked"; ?> > <?php _e('Delete'); ?></label></div>
+									<div class="checkbox"><label><input type="checkbox" name="perms[]" value="manageProject" <?php if(in_array("manageProject",$roleperms)) echo "checked"; ?> > <?php _e('Manage Project'); ?></label></div>
+									<div class="checkbox"><label><input type="checkbox" name="perms[]" value="manageProjectNotes" <?php if(in_array("manageProjectNotes",$roleperms)) echo "checked"; ?> > <?php _e('Manage Project Notes'); ?></label></div>
+									<div class="checkbox"><label><input type="checkbox" name="perms[]" value="adminsProject" <?php if(in_array("adminsProject",$roleperms)) echo "checked"; ?> > <?php _e('Assign/Unassign Staff'); ?></label></div>
+									<div class="checkbox"><label><input type="checkbox" name="perms[]" value="viewProjects" <?php if(in_array("viewProjects",$roleperms)) echo "checked"; ?> > <?php _e('View Projects'); ?></label></div>
+								</div>
+								<div class="col-md-3">
+									<h4>Tickets</h4>
+									<div class="checkbox"><label><input type="checkbox" name="perms[]" value="addTicket" <?php if(in_array("addTicket",$roleperms)) echo "checked"; ?> > <?php _e('Add'); ?></label></div>
+									<div class="checkbox"><label><input type="checkbox" name="perms[]" value="editTicket" <?php if(in_array("editTicket",$roleperms)) echo "checked"; ?> > <?php _e('Edit'); ?></label></div>
+									<div class="checkbox"><label><input type="checkbox" name="perms[]" value="deleteTicket" <?php if(in_array("deleteTicket",$roleperms)) echo "checked"; ?> > <?php _e('Delete'); ?></label></div>
+									<div class="checkbox"><label><input type="checkbox" name="perms[]" value="manageTicket" <?php if(in_array("manageTicket",$roleperms)) echo "checked"; ?> > <?php _e('Manage Ticket'); ?></label></div>
+									<div class="checkbox"><label><input type="checkbox" name="perms[]" value="manageTicketRules" <?php if(in_array("manageTicketRules",$roleperms)) echo "checked"; ?> > <?php _e('Manage Ticket Rules'); ?></label></div>
+									<div class="checkbox"><label><input type="checkbox" name="perms[]" value="manageTicketNotes" <?php if(in_array("manageTicketNotes",$roleperms)) echo "checked"; ?> > <?php _e('Manage Ticket Notes'); ?></label></div>
+									<div class="checkbox"><label><input type="checkbox" name="perms[]" value="manageTicketAssignment" <?php if(in_array("manageTicketAssignment",$roleperms)) echo "checked"; ?> > <?php _e('Manage Ticket Assignment'); ?></label></div>
+									<div class="checkbox"><label><input type="checkbox" name="perms[]" value="viewTickets" <?php if(in_array("viewTickets",$roleperms)) echo "checked"; ?> > <?php _e('View Tickets'); ?></label></div>
+								</div>
+								<div class="col-md-3">
+									<h4>Issues</h4>
+									<div class="checkbox"><label><input type="checkbox" name="perms[]" value="addIssue" <?php if(in_array("addIssue",$roleperms)) echo "checked"; ?> > <?php _e('Add'); ?></label></div>
+									<div class="checkbox"><label><input type="checkbox" name="perms[]" value="editIssue" <?php if(in_array("editIssue",$roleperms)) echo "checked"; ?> > <?php _e('Edit'); ?></label></div>
+									<div class="checkbox"><label><input type="checkbox" name="perms[]" value="deleteIssue" <?php if(in_array("deleteIssue",$roleperms)) echo "checked"; ?> > <?php _e('Delete'); ?></label></div>
+									<div class="checkbox"><label><input type="checkbox" name="perms[]" value="manageIssue" <?php if(in_array("manageIssue",$roleperms)) echo "checked"; ?> > <?php _e('Manage'); ?></label></div>
+									<div class="checkbox"><label><input type="checkbox" name="perms[]" value="viewIssues" <?php if(in_array("viewIssues",$roleperms)) echo "checked"; ?> > <?php _e('View Issues'); ?></label></div>
+									<br><br><br><br>
+								</div>
+								<div class="col-md-3">
+									<h4>Comments</h4>
+									<div class="checkbox"><label><input type="checkbox" name="perms[]" value="addComment" <?php if(in_array("addComment",$roleperms)) echo "checked"; ?> > <?php _e('Add'); ?></label></div>
+									<div class="checkbox"><label><input type="checkbox" name="perms[]" value="editComment" <?php if(in_array("editComment",$roleperms)) echo "checked"; ?> > <?php _e('Edit'); ?></label></div>
+									<div class="checkbox"><label><input type="checkbox" name="perms[]" value="deleteComment" <?php if(in_array("deleteComment",$roleperms)) echo "checked"; ?> > <?php _e('Delete'); ?></label></div>
+									<div class="checkbox"><label><input type="checkbox" name="perms[]" value="assignComment" <?php if(in_array("assignComment",$roleperms)) echo "checked"; ?> > <?php _e('Allow Account Selection'); ?></label></div>
+									<div class="checkbox"><label><input type="checkbox" name="perms[]" value="viewComments" <?php if(in_array("viewComments",$roleperms)) echo "checked"; ?> > <?php _e('View Comments'); ?></label></div>
+									<br><br><br><br>
+								</div>
+								<div class="col-md-3">
+									<h4>Credentials</h4>
+									<div class="checkbox"><label><input type="checkbox" name="perms[]" value="addCredential" <?php if(in_array("addCredential",$roleperms)) echo "checked"; ?> > <?php _e('Add'); ?></label></div>
+									<div class="checkbox"><label><input type="checkbox" name="perms[]" value="editCredential" <?php if(in_array("editCredential",$roleperms)) echo "checked"; ?> > <?php _e('Edit'); ?></label></div>
+									<div class="checkbox"><label><input type="checkbox" name="perms[]" value="deleteCredential" <?php if(in_array("deleteCredential",$roleperms)) echo "checked"; ?> > <?php _e('Delete'); ?></label></div>
+									<div class="checkbox"><label><input type="checkbox" name="perms[]" value="viewCredential" <?php if(in_array("viewCredential",$roleperms)) echo "checked"; ?> > <?php _e('View Credential'); ?></label></div>
+									<div class="checkbox"><label><input type="checkbox" name="perms[]" value="viewCredentials" <?php if(in_array("viewCredentials",$roleperms)) echo "checked"; ?> > <?php _e('View Credentials'); ?></label></div>
+									<br><br><br><br>
+									<br>
+								</div>
+
+								<div class="col-md-3">
+									<h4>Knowledge Base</h4>
+									<div class="checkbox"><label><input type="checkbox" name="perms[]" value="addKB" <?php if(in_array("addKB",$roleperms)) echo "checked"; ?> > <?php _e('Add'); ?></label></div>
+									<div class="checkbox"><label><input type="checkbox" name="perms[]" value="editKB" <?php if(in_array("editKB",$roleperms)) echo "checked"; ?> > <?php _e('Edit'); ?></label></div>
+									<div class="checkbox"><label><input type="checkbox" name="perms[]" value="deleteKB" <?php if(in_array("deleteKB",$roleperms)) echo "checked"; ?> > <?php _e('Delete'); ?></label></div>
+									<div class="checkbox"><label><input type="checkbox" name="perms[]" value="viewKB" <?php if(in_array("viewKB",$roleperms)) echo "checked"; ?> > <?php _e('View Knowledge Base'); ?></label></div>
+									<br>
+								</div>
+								<div class="col-md-3">
+									<h4>Predefined Replies</h4>
+									<div class="checkbox"><label><input type="checkbox" name="perms[]" value="addPReply" <?php if(in_array("addPReply",$roleperms)) echo "checked"; ?> > <?php _e('Add'); ?></label></div>
+									<div class="checkbox"><label><input type="checkbox" name="perms[]" value="editPReply" <?php if(in_array("editPReply",$roleperms)) echo "checked"; ?> > <?php _e('Edit'); ?></label></div>
+									<div class="checkbox"><label><input type="checkbox" name="perms[]" value="deletePReply" <?php if(in_array("deletePReply",$roleperms)) echo "checked"; ?> > <?php _e('Delete'); ?></label></div>
+									<div class="checkbox"><label><input type="checkbox" name="perms[]" value="viewPReplies" <?php if(in_array("viewPReplies",$roleperms)) echo "checked"; ?> > <?php _e('View Predefined Replies'); ?></label></div>
+									<br>
+								</div>
+								<div class="col-md-3">
+									<h4>Files</h4>
+									<div class="checkbox"><label><input type="checkbox" name="perms[]" value="uploadFile" <?php if(in_array("uploadFile",$roleperms)) echo "checked"; ?> > <?php _e('Upload'); ?></label></div>
+									<div class="checkbox"><label><input type="checkbox" name="perms[]" value="downloadFile" <?php if(in_array("downloadFile",$roleperms)) echo "checked"; ?> > <?php _e('Download'); ?></label></div>
+									<div class="checkbox"><label><input type="checkbox" name="perms[]" value="deleteFile" <?php if(in_array("deleteFile",$roleperms)) echo "checked"; ?> > <?php _e('Delete'); ?></label></div>
+									<div class="checkbox"><label><input type="checkbox" name="perms[]" value="viewFiles" <?php if(in_array("viewFiles",$roleperms)) echo "checked"; ?> > <?php _e('View Files'); ?></label></div>
+									<br>
+								</div>
+								<div class="col-md-3">
+									<h4>Monitoring</h4>
+									<div class="checkbox"><label><input type="checkbox" name="perms[]" value="addHost" <?php if(in_array("addHost",$roleperms)) echo "checked"; ?> > <?php _e('Add'); ?></label></div>
+									<div class="checkbox"><label><input type="checkbox" name="perms[]" value="editHost" <?php if(in_array("editHost",$roleperms)) echo "checked"; ?> > <?php _e('Edit'); ?></label></div>
+									<div class="checkbox"><label><input type="checkbox" name="perms[]" value="deleteHost" <?php if(in_array("deleteHost",$roleperms)) echo "checked"; ?> > <?php _e('Delete'); ?></label></div>
+									<div class="checkbox"><label><input type="checkbox" name="perms[]" value="manageHost" <?php if(in_array("manageHost",$roleperms)) echo "checked"; ?> > <?php _e('Manage'); ?></label></div>
+									<div class="checkbox"><label><input type="checkbox" name="perms[]" value="viewMonitoring" <?php if(in_array("viewMonitoring",$roleperms)) echo "checked"; ?> > <?php _e('View Monitoring'); ?></label></div>
+								</div>
+
+								<div class="col-md-3">
+									<h4>Users</h4>
+									<div class="checkbox"><label><input type="checkbox" name="perms[]" value="addUser" <?php if(in_array("addUser",$roleperms)) echo "checked"; ?> > <?php _e('Add'); ?></label></div>
+									<div class="checkbox"><label><input type="checkbox" name="perms[]" value="editUser" <?php if(in_array("editUser",$roleperms)) echo "checked"; ?> > <?php _e('Edit'); ?></label></div>
+									<div class="checkbox"><label><input type="checkbox" name="perms[]" value="deleteUser" <?php if(in_array("deleteUser",$roleperms)) echo "checked"; ?> > <?php _e('Delete'); ?></label></div>
+									<div class="checkbox"><label><input type="checkbox" name="perms[]" value="viewUsers" <?php if(in_array("viewUsers",$roleperms)) echo "checked"; ?> > <?php _e('View Users'); ?></label></div>
+								</div>
+								<div class="col-md-3">
+									<h4>Staff</h4>
+									<div class="checkbox"><label><input type="checkbox" name="perms[]" value="addStaff" <?php if(in_array("addStaff",$roleperms)) echo "checked"; ?> > <?php _e('Add'); ?></label></div>
+									<div class="checkbox"><label><input type="checkbox" name="perms[]" value="editStaff" <?php if(in_array("editStaff",$roleperms)) echo "checked"; ?> > <?php _e('Edit'); ?></label></div>
+									<div class="checkbox"><label><input type="checkbox" name="perms[]" value="deleteStaff" <?php if(in_array("deleteStaff",$roleperms)) echo "checked"; ?> > <?php _e('Delete'); ?></label></div>
+									<div class="checkbox"><label><input type="checkbox" name="perms[]" value="viewStaff" <?php if(in_array("viewStaff",$roleperms)) echo "checked"; ?> > <?php _e('View Staff'); ?></label></div>
+								</div>
+								<div class="col-md-3">
+									<h4>Roles</h4>
+									<div class="checkbox"><label><input type="checkbox" name="perms[]" value="addRole" <?php if(in_array("addRole",$roleperms)) echo "checked"; ?> > <?php _e('Add'); ?></label></div>
+									<div class="checkbox"><label><input type="checkbox" name="perms[]" value="editRole" <?php if(in_array("editRole",$roleperms)) echo "checked"; ?> > <?php _e('Edit'); ?></label></div>
+									<div class="checkbox"><label><input type="checkbox" name="perms[]" value="deleteRole" <?php if(in_array("deleteRole",$roleperms)) echo "checked"; ?> > <?php _e('Delete'); ?></label></div>
+									<div class="checkbox"><label><input type="checkbox" name="perms[]" value="viewRoles" <?php if(in_array("viewRoles",$roleperms)) echo "checked"; ?> > <?php _e('View Roles'); ?></label></div>
+								</div>
+								<div class="col-md-3">
+									<h4>Contacts</h4>
+									<div class="checkbox"><label><input type="checkbox" name="perms[]" value="addContact" <?php if(in_array("addContact",$roleperms)) echo "checked"; ?> > <?php _e('Add'); ?></label></div>
+									<div class="checkbox"><label><input type="checkbox" name="perms[]" value="editContact" <?php if(in_array("editContact",$roleperms)) echo "checked"; ?> > <?php _e('Edit'); ?></label></div>
+									<div class="checkbox"><label><input type="checkbox" name="perms[]" value="deleteContact" <?php if(in_array("deleteContact",$roleperms)) echo "checked"; ?> > <?php _e('Delete'); ?></label></div>
+									<div class="checkbox"><label><input type="checkbox" name="perms[]" value="viewContacts" <?php if(in_array("viewContacts",$roleperms)) echo "checked"; ?> > <?php _e('View Contacts'); ?></label></div>
+								</div>
+
+								<div class="col-md-3">
+									<h4>System</h4>
+									<div class="checkbox"><label><input type="checkbox" name="perms[]" value="manageData" <?php if(in_array("manageData",$roleperms)) echo "checked"; ?> > <?php _e('Manage Predefined Data'); ?></label></div>
+									<div class="checkbox"><label><input type="checkbox" name="perms[]" value="manageSettings" <?php if(in_array("manageSettings",$roleperms)) echo "checked"; ?> > <?php _e('Manage Settings'); ?></label></div>
+									<div class="checkbox"><label><input type="checkbox" name="perms[]" value="viewLogs" <?php if(in_array("viewLogs",$roleperms)) echo "checked"; ?> > <?php _e('View Logs'); ?></label></div>
+									<div class="checkbox"><label><input type="checkbox" name="perms[]" value="viewSystem" <?php if(in_array("viewSystem",$roleperms)) echo "checked"; ?> > <?php _e('View System'); ?></label></div>
+								</div>
+								<div class="col-md-3">
+									<h4>People</h4>
+									<div class="checkbox"><label><input type="checkbox" name="perms[]" value="viewPeople" <?php if(in_array("viewPeople",$roleperms)) echo "checked"; ?> > <?php _e('View People'); ?></label></div>
+									<h4>Reports</h4>
+									<div class="checkbox"><label><input type="checkbox" name="perms[]" value="viewReports" <?php if(in_array("viewReports",$roleperms)) echo "checked"; ?> > <?php _e('View Reports'); ?></label></div>
+									<br>
+								</div>
+
+
+								<div class="col-md-3">
+									<h4>Miscellaneous</h4>
+									<div class="checkbox"><label><input type="checkbox" name="perms[]" value="autorefresh" <?php if(in_array("autorefresh",$roleperms)) echo "checked"; ?> > <?php _e('Autorefresh'); ?></label></div>
+									<div class="checkbox"><label><input type="checkbox" name="perms[]" value="search" <?php if(in_array("search",$roleperms)) echo "checked"; ?> > <?php _e('Search'); ?></label></div>
+								</div>
+
+								<input type="hidden" name="perms[]" value="Null">
+								<input type="hidden" name="id" value="<?php echo $role['id']; ?>">
+
+								<input type="hidden" name="action" value="editRole">
+								<input type="hidden" name="route" value="people/roles/edit">
+								<input type="hidden" name="routeid" value="<?php echo $role['id']; ?>">
+								<input type="hidden" name="section" value="">
+
+								<div class="col-md-12">
+									<br><br><br>
+									<button type="submit" class="btn btn-success"><i class="fa fa-save"></i> <?php _e('Save'); ?></button>
+									<a onclick="javascript:checkAll('roleForm', true);" href="javascript:void();" class="btn btn-default" ><i class="fa fa-check-square-o"></i> Check All</a>
+									<a onclick="javascript:checkAll('roleForm', false);" href="javascript:void();" class="btn btn-default" ><i class="fa fa-square-o"></i> Uncheck All</a>
+								</div>
+
+							</form><!-- /.form -->
+
+						</div>
+
+					</div>
+				</div>
+			</div>
+		</div>
+	</section><!-- /.content -->
+</aside><!-- /.right-side -->
+
+<script type="text/javascript" language="javascript">// <![CDATA[
+	function checkAll(formname, checktoggle)
+	{
+	  var checkboxes = new Array();
+	  checkboxes = document[formname].getElementsByTagName('input');
+
+	  for (var i=0; i<checkboxes.length; i++)  {
+	    if (checkboxes[i].type == 'checkbox')   {
+	      checkboxes[i].checked = checktoggle;
+	    }
+	  }
+	}
+
+</script>

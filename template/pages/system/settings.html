@@ -1,0 +1,505 @@
+<aside class="right-side">
+	<!-- Content Header (Page header) -->
+	<section class="content-header">
+		<h1><?php _e('Settings'); ?><small> <?php _e('System configuration'); ?></small></h1>
+		<ol class="breadcrumb"><li><a href="?route=dashboard"><i class="fa fa-dashboard"></i> <?php _e('Home'); ?></a></li><li><?php _e('System'); ?></li><li class="active"><?php _e('Settings'); ?></li></ol>
+	</section>
+
+	<!-- Main content -->
+	<section class="content">
+		<?php if(!empty($statusmessage)): ?>
+				<div class="row"><div class='col-md-12'><div class="alert alert-<?php print $statusmessage["type"]; ?> alert-auto" role="alert"><?php print __($statusmessage["message"]); ?></div></div></div>
+		<?php endif; ?>
+	    <div class='row'>
+            <div class='col-md-12'>
+                <!-- Custom Tabs -->
+                <div class="nav-tabs-custom">
+                    <ul class="nav nav-tabs">
+                        <li <?php if ($section == "") echo 'class="active"'; ?> ><a href="#general" data-toggle="tab"><?php _e('General'); ?></a></li>
+						<li <?php if ($section == "localisation") echo 'class="active"'; ?> ><a href="#localisation" data-toggle="tab"><?php _e('Localisation'); ?></a></li>
+                        <li <?php if ($section == "email") echo 'class="active"'; ?> ><a href="#email" data-toggle="tab"><?php _e('Email'); ?></a></li>
+						<li <?php if ($section == "sms") echo 'class="active"'; ?> ><a href="#sms" data-toggle="tab"><?php _e('SMS'); ?></a></li>
+						<li <?php if ($section == "templates") echo 'class="active"'; ?> ><a href="#templates" data-toggle="tab"><?php _e('Notifications'); ?></a></li>
+						<li <?php if ($section == "tickets") echo 'class="active"'; ?> ><a href="#tickets" data-toggle="tab"><?php _e('Tickets'); ?></a></li>
+						<li <?php if ($section == "crons") echo 'class="active"'; ?> ><a href="#crons" data-toggle="tab"><?php _e('Cron Jobs'); ?></a></li>
+                    </ul>
+                    <div class="tab-content">
+                        <div class="tab-pane <?php if ($section == "") echo 'active'; ?>" id="general">
+							<form role="form" class="form-horizontal" action="" method="post" id="generalSettingsForm">
+								<div class="form-group">
+									<label for="app_name" class="col-lg-2 control-label"><?php _e('Application Name'); ?></label>
+									<div class="col-lg-4"><input class="form-control" id="app_name" value="<?php echo getConfigValue("app_name"); ?>" placeholder="Application Name" type="text" name="app_name" required></div>
+									<div class="col-lg-4"><p class="help-block"><?php _e('Application Name as it appears throughout the system'); ?></p></div>
+								</div>
+								<div class="form-group">
+									<label for="app_url" class="col-lg-2 control-label"><?php _e('Application URL'); ?></label>
+									<div class="col-lg-4"><input class="form-control" id="app_url" value="<?php echo getConfigValue("app_url"); ?>" placeholder="Application URL" type="text" name="app_url" required></div>
+									<div class="col-lg-4"><p class="help-block"><?php _e('Full installation URL including http:// or https://'); ?></p></div>
+								</div>
+								<div class="form-group">
+									<label for="company_name" class="col-lg-2 control-label"><?php _e('Company Name'); ?></label>
+									<div class="col-lg-4"><input class="form-control" id="company_name" value="<?php echo getConfigValue("company_name"); ?>" placeholder="Company Name" type="text" name="company_name" required></div>
+									<div class="col-lg-4"><p class="help-block"><?php _e('Company Name as it appears throughout the system'); ?></p></div>
+								</div>
+								<div class="form-group">
+									<label for="company_details" class="col-lg-2 control-label"><?php _e('Company Details'); ?></label>
+									<div class="col-lg-4"><textarea class="form-control" rows="3" placeholder="Company Details ..." id="company_details" name="company_details"><?php echo getConfigValue("company_details"); ?></textarea></div>
+									<div class="col-lg-4"><p class="help-block"><?php _e('Company Details used in the system for reports'); ?></p></div>
+								</div>
+								<div class="form-group">
+									<label for="log_retention" class="col-lg-2 control-label"><?php _e('Log Retention'); ?></label>
+									<div class="col-lg-4"><input class="form-control" id="log_retention" value="<?php echo getConfigValue("log_retention"); ?>" placeholder="Log Retention (days)" type="number" name="log_retention" required></div>
+									<div class="col-lg-4"><p class="help-block"><?php _e('Delete log entries older then (days)'); ?></p></div>
+								</div>
+								<div class="form-group">
+									<label for="table_records" class="col-lg-2 control-label"><?php _e('Record to Display per Page'); ?></label>
+									<div class="col-lg-4">
+										<select class="form-control" id="table_records" name="table_records">
+											<option <?php if(getConfigValue("table_records") == "10") echo 'selected'; ?> value="10">10</option>
+											<option <?php if(getConfigValue("table_records") == "25") echo 'selected'; ?> value="25">25</option>
+											<option <?php if(getConfigValue("table_records") == "50") echo 'selected'; ?> value="50">50</option>
+											<option <?php if(getConfigValue("table_records") == "100") echo 'selected'; ?> value="100">100</option>
+										</select>
+									</div>
+								</div>
+								<div class="form-group">
+									<label for="asset_tag_prefix" class="col-lg-2 control-label"><?php _e('Default Asset Tag Prefix'); ?></label>
+									<div class="col-lg-4"><input class="form-control" id="asset_tag_prefix" value="<?php echo getConfigValue("asset_tag_prefix"); ?>" placeholder="Asset Tag Prefix" type="text" name="asset_tag_prefix" required></div>
+									<div class="col-lg-4"></div>
+								</div>
+								<div class="form-group">
+									<label for="license_tag_prefix" class="col-lg-2 control-label"><?php _e('Default License Tag Prefix'); ?></label>
+									<div class="col-lg-4"><input class="form-control" id="license_tag_prefix" value="<?php echo getConfigValue("license_tag_prefix"); ?>" placeholder="License Tag Prefix" type="text" name="license_tag_prefix" required></div>
+									<div class="col-lg-4"></div>
+								</div>
+								<div class="form-group">
+									<label for="password_generator_length" class="col-lg-2 control-label"><?php _e('Password Generator Length'); ?></label>
+									<div class="col-lg-4"><input class="form-control" id="password_generator_length" value="<?php echo getConfigValue("password_generator_length"); ?>" placeholder="Asset Tag Prefix" type="number" name="password_generator_length" required></div>
+									<div class="col-lg-4"></div>
+								</div>
+								<div class="form-group">
+									<div class="col-lg-4 col-lg-offset-2"><button type='submit' class="btn btn-success"><i class="fa fa-save"></i> <?php _e('Save Changes'); ?></button></div>
+								</div>
+								<input type="hidden" name="action" value="generalSettings">
+								<input type="hidden" name="route" value="system/settings">
+								<input type="hidden" name="section" value="">
+							</form>
+						</div><!-- /.tab-pane -->
+
+                        <div class="tab-pane <?php if ($section == "localisation") echo 'active'; ?>" id="localisation">
+							<div class="row">
+								<div class="col-md-6">
+									<form role="form" class="form-horizontal" action="" method="post" id="localisationSettingsForm">
+										<div class="form-group">
+											<label for="week_start" class="col-lg-4 control-label"><?php _e('First Day of The Week'); ?></label>
+											<div class="col-lg-8">
+												<select class="form-control" id="week_start" name="week_start">
+													<option <?php if(getConfigValue("week_start") == "1") echo 'selected'; ?> value="1"><?php _e('Monday'); ?></option>
+													<option <?php if(getConfigValue("week_start") == "7") echo 'selected'; ?> value="7"><?php _e('Sunday'); ?></option>
+												</select>
+												<p class="help-block"><?php _e('Used in inputs with calendar'); ?></p>
+											</div>
+										</div>
+										<div class="form-group">
+											<label for="default_lang" class="col-lg-4 control-label"><?php _e('Default Language'); ?></label>
+											<div class="col-lg-8">
+												<select class="form-control" id="default_lang" name="default_lang">
+													<?php foreach ($languages as $language) { ?>
+														<option <?php if(getConfigValue("default_lang") == $language['code']) echo 'selected'; ?> value="<?php echo $language['code']; ?>"><?php echo $language['name']; ?></option>
+													<?php } ?>
+												</select>
+											</div>
+										</div>
+
+										<div class="form-group">
+											<label for="timezone" class="col-lg-4 control-label"><?php _e('Timezone'); ?></label>
+											<div class="col-lg-8">
+												<select class="form-control select2" id="timezone" name="timezone" style="width: 100%;">
+													<?php foreach ($tzlist as $key => $value) { ?>
+														<option <?php if(getConfigValue("timezone") == $value) echo 'selected'; ?> value="<?php echo $value; ?>"><?php echo $key; ?></option>
+													<?php } ?>
+
+												</select>
+
+											</div>
+										</div>
+
+										<div class="form-group">
+											<div class="col-lg-8 col-lg-offset-4"><button type='submit' class="btn btn-success"><i class="fa fa-save"></i> <?php _e('Save Changes'); ?></button></div>
+										</div>
+										<input type="hidden" name="action" value="localisationSettings">
+										<input type="hidden" name="route" value="system/settings">
+										<input type="hidden" name="section" value="localisation">
+									</form>
+								</div>
+								<div class="col-md-6">
+									<div class="box box-primary">
+										<div class="box-header with-border">
+											<h3 class="box-title"><?php _e('Languages'); ?></h3>
+											<div class="box-tools pull-right">
+												<a href="#" onClick='showM("?modal=languages/add&reroute=system/settings&routeid=&section=localisation");return false' class="btn btn-primary btn-sm"><i class="fa fa-plus"></i> NEW LANGUAGE</a>
+											</div>
+										</div>
+										<div class="box-body">
+											<div class="table-responsive">
+												<table class="table table-striped table-hover">
+													<thead>
+														<tr>
+															<th><?php _e('Code'); ?></th>
+															<th><?php _e('Name'); ?></th>
+															<th class="text-right"><?php _e('Actions'); ?></th>
+														</tr>
+													</thead>
+													<tbody>
+														<?php
+														foreach ($languages as $language) {
+														echo "<tr>";
+															echo "<td>".$language['code']."</td>";
+															echo "<td>".$language['name']."</td>";
+															echo "<td>";
+																if($language['id'] != 1) {
+																	echo "<div class='pull-right'>
+																		<a href='#' onClick='showM(\"?modal=languages/delete&reroute=system/settings&routeid=&id=".$language['id']."&section=localisation\");return false' class='btn-right text-red'><i class='fa fa-trash-o'></i></a>
+																	</div>";
+																}
+															echo "</td>";
+														echo "</tr>";
+														}
+														?>
+													</tbody>
+												</table>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+
+						</div><!-- /.tab-pane -->
+
+                        <div class="tab-pane <?php if ($section == "email") echo 'active'; ?>" id="email">
+							<form role="form" class="form-horizontal" action="" method="post" id="emailSettingsForm">
+								<div class="form-group">
+									<label for="email_from_address" class="col-lg-2 control-label"><?php _e('Email From Address'); ?></label>
+									<div class="col-lg-4"><input class="form-control" id="email_from_address" value="<?php echo getConfigValue("email_from_address"); ?>" placeholder="Email From Address" type="text" name="email_from_address" required></div>
+									<div class="col-lg-4"><p class="help-block"></p></div>
+								</div>
+								<div class="form-group">
+									<label for="email_from_name" class="col-lg-2 control-label"><?php _e('Emails From Name'); ?></label>
+									<div class="col-lg-4"><input class="form-control" id="email_from_name" value="<?php echo getConfigValue("email_from_name"); ?>" placeholder="Emails From Name" type="text" name="email_from_name" required></div>
+									<div class="col-lg-4"><p class="help-block"></p></div>
+								</div>
+								<div class="form-group">
+									<div class="col-lg-5 col-lg-offset-2">
+										<div class="checkbox"><label><input type="checkbox" name="email_smtp_enable" <?php if(getConfigValue("email_smtp_enable") == "true") echo 'checked="yes"'; ?> value="true"> Enable SMTP</label></div>
+										<div class="checkbox"><label><input type="checkbox" name="email_smtp_auth" <?php if(getConfigValue("email_smtp_auth") == "true") echo 'checked="yes"'; ?> value="true"> SMTP Requires Authentication</label></div>
+									</div>
+								</div>
+
+								<div class="form-group">
+									<label for="email_smtp_host" class="col-lg-2 control-label"><?php _e('SMTP Host'); ?></label>
+									<div class="col-lg-4"><input class="form-control" id="email_smtp_host" value="<?php echo getConfigValue("email_smtp_host"); ?>" placeholder="SMTP Host" type="text" name="email_smtp_host"></div>
+									<div class="col-lg-4"><p class="help-block"></p></div>
+								</div>
+								<div class="form-group">
+									<label for="email_smtp_port" class="col-lg-2 control-label"><?php _e('SMTP Port'); ?></label>
+									<div class="col-lg-4"><input class="form-control" id="email_smtp_port" value="<?php echo getConfigValue("email_smtp_port"); ?>" placeholder="SMTP Port" type="text" name="email_smtp_port"></div>
+									<div class="col-lg-4"><p class="help-block"></p></div>
+								</div>
+								<div class="form-group">
+									<label for="email_smtp_username" class="col-lg-2 control-label"><?php _e('SMTP Username'); ?></label>
+									<div class="col-lg-4"><input class="form-control" id="email_smtp_username" value="<?php echo getConfigValue("email_smtp_username"); ?>" placeholder="SMTP Username" type="text" name="email_smtp_username"></div>
+									<div class="col-lg-4"><p class="help-block"></p></div>
+								</div>
+								<div class="form-group">
+									<label for="email_smtp_password" class="col-lg-2 control-label"><?php _e('SMTP Password'); ?></label>
+									<div class="col-lg-4"><input class="form-control" id="email_smtp_password" value="<?php echo getConfigValue("email_smtp_password"); ?>" placeholder="SMTP Password" type="password" name="email_smtp_password"></div>
+									<div class="col-lg-4"><p class="help-block"></p></div>
+								</div>
+								<div class="form-group">
+									<label for="email_smtp_security" class="col-lg-2 control-label"><?php _e('SMTP Security'); ?></label>
+									<div class="col-lg-4">
+										<select class="form-control" id="email_smtp_security" name="email_smtp_security">
+											<option <?php if(getConfigValue("email_smtp_security") == "") echo 'selected'; ?> value=""><?php _e('None'); ?></option>
+											<option <?php if(getConfigValue("email_smtp_security") == "SSL") echo 'selected'; ?> value="SSL"><?php _e('SSL'); ?></option>
+											<option <?php if(getConfigValue("email_smtp_security") == "TLS") echo 'selected'; ?> value="TLS"><?php _e('TLS'); ?></option>
+										</select>
+									</div>
+									<div class="col-lg-4"><p class="help-block"></p></div>
+								</div>
+								<div class="form-group">
+									<label for="email_smtp_username" class="col-lg-2 control-label"><?php _e('SMTP Authentication Domain'); ?></label>
+									<div class="col-lg-4"><input class="form-control" id="email_smtp_domain" value="<?php echo getConfigValue("email_smtp_domain"); ?>" placeholder="SMTP Authentication Domain" type="text" name="email_smtp_domain"></div>
+									<div class="col-lg-4"><p class="help-block"><?php _e('Use in case of connecting to an Exchange server or similar server requiring NTLM authentication.'); ?></p></div>
+								</div>
+								<div class="form-group">
+									<div class="col-lg-4 col-lg-offset-2"><button type='submit' class="btn btn-success"><i class="fa fa-save"></i> <?php _e('Save Changes'); ?></button></div>
+								</div>
+								<input type="hidden" name="action" value="emailSettings">
+								<input type="hidden" name="route" value="system/settings">
+								<input type="hidden" name="section" value="email">
+							</form>
+                        </div><!-- /.tab-pane -->
+
+
+                        <div class="tab-pane <?php if ($section == "sms") echo 'active'; ?>" id="sms">
+							<form role="form" class="form-horizontal" action="" method="post" id="smsSettingsForm">
+								<div class="form-group">
+									<label for="sms_provider" class="col-lg-2 control-label"><?php _e('SMS Provider'); ?></label>
+									<div class="col-lg-4">
+										<select class="form-control" id="sms_provider" name="sms_provider">
+											<option <?php if(getConfigValue("sms_provider") == "clickatell") echo 'selected'; ?> value="clickatell">Clickatell</option>
+											<option <?php if(getConfigValue("sms_provider") == "smsglobal") echo 'selected'; ?> value="smsglobal">SMS Global</option>
+										</select>
+									</div>
+									<div class="col-lg-4"><p class="help-block"></p></div>
+								</div>
+
+								<div class="form-group">
+									<label for="sms_user" class="col-lg-2 control-label"><?php _e('Username'); ?></label>
+									<div class="col-lg-4"><input class="form-control" id="sms_user" value="<?php echo getConfigValue("sms_user"); ?>" placeholder="SMS Username" type="text" name="sms_user"></div>
+									<div class="col-lg-4"><p class="help-block"></p></div>
+								</div>
+								<div class="form-group">
+									<label for="sms_password" class="col-lg-2 control-label"><?php _e('Password'); ?></label>
+									<div class="col-lg-4"><input class="form-control" id="sms_password" value="<?php echo getConfigValue("sms_password"); ?>" placeholder="SMS Password" type="password" name="sms_password"></div>
+									<div class="col-lg-4"><p class="help-block"></p></div>
+								</div>
+								<div class="form-group">
+									<label for="sms_api_id" class="col-lg-2 control-label"><?php _e('API ID'); ?></label>
+									<div class="col-lg-4"><input class="form-control" id="sms_api_id" value="<?php echo getConfigValue("sms_api_id"); ?>" placeholder="API ID" type="text" name="sms_api_id"></div>
+									<div class="col-lg-4"><p class="help-block"><?php _e('Only for Clickatell'); ?></p></div>
+								</div>
+								<div class="form-group">
+									<label for="sms_from" class="col-lg-2 control-label"><?php _e('From Name/Number'); ?></label>
+									<div class="col-lg-4"><input class="form-control" id="sms_from" value="<?php echo getConfigValue("sms_from"); ?>" placeholder="From Name/Number" type="text" name="sms_from"></div>
+									<div class="col-lg-4"><p class="help-block"><?php _e('Only for SMS Global'); ?></p></div>
+								</div>
+
+								<div class="form-group">
+									<div class="col-lg-4 col-lg-offset-2"><button type='submit' class="btn btn-success"><i class="fa fa-save"></i> <?php _e('Save Changes'); ?></button></div>
+								</div>
+								<input type="hidden" name="action" value="smsSettings">
+								<input type="hidden" name="route" value="system/settings">
+								<input type="hidden" name="section" value="sms">
+							</form>
+                        </div><!-- /.tab-pane -->
+
+                        <div class="tab-pane <?php if ($section == "templates") echo 'active'; ?>" id="templates">
+
+
+							<div class="text-center">
+								<h3>Tickets</h3>
+								<a onClick='showM("index.php?modal=notifications/edit&id=1&reroute=system/settings&section=templates");return false' data-toggle="modal" class="btn btn-primary btn-sm"><?php _e('New Ticket (User)'); ?></a>
+								<a onClick='showM("index.php?modal=notifications/edit&id=7&reroute=system/settings&section=templates");return false' data-toggle="modal" class="btn btn-primary btn-sm"><?php _e('New Ticket (Staff)'); ?></a>
+								<a onClick='showM("index.php?modal=notifications/edit&id=2&reroute=system/settings&section=templates");return false' data-toggle="modal" class="btn btn-primary btn-sm"><?php _e('New Ticket Reply (User)'); ?></a>
+								<a onClick='showM("index.php?modal=notifications/edit&id=8&reroute=system/settings&section=templates");return false' data-toggle="modal" class="btn btn-primary btn-sm"><?php _e('New Ticket Reply (Staff)'); ?></a>
+								<a onClick='showM("index.php?modal=notifications/edit&id=9&reroute=system/settings&section=templates");return false' data-toggle="modal" class="btn btn-primary btn-sm"><?php _e('Ticket Escalation (Staff)'); ?></a>
+								<a onClick='showM("index.php?modal=notifications/edit&id=10&reroute=system/settings&section=templates");return false' data-toggle="modal" class="btn btn-primary btn-sm"><?php _e('Ticket Auto Close (User)'); ?></a>
+								<br>
+								<h3>People</h3>
+								<a onClick='showM("index.php?modal=notifications/edit&id=3&reroute=system/settings&section=templates");return false' data-toggle="modal" class="btn btn-primary btn-sm"><?php _e('New Account'); ?></a>
+								<a onClick='showM("index.php?modal=notifications/edit&id=5&reroute=system/settings&section=templates");return false' data-toggle="modal" class="btn btn-primary btn-sm"><?php _e('Password Reset'); ?></a>
+								<br>
+								<h3>Monitoring</h3>
+								<a onClick='showM("index.php?modal=notifications/edit&id=6&reroute=system/settings&section=templates");return false' data-toggle="modal" class="btn btn-primary btn-sm"><?php _e('Monitoring Notification'); ?></a>
+
+							</div>
+							<br>
+
+
+                        </div><!-- /.tab-pane -->
+
+
+                        <div class="tab-pane <?php if ($section == "tickets") echo 'active'; ?>" id="tickets">
+							<div class="row">
+								<div class="col-md-6">
+									<h4 class="col-xs-10 col-xs-offset-2"><?php _e('Auto Import Tickets'); ?></h4>
+									<form role="form" class="form-horizontal" action="" method="post" id="ticketSettingsForm">
+										<div class="form-group">
+											<label for="tickets_server" class="col-xs-2 control-label"><?php _e('Server'); ?></label>
+											<div class="col-xs-10"><input class="form-control" id="tickets_server" value="<?php echo getConfigValue("tickets_server"); ?>" placeholder="IMAP Server Address" type="text" name="tickets_server"></div>
+										</div>
+										<div class="form-group">
+											<label for="tickets_username" class="col-xs-2 control-label"><?php _e('Username'); ?></label>
+											<div class="col-xs-10"><input class="form-control" id="tickets_username" value="<?php echo getConfigValue("tickets_username"); ?>" placeholder="Username" type="text" name="tickets_username"></div>
+										</div>
+										<div class="form-group">
+											<label for="tickets_password" class="col-xs-2 control-label"><?php _e('Password'); ?></label>
+											<div class="col-xs-10"><input class="form-control" id="tickets_password" value="<?php echo getConfigValue("tickets_password"); ?>" placeholder="Password" type="password" name="tickets_password"></div>
+										</div>
+										<div class="form-group">
+											<label for="tickets_encrypton" class="col-xs-2 control-label"><?php _e('Encryption'); ?></label>
+											<div class="col-xs-10">
+												<select class="form-control" id="tickets_encrypton" name="tickets_encrypton">
+													<option <?php if(getConfigValue("tickets_encrypton") == "") echo 'selected'; ?> value=""><?php _e('None'); ?></option>
+													<option <?php if(getConfigValue("tickets_encrypton") == "ssl") echo 'selected'; ?> value="ssl"><?php _e('SSL'); ?></option>
+													<option <?php if(getConfigValue("tickets_encrypton") == "tls") echo 'selected'; ?> value="tls"><?php _e('TLS'); ?></option>
+												</select>
+											</div>
+										</div>
+
+										<div class="form-group">
+											<div class="col-xs-8 col-xs-offset-2">
+												<div class="checkbox"><label><input type="checkbox" name="tickets_notification" <?php if(getConfigValue("tickets_notification") == "true") echo 'checked="yes"'; ?> value="true"> <?php _e('Send ticket notification to users for imported emails'); ?></label></div>
+											</div>
+										</div>
+
+										<div class="form-group">
+											<label for="tickets_encrypton" class="col-xs-2 control-label"><?php _e('Department'); ?></label>
+											<div class="col-xs-10">
+												<select class="form-control" id="tickets_defaultdepartment" name="tickets_defaultdepartment">
+													<option value="0">None</option>
+													<?php foreach ($sdepartments as $sdepartment) { ?>
+														<option <?php if(getConfigValue("tickets_defaultdepartment") == $sdepartment['id']) echo 'selected'; ?> value="<?php echo $sdepartment['id']; ?>"><?php echo $sdepartment['name']; ?></option>
+													<?php } ?>
+												</select>
+
+											</div>
+											<div class="col-xs-10 col-xs-offset-2"><p class="help-block"><?php _e('New imported tickets will be assigned to this department.'); ?></p></div>
+										</div>
+
+										<hr>
+										<h4 class="col-xs-10 col-xs-offset-2"><?php _e('Auto Close Answered Tickets'); ?></h4>
+
+										<div class="form-group">
+											<label for="auto_close_tickets" class="col-xs-2 control-label"><?php _e('Older Than'); ?></label>
+											<div class="col-xs-10"><input class="form-control" id="auto_close_tickets" value="<?php echo getConfigValue("auto_close_tickets"); ?>" type="number" name="auto_close_tickets" required></div>
+											<div class="col-xs-10 col-xs-offset-2"><p class="help-block"><?php _e('Time (in hours) of inactivity after which ticket is closed (0 to disable)'); ?></p></div>
+										</div>
+										<div class="form-group">
+											<div class="col-xs-8 col-xs-offset-2">
+												<div class="checkbox"><label><input type="checkbox" name="auto_close_tickets_notify" <?php if(getConfigValue("auto_close_tickets_notify") == "true") echo 'checked="yes"'; ?> value="true"> <?php _e('Send auto close notification'); ?></label></div>
+											</div>
+										</div>
+
+										<br>
+										<div class="form-group">
+											<div class="col-lg-4 col-lg-offset-2"><button type='submit' class="btn btn-success"><i class="fa fa-save"></i> <?php _e('Save Changes'); ?></button></div>
+										</div>
+										<input type="hidden" name="action" value="ticketsSettings">
+										<input type="hidden" name="route" value="system/settings">
+										<input type="hidden" name="section" value="tickets">
+									</form>
+								</div>
+								<div class="col-md-6">
+
+									<div class="box box-primary">
+										<div class="box-header with-border">
+											<h3 class="box-title"><?php _e('Support Departments'); ?></h3>
+											<div class="box-tools pull-right">
+												<a href="#" onClick='showM("?modal=supportdepartments/add&reroute=system/settings&routeid=&section=tickets");return false' class="btn btn-primary btn-sm"><i class="fa fa-plus"></i> NEW DEPARTMENT</a>
+											</div>
+										</div>
+										<div class="box-body">
+											<div class="table-responsive">
+												<table class="table table-striped table-hover">
+													<thead>
+														<tr>
+															<th><?php _e('ID'); ?></th>
+															<th><?php _e('Name'); ?></th>
+															<th class="text-right"></th>
+														</tr>
+													</thead>
+													<tbody>
+														<?php
+														foreach ($sdepartments as $sdepartment) {
+														echo "<tr>";
+															echo "<td>".$sdepartment['id']."</td>";
+															echo "<td>".$sdepartment['name']."</td>";
+															echo "<td>";
+
+															echo "<div class='pull-right'>
+																<a href='#' onClick='showM(\"?modal=supportdepartments/edit&reroute=system/settings&routeid=&id=".$sdepartment['id']."&section=tickets\");return false' class='btn-right text-dark'><i class='fa fa-edit'></i></a>&nbsp;";
+
+																if($sdepartment['id'] != 1)  echo "<a href='#' onClick='showM(\"?modal=supportdepartments/delete&reroute=system/settings&routeid=&id=".$sdepartment['id']."&section=tickets\");return false' class='btn-right text-red'><i class='fa fa-trash-o'></i></a>";
+															echo "</div>";
+
+															echo "</td>";
+														echo "</tr>";
+														}
+														?>
+													</tbody>
+												</table>
+												<?php if(empty($sdepartments)) echo "<p>" . __('No Records Found') . "</p>"; ?>
+											</div>
+										</div>
+									</div>
+
+									<div class="box box-primary">
+										<div class="box-header with-border">
+											<h3 class="box-title"><?php _e('Escalation Rules'); ?></h3>
+											<div class="box-tools pull-right">
+												<a href="#" onClick='showM("?modal=escalationrules/add&reroute=system/settings&routeid=&section=tickets");return false' class="btn btn-primary btn-sm"><i class="fa fa-plus"></i> NEW RULE</a>
+											</div>
+										</div>
+										<div class="box-body">
+											<div class="table-responsive">
+												<table class="table table-striped table-hover">
+													<thead>
+														<tr>
+															<th><?php _e('ID'); ?></th>
+															<th><?php _e('Name'); ?></th>
+															<th class="text-right"></th>
+														</tr>
+													</thead>
+													<tbody>
+														<?php
+														foreach ($rules as $rule) {
+														echo "<tr>";
+															echo "<td>".$rule['id']."</td>";
+															echo "<td>".$rule['name']."</td>";
+															echo "<td>";
+
+															echo "<div class='pull-right'>
+																<a href='#' onClick='showM(\"?modal=escalationrules/edit&reroute=system/settings&routeid=&id=".$rule['id']."&section=tickets\");return false' class='btn-right text-dark'><i class='fa fa-edit'></i></a>&nbsp;
+																<a href='#' onClick='showM(\"?modal=escalationrules/delete&reroute=system/settings&routeid=&id=".$rule['id']."&section=tickets\");return false' class='btn-right text-red'><i class='fa fa-trash-o'></i></a>
+															</div>";
+
+															echo "</td>";
+														echo "</tr>";
+														}
+														?>
+													</tbody>
+												</table>
+												<?php if(empty($rules)) echo "<p>" . __('No Records Found') . "</p>"; ?>
+											</div>
+										</div>
+										<div class="box-footer">
+											<span><?php _e('In addition to these rules, per ticket rules can be defined in ticket view.'); ?></span>
+										</div>
+									</div>
+
+									<p class="alert alert-info"><i class="fa fa-info"></i>&nbsp;&nbsp;&nbsp;<?php _e('Auto Close and Escalation Rules are processed in the tickets cron job.'); ?></p>
+								</div>
+							</div>
+                        </div><!-- /.tab-pane -->
+
+						<div class="tab-pane <?php if ($section == "crons") echo 'active'; ?>" id="crons">
+
+
+							<div>
+								<h4><?php _e('To automatically import tickets from your IMAP mailbox you need to set the following cron job:'); ?></h4>
+								<p>*/5 * * * * GET <?php echo baseURL(); ?>crons/tickets.php</p>
+								<p class="text-muted"><?php _e('This cron job will check your IMAP account for new ticekts, Auto Close tickets (if enabled) and process Escalation Rules (if any) every 5 minutes.'); ?></p>
+								<br><br>
+								<h4><?php _e('For service monitoring to work you need to set the following cron job:'); ?></h4>
+								<p>*/5 * * * * GET <?php echo baseURL(); ?>crons/monitoring.php</p>
+								<p class="text-muted"><?php _e('This cron job will run monitoring tasks on all configured hosts every 5 minutes.'); ?></p>
+								<br><br>
+
+							</div>
+							<br>
+
+
+                        </div><!-- /.tab-pane -->
+
+                    </div><!-- /.tab-content -->
+                </div><!-- nav-tabs-custom -->
+            </div><!-- /.col-->
+        </div><!-- ./row -->
+
+
+
+
+	</section><!-- /.content -->
+</aside><!-- /.right-side -->

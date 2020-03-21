@@ -1,0 +1,615 @@
+<aside class="right-side">
+	<!-- Content Header (Page header) -->
+	<section class="content-header">
+		<h1><?php echo $client['name']; ?></h1>
+		<ol class="breadcrumb">
+			<li><a href="?route=dashboard"><i class="fa fa-dashboard"></i> <?php _e('Home'); ?></a></li>
+			<li><a href="?route=clients"><?php _e('Clients'); ?></a></li>
+			<li class="active"><?php echo $client['name']; ?></li></ol>
+	</section>
+
+	<!-- Main content -->
+	<section class="content">
+		<?php if(!empty($statusmessage)): ?>
+				<div class="row"><div class='col-md-12'><div class="alert alert-<?php print $statusmessage["type"]; ?> alert-auto" role="alert"><?php print __($statusmessage["message"]); ?></div></div></div>
+		<?php endif; ?>
+		<div class="row">
+			<div class="col-md-12">
+		          <div class="nav-tabs-custom">
+			            <ul class="nav nav-tabs">
+			              <li <?php if ($section == "") echo 'class="active"'; ?> ><a href="#tab-summary" data-toggle="tab"><?php _e('Summary'); ?></a></li>
+						  <li <?php if ($section == "assets") echo 'class="active"'; ?> ><a href="#tab-assets" id="go-assets" data-toggle="tab"><?php _e('Assets'); ?></a></li>
+						  <li <?php if ($section == "licenses") echo 'class="active"'; ?> ><a href="#tab-licenses" id="go-licenses" data-toggle="tab"><?php _e('Licenses'); ?></a></li>
+						  <li <?php if ($section == "projects") echo 'class="active"'; ?> ><a href="#tab-projects" id="go-projects" data-toggle="tab"><?php _e('Projects'); ?></a></li>
+						  <li <?php if ($section == "issues") echo 'class="active"'; ?> ><a href="#tab-issues" id="go-issues" data-toggle="tab"><?php _e('Issues'); ?></a></li>
+						  <li <?php if ($section == "tickets") echo 'class="active"'; ?> ><a href="#tab-tickets" id="go-tasks" data-toggle="tab"><?php _e('Tickets'); ?></a></li>
+						  <li <?php if ($section == "credentials") echo 'class="active"'; ?> ><a href="#tab-credentials" id="go-credentials" data-toggle="tab"><?php _e('Credentials'); ?></a></li>
+						  <li <?php if ($section == "users") echo 'class="active"'; ?>><a href="#tab-users" id="go-users" data-toggle="tab"><?php _e('Users'); ?></a></li>
+						  <li <?php if ($section == "files") echo 'class="active"'; ?> ><a href="#tab-files" data-toggle="tab"><?php _e('Files'); ?></a></li>
+
+						  <div class="btn-group pull-right" style="padding:6px;">
+							  <?php if(in_array("addIssue",$perms)) { ?><a data-toggle='tooltip' title='<?php _e('New Issue'); ?>' class="btn btn-primary btn-sm" href="#" onClick='showM("?modal=issues/add&reroute=clients/manage&routeid=<?php echo $client['id']; ?>&clientid=<?php echo $client['id']; ?>&section=issues");return false'><?php _e('New Issue'); ?></a><?php } ?>
+							  <?php if(in_array("addAsset",$perms)) { ?><a data-toggle='tooltip' title='<?php _e('New Asset'); ?>' class="btn btn-default btn-sm" href="?route=inventory/assets/create" ><i class="fa fa-barcode"></i></a><?php } ?>
+							  <?php if(in_array("addLicense",$perms)) { ?><a data-toggle='tooltip' title='<?php _e('New License'); ?>' class="btn btn-default btn-sm" href="?route=inventory/licenses/create" ><i class="fa fa-certificate"></i></a><?php } ?>
+							  <?php if(in_array("addProject",$perms)) { ?><a data-toggle='tooltip' title='<?php _e('New Project'); ?>' class="btn btn-default btn-sm" href="#" onClick='showM("?modal=projects/add&reroute=clients/manage&routeid=<?php echo $client['id']; ?>&clientid=<?php echo $client['id']; ?>&section=projects");return false'><i class="fa fa-lightbulb-o"></i></a><?php } ?>
+							  <?php if(in_array("addTicket",$perms)) { ?><a data-toggle='tooltip' title='<?php _e('New Ticket'); ?>' class="btn btn-default btn-sm" href="#" onClick='showM("?modal=tickets/add&reroute=clients/manage&routeid=<?php echo $client['id']; ?>&clientid=<?php echo $client['id']; ?>&assetid=&section=tickets");return false'><i class="fa fa-tag"></i></a><?php } ?>
+							  <?php if(in_array("addCredential",$perms)) { ?><a data-toggle='tooltip' title='<?php _e('New Credential'); ?>' class="btn btn-default btn-sm" onClick='showM("?modal=credentials/add&reroute=clients/manage&routeid=<?php echo $client['id']; ?>&clientid=<?php echo $client['id']; ?>&section=credentials");return false'><i class="fa fa-asterisk"></i></a><?php } ?>
+							  <?php if(in_array("addUser",$perms)) { ?><a data-toggle='tooltip' title='<?php _e('New User'); ?>' class="btn btn-default btn-sm" onClick='showM("?modal=users/add&reroute=clients/manage&routeid=<?php echo $client['id']; ?>&clientid=<?php echo $client['id']; ?>&section=users");return false'><i class="fa fa-user"></i></a><?php } ?>
+							  <?php if(in_array("uploadFile",$perms)) { ?><a data-toggle='tooltip' title='<?php _e('Upload File'); ?>' class="btn btn-default btn-sm " href="#" onClick='showM("?modal=files/upload&reroute=clients/manage&routeid=<?php echo $client['id']; ?>&clientid=<?php echo $client['id']; ?>&section=files");return false'><i class="fa fa-upload"></i></a><?php } ?>
+							  <?php if(in_array("adminsClient",$perms)) { ?><a data-toggle='tooltip' title='<?php _e('Assign Staff'); ?>' class="btn btn-default btn-sm" href="#" onClick='showM("?modal=clients/assignAdmin&reroute=clients/manage&routeid=<?php echo $client['id']; ?>");return false'><i class="fa fa-thumb-tack"></i> </a></li><?php } ?>
+						  </div>
+
+			            </ul>
+			            <div class="tab-content">
+				              <div class="tab-pane <?php if ($section == "") echo 'active'; ?>" id="tab-summary">
+								  <!-- Info boxes -->
+								        <div class="row">
+								          <div class="col-md-3 col-sm-6 col-xs-12">
+								            <div class="info-box">
+								              <span class="info-box-icon bg-blue"><i class="fa fa-barcode"></i></span>
+								              <div class="info-box-content">
+								                <span class="info-box-text"><?php _e('Assets'); ?></span>
+								                <span class="info-box-number" style="font-size:42px"><?php echo $sumAssets; ?></span>
+								              </div>
+								              <!-- /.info-box-content -->
+								            </div>
+								            <!-- /.info-box -->
+								          </div>
+								          <!-- /.col -->
+								          <div class="col-md-3 col-sm-6 col-xs-12">
+								            <div class="info-box">
+								              <span class="info-box-icon bg-green"><i class="fa fa-certificate"></i></span>
+								              <div class="info-box-content">
+								                <span class="info-box-text"><?php _e('Licenses'); ?></span>
+								                <span class="info-box-number" style="font-size:42px"><?php echo $sumLicenses; ?></span>
+								              </div>
+								              <!-- /.info-box-content -->
+								            </div>
+								            <!-- /.info-box -->
+								          </div>
+								          <!-- /.col -->
+
+								          <!-- fix for small devices only -->
+								          <div class="clearfix visible-sm-block"></div>
+								          <div class="col-md-3 col-sm-6 col-xs-12">
+								            <div class="info-box">
+								              <span class="info-box-icon bg-yellow"><i class="fa fa-lightbulb-o"></i></span>
+								              <div class="info-box-content">
+								                <span class="info-box-text"><?php _e('Projects'); ?></span>
+								                <span class="info-box-number" style="font-size:42px"><?php echo $sumProjects; ?></span>
+								              </div>
+								              <!-- /.info-box-content -->
+								            </div>
+								            <!-- /.info-box -->
+								          </div>
+								          <!-- /.col -->
+								          <div class="col-md-3 col-sm-6 col-xs-12">
+								            <div class="info-box">
+								              <span class="info-box-icon bg-purple"><i class="fa fa-users"></i></span>
+								              <div class="info-box-content">
+								                <span class="info-box-text"><?php _e('Users'); ?></span>
+								                <span class="info-box-number" style="font-size:42px"><?php echo $sumUsers; ?></span>
+								              </div>
+								              <!-- /.info-box-content -->
+								            </div>
+								            <!-- /.info-box -->
+								          </div>
+								          <!-- /.col -->
+								        </div>
+								        <!-- /.row -->
+
+								  <div class="row">
+									  <div class="col-md-8">
+										  <!-- BAR CHART -->
+								           <div class="box box-primary">
+								             <div class="box-header with-border">
+								               <h3 class="box-title"><?php _e('Total Worked Hours'); ?></h3>
+								               <div class="box-tools pull-right">
+								                 <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+								               </div>
+								             </div>
+								             <div class="box-body">
+								               <div class="chart">
+								                 <canvas id="Client6Chart" style="height:230px"></canvas>
+								               </div>
+								             </div>
+								             <!-- /.box-body -->
+								           </div>
+								           <!-- /.box -->
+										</div>
+
+										  <div class="col-md-4">
+							                <!-- ASSIGNED ADMINS -->
+							                <div class="box box-primary">
+							                  <div class="box-header with-border">
+							                    <h3 class="box-title"><?php _e('Assigned Staff'); ?></h3>
+							                    <div class="box-tools pull-right">
+							                      <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+							                    </div>
+							                  </div>
+							                  <!-- /.box-header -->
+							                  <div class="box-body ">
+							                    <ul class="users-list clearfix">
+													<?php
+													foreach ($assignedadmins as $aasign) { ?>
+														<li>
+		  						                        <img src="<?php echo getGravatar(getSingleValue("people","email",$aasign['adminid']),"50"); ?>" alt="User Image" style="height:50px;width:50px;">
+		  						                        <a class="users-list-name" href="#"><?php echo getSingleValue("people","name",$aasign['adminid']); ?></a>
+		  						                        <span class="users-list-date"><?php echo getSingleValue("people","title",$aasign['adminid']); ?></span>
+														<?php if(in_array("adminsClient",$perms)) { ?><span class="users-list-date"><a onClick='showM("index.php?modal=clients/unassignAdmin&reroute=clients/manage&routeid=<?php echo $client['id']; ?>&id=<?php echo $aasign['id']; ?>");return false' data-toggle="modal"><?php _e('Unassign'); ?></a></span><?php } ?>
+		  						                      </li>
+													<?php } ?>
+
+							                    </ul>
+							                    <!-- /.users-list -->
+												<?php if(empty($assignedadmins)) echo __("There are no assigned admins to display."); ?>
+							                  </div>
+							                  <!-- /.box-body -->
+							                </div>
+							                <!--/.box -->
+
+											<!-- DONUT CHART -->
+								             <div class="box box-primary">
+								               <div class="box-header with-border">
+								                 <h3 class="box-title"><?php _e('Assets by Category'); ?></h3>
+								                 <div class="box-tools pull-right">
+								                   <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+								                 </div>
+								               </div>
+											   <div class="box-body">
+								 				  <div class="row">
+								 	                <div class="col-lg-6">
+								 	                  <div class="chart-responsive">
+								 	                    <canvas id="pieChart" height=""></canvas>
+								 	                  </div>
+								 	                  <!-- ./chart-responsive -->
+								 	                </div>
+								 	                <!-- /.col -->
+								 	                <div class="col-lg-6">
+								 	                  <div id="js-legend" class="chart-legend">
+
+								 	                  </div>
+								 	                </div>
+								 	                <!-- /.col -->
+								 	              </div>
+								 	              <!-- /.row -->
+								 			  </div>
+								 			  <!-- /.box-body -->
+								             </div>
+								             <!-- /.box -->
+
+							              </div>
+							              <!-- /.col -->
+								  </div>
+								  <!-- /.row -->
+				              </div>
+
+							  <?php if(in_array("viewAssets",$perms)) { ?>
+				              <div class="tab-pane <?php if ($section == "assets") echo 'active'; ?>" id="tab-assets">
+								  <div class="table-responsive">
+									  <table id="dataTablesFull" class="table table-striped table-hover">
+			                              <thead>
+			                                  <tr>
+			                                    <th><?php _e('Tag'); ?></th>
+												<th><?php _e('Category'); ?></th>
+			  									<th><?php _e('Name'); ?></th>
+			  									<th><?php _e('Model'); ?></th>
+												<th><?php _e('Serial Number'); ?></th>
+												<th><?php _e('Status'); ?></th>
+			  									<th class="text-right"></th>
+			                                  </tr>
+			                              </thead>
+										  <tbody>
+		  									<?php
+		  									foreach ($assets as $asset) { ?>
+		  		                                <tr>
+		  											<td><?php if(in_array("manageAsset",$perms)) { ?><a href='?route=inventory/assets/manage&id=<?php echo $asset['id']; ?>'><?php echo $asset['tag']; ?></a><?php } else echo $asset['tag']; ?></td>
+		  											<td><span class='label' style='background-color:#FFF;color:<?php echo getSingleValue("assetcategories","color",$asset['categoryid']); ?>;border:1px solid <?php echo getSingleValue("assetcategories","color",$asset['categoryid']); ?>'><?php echo getSingleValue("assetcategories","name",$asset['categoryid']); ?></span></td>
+		  											<td><?php if(in_array("manageAsset",$perms)) { ?><a href='?route=inventory/assets/manage&id=<?php echo $asset['id']; ?>'><?php echo $asset['name']; ?></a><?php } else echo $asset['name']; ?></td>
+		  											<td><?php echo getSingleValue("manufacturers","name",$asset['manufacturerid']); ?> <?php echo getSingleValue("models","name",$asset['modelid']); ?></td>
+		  											<td><?php echo $asset['serial']; ?></td>
+		  											<td><span class='badge' style='background-color:<?php echo getSingleValue("labels","color",$asset['statusid']); ?>'><?php echo getSingleValue("labels","name",$asset['statusid']); ?></span></td>
+		  											<td>
+		  												<div class='pull-right'>
+		  													<?php if(in_array("manageAsset",$perms)) { ?>	<a href='?route=inventory/assets/manage&id=<?php echo $asset['id']; ?>' class='btn-right text-dark'><i class='fa fa-eye'></i></a>&nbsp;<?php } ?>
+		  													<?php if(in_array("deleteAsset",$perms)) { ?>	<a href='#' onClick='showM("?modal=assets/delete&reroute=clients/manage&routeid=<?php echo $client['id']; ?>&id=<?php echo $asset['id']; ?>&section=assets");return false' class='btn-right text-red'><i class='fa fa-trash-o'></i></a><?php } ?>
+		  												</div>
+		  											</td>
+		  		                                </tr>
+		  									<?php } ?>
+		  								</tbody>
+			  						</table>
+								</div>
+				              </div>
+							  <?php } ?>
+							  <?php if(in_array("viewLicenses",$perms)) { ?>
+							  <div class="tab-pane <?php if ($section == "licenses") echo 'active'; ?>" id="tab-licenses">
+								  <div class="table-responsive">
+									  <table id="dataTablesFull2" class="table table-striped table-hover">
+			                              <thead>
+			                                  <tr>
+			                                    <th><?php _e('Tag'); ?></th>
+			  									<th><?php _e('Category'); ?></th>
+			  									<th><?php _e('Name'); ?></th>
+			  									<th><?php _e('Status'); ?></th>
+			  									<th class="text-right"></th>
+			                                  </tr>
+			                              </thead>
+										  <tbody>
+		  									<?php
+		  									foreach ($licenses as $license) { ?>
+		  		                                <tr>
+		  											<td><?php if(in_array("manageLicense",$perms)) { ?><a href='?route=inventory/licenses/manage&id=<?php echo $license['id']; ?>'><?php echo $license['tag']; ?></a><?php } else echo $license['tag']; ?></td>
+		  											<td><span class='label' style='background-color:#FFF;color:<?php echo getSingleValue("licensecategories","color",$license['categoryid']); ?>;border:1px solid <?php echo getSingleValue("licensecategories","color",$license['categoryid']); ?>'><?php echo getSingleValue("licensecategories","name",$license['categoryid']); ?></span></td>
+		  											<td><?php if(in_array("manageLicense",$perms)) { ?><a href='?route=inventory/licenses/manage&id=<?php echo $license['id']; ?>'><?php echo $license['name']; ?></a><?php } else echo $license['name']; ?></td>
+		  											<td><span class='badge' style='background-color:<?php echo getSingleValue("labels","color",$license['statusid']); ?>'><?php echo getSingleValue("labels","name",$license['statusid']); ?></span></td>
+		  											<td>
+		  													<div class='btn-group pull-right'>
+		  														<?php if(in_array("manageLicense",$perms)) { ?><a href='?route=inventory/licenses/manage&id=<?php echo $license['id']; ?>' class='btn-right text-dark'><i class='fa fa-eye'></i></a>&nbsp;<?php } ?>
+		  														<?php if(in_array("deleteLicense",$perms)) { ?><a href='#' onClick='showM("?modal=licenses/delete&reroute=clients/manage&routeid=<?php echo $client['id']; ?>&id=<?php echo $license['id']; ?>&section=licenses");return false' class='btn-right text-red'><i class='fa fa-trash-o'></i></a><?php } ?>
+		  													</div>
+		  											</td>
+		  		                                </tr>
+		  									<?php } ?>
+		  								</tbody>
+			  						</table>
+								</div>
+				              </div>
+							  <?php } ?>
+							  <?php if(in_array("viewProjects",$perms)) { ?>
+							  <div class="tab-pane <?php if ($section == "projects") echo 'active'; ?>" id="tab-projects">
+								  <div class="table-responsive">
+		  	                        <table id="dataTablesFullDesc" class="table table-striped table-hover">
+		  	                            <thead>
+		  	                                <tr>
+		  										<th style="max-width:30px;" class="no-sort"></th>
+		  										<th style="width:100px;"><?php _e('Tag'); ?></th>
+		  										<th><?php _e('Name'); ?></th>
+		  										<th class="text-right"></th>
+		  	                                </tr>
+		  	                            </thead>
+										<tbody>
+											<?php foreach ($projects as $project) { ?>
+												<tr>
+													<td><input type="text" class="knob" value="<?php echo Project::progress($project['id']); ?>" data-thickness="0.2" data-width="40" data-height="40" data-fgColor="#00a65a" data-readonly="true"></td>
+													<td><?php if(in_array("manageProject",$perms)) { ?><a href='?route=projects/manage&id=<?php echo $project['id']; ?>'><?php echo $project['tag']; ?></a><?php } else echo $project['tag']; ?></td>
+													<td><?php if(in_array("manageProject",$perms)) { ?><a href='?route=projects/manage&id=<?php echo $project['id']; ?>'><?php echo $project['name']; ?></a><?php } else echo $project['tag']; ?></td>
+													<td>
+														<div class='pull-right'>
+															<?php if(in_array("manageProject",$perms)) { ?><a href='?route=projects/manage&id=<?php echo $project['id']; ?>' class='btn-right text-dark'><i class='fa fa-eye'></i></a>&nbsp;<?php } ?>
+															<?php if(in_array("editProject",$perms)) { ?><a href='#' onClick='showM("index.php?modal=projects/edit&reroute=clients/manage&routeid=<?php echo $client['id']; ?>&id=<?php echo $project['id']; ?>&section=projects");return false' class='btn-right text-dark'><i class='fa fa-edit'></i></a>&nbsp;<?php } ?>
+															<?php if(in_array("deleteProject",$perms)) { ?><a href='#' onClick='showM("index.php?modal=projects/delete&reroute=clients/manage&routeid=<?php echo $client['id']; ?>&id=<?php echo $project['id']; ?>&section=projects");return false' class='btn-right text-red'><i class='fa fa-trash-o'></i></a><?php } ?>
+														</div>
+													</td>
+												</tr>
+											<?php } ?>
+										</tbody>
+		  							</table>
+		  						</div>
+							  </div>
+							  <!-- /.tab-pane -->
+							  <?php } ?>
+							  <?php if(in_array("viewIssues",$perms)) { ?>
+							  <div class="tab-pane <?php if ($section == "issues") echo 'active'; ?>" id="tab-issues">
+								  <div class="table-responsive">
+									  <table id="dataTablesFullDesc" class="table table-striped table-hover">
+		  	                            <thead>
+		  	                                <tr>
+		  										<th><?php _e('ID'); ?></th>
+		  										<th class="no-sort"></th>
+		  										<th><?php _e('Name'); ?></th>
+		  										<th><?php _e('Assigned To'); ?></th>
+		  										<th><?php _e('Related Entities'); ?></th>
+		  										<th><?php _e('Status'); ?></th>
+		  										<th><?php _e('Due Date'); ?></th>
+		  										<th class="text-right"></th>
+		  	                                </tr>
+		  	                            </thead>
+										<tbody>
+											<?php foreach ($issues as $issue) { ?>
+												<tr>
+													<td><?php echo $issue['id']; ?></td>
+													<td>
+														<?php if($issue['priority'] == "High") echo "<i class='fa fa-flag fa-fw text-red' data-toggle='tooltip' title='".__("High priority")."'></i>&nbsp;"; ?>
+														<?php if($issue['priority'] == "Normal") echo "<i class='fa fa-flag fa-fw text-yellow' data-toggle='tooltip' title='".__("Normal priority")."'></i>&nbsp;"; ?>
+														<?php if($issue['priority'] == "Low") echo "<i class='fa fa-flag fa-fw text-blue' data-toggle='tooltip' title='".__("Low priority")."'></i>&nbsp;"; ?>
+
+														<?php if($issue['issuetype'] == "Task") echo "<i class='fa fa-check-square fa-fw text-blue' data-toggle='tooltip' title='".__("Task")."'></i>"; ?>
+														<?php if($issue['issuetype'] == "Maintenance") echo "<i class='fa fa-minus-square fa-fw text-yellow' data-toggle='tooltip' title='".__("Maintenance")."'></i>"; ?>
+														<?php if($issue['issuetype'] == "Bug") echo "<i class='fa fa-bug fa-fw text-red' data-toggle='tooltip' title='".__("Bug")."'></i>"; ?>
+														<?php if($issue['issuetype'] == "Improvement") echo "<i class='fa fa-external-link fa-fw text-teal' data-toggle='tooltip' title='".__("Improvement")."'></i>"; ?>
+														<?php if($issue['issuetype'] == "New Feature") echo "<i class='fa fa-plus-square fa-fw text-green' data-toggle='tooltip' title='".__("New Feature")."'></i>"; ?>
+														<?php if($issue['issuetype'] == "Story") echo "<i class='fa fa-circle fa-fw text-red' data-toggle='tooltip' title='".__("Story")."'></i>"; ?>
+													</td>
+													<td><?php if(in_array("editIssue",$perms)) { ?><a href="#" onClick='showM("index.php?modal=issues/edit&reroute=clients/manage&routeid=<?php echo $client['id']; ?>&id=<?php echo $issue['id']; ?>&section=issues");return false'><?php echo $issue['name']; ?></a><?php } else echo $issue['name']; ?></td>
+													<td><?php if($issue['adminid'] != 0) echo getSingleValue("people","name",$issue['adminid']); else echo "<span class='text-muted'>".__("Nobody")."</span>"; ?></td>
+													<td>
+														<?php if($issue['clientid'] != 0) { ?>
+															<a href='<?php if(in_array("manageClient",$perms)) { ?>?route=clients/manage&id=<?php echo $issue['clientid']; ?><?php } else echo "#"; ?>'>
+																<span class='label' style="background-color:#FFF;color:#0073b7;border:1px solid #0073b7;"><?php echo getSingleValue("clients","name",$issue['clientid']); ?></span>
+															</a>&nbsp;
+														<?php } ?>
+
+														<?php if($issue['assetid'] != 0) { ?>
+															<a href='<?php if(in_array("manageAsset",$perms)) { ?>?route=inventory/assets/manage&id=<?php echo $issue['assetid']; ?><?php } else echo "#"; ?>'>
+																<span class='label' style="background-color:#FFF;color:#001F3F;border:1px solid #001F3F;"><i class='fa fa-barcode'></i> <?php echo getSingleValue("assets","tag",$issue['assetid']); ?> </span>
+															</a>&nbsp;
+														<?php } ?>
+
+														<?php if($issue['projectid'] != 0) { ?>
+															<a href='<?php if(in_array("manageProject",$perms)) { ?>?route=projects/manage&id=<?php echo $issue['projectid']; ?><?php } else echo "#"; ?>'>
+																<span class='label' style="background-color:#FFF;color:#ff851b;border:1px solid #ff851b;"><i class='fa fa-lightbulb-o'></i> <?php echo getSingleValue("projects","tag",$issue['projectid']); ?> </span>
+															</a>
+														<?php } ?>
+
+													</td>
+													<td>
+														<?php if($issue['status'] == "To Do") echo "<span class='badge bg-green'>".__("To Do")."</span>"; ?>
+														<?php if($issue['status'] == "In Progress") echo "<span class='badge bg-blue'>".__("In Progress")."</span>"; ?>
+														<?php if($issue['status'] == "Done") echo "<span class='badge bg-gray'>".__("Done")."</span>"; ?>
+														<?php if($issue['status'] != "Done" && $issue['duedate'] < date('Y-m-d') && $issue['duedate'] != "") echo "<span class='badge bg-red'>".__("Overdue")."</span>"; ?>
+													</td>
+													<td><?php if($issue['duedate'] != "") echo $issue['duedate']; else echo "<span class='text-muted'>".__("None")."</span>" ?></td>
+													<td>
+														<div class='pull-right'>
+			  											  <?php if(in_array("editIssue",$perms)) { ?><a href="#" onClick='showM("index.php?modal=issues/edit&reroute=clients/manage&routeid=<?php echo $client['id']; ?>&id=<?php echo $issue['id']; ?>&section=issues");return false' class='btn-right text-dark'><i class='fa fa-edit'></i></a>&nbsp;<?php } ?>
+			  											  <?php if(in_array("deleteIssue",$perms)) { ?><a href="#" onClick='showM("index.php?modal=issues/delete&reroute=clients/manage&routeid=<?php echo $client['id']; ?>&id=<?php echo $issue['id']; ?>&section=issues");return false' class='btn-right text-red'><i class='fa fa-trash-o'></i></a><?php } ?>
+			  										  	</div>
+													</td>
+												</tr>
+											<?php } ?>
+										</tbody>
+		  							</table>
+								</div>
+				              </div>
+							  <?php } ?>
+							  <?php if(in_array("viewTickets",$perms)) { ?>
+							  <div class="tab-pane <?php if ($section == "tickets") echo 'active'; ?>" id="tab-tickets">
+								  <div class="table-responsive">
+									  <table id="dataTablesFullNoOrder" class="table table-striped table-hover">
+		  	                            <thead>
+		  	                                <tr>
+		  										<th class="no-sort" style="width:5px;"></th>
+		  										<th><?php _e('Ticket #'); ?></th>
+		  										<th><?php _e('Subject'); ?></th>
+		  										<th><?php _e('Assigned To'); ?></th>
+		  										<th><?php _e('Related Entities'); ?></th>
+		  										<th><?php _e('Status'); ?></th>
+		  										<th><?php _e('Last Reply'); ?></th>
+		  										<th class="text-right"></th>
+		  	                                </tr>
+		  	                            </thead>
+										<tbody>
+											<?php foreach ($tickets as $ticket) { ?>
+												<tr>
+													<td>
+														<?php if($ticket['priority'] == "High") echo "<i class='fa fa-flag text-red' data-toggle='tooltip' title='".__("High priority")."'></i>"; ?>
+														<?php if($ticket['priority'] == "Normal") echo "<i class='fa fa-flag text-yellow' data-toggle='tooltip' title='".__("Normal priority")."'></i>"; ?>
+														<?php if($ticket['priority'] == "Low") echo "<i class='fa fa-flag text-blue' data-toggle='tooltip' title='".__("Low priority")."'></i>"; ?>
+													</td>
+													<td><?php if(in_array("manageTicket",$perms)) { ?><a href='?route=tickets/manage&id=<?php echo $ticket['id']; ?>'><?php echo $ticket['ticket']; ?></a><?php } else echo $ticket['ticket']; ?></td>
+													<td><?php if(in_array("manageTicket",$perms)) { ?><a href='?route=tickets/manage&id=<?php echo $ticket['id']; ?>'><?php echo $ticket['subject']; ?></a><?php } else echo $ticket['subject']; ?></td>
+													<td><?php if($ticket['adminid'] != 0) echo getSingleValue("people","name",$ticket['adminid']); else echo "<span class='text-muted'>".__("Nobody")."</span>"; ?></td>
+													<td>
+														<?php if($ticket['clientid'] != 0) { ?>
+															<a href='<?php if(in_array("manageClient",$perms)) { ?>?route=clients/manage&id=<?php echo $ticket['clientid']; ?><?php } else echo "#"; ?>'>
+																<span class='label' style="background-color:#FFF;color:#0073b7;border:1px solid #0073b7;"> <?php echo getSingleValue("clients","name",$ticket['clientid']); ?> </span>
+															</a>&nbsp;
+														<?php } ?>
+
+														<?php if($ticket['assetid'] != 0) { ?>
+															<a href='<?php if(in_array("manageAsset",$perms)) { ?>?route=inventory/assets/manage&id=<?php echo $ticket['assetid']; ?><?php } else echo "#"; ?>'>
+																<span class='label' style="background-color:#FFF;color:#001F3F;border:1px solid #001F3F;"><i class='fa fa-barcode'></i> <?php echo getSingleValue("assets","tag",$ticket['assetid']); ?> </span>
+															</a>
+														<?php } ?>
+													</td>
+													<td>
+														<?php if($ticket['status'] == "Open") echo "<span class='badge bg-green'>".__("Open")."</span>"; ?>
+														<?php if($ticket['status'] == "In Progress") echo "<span class='badge bg-navy'>".__("In Progress")."</span>"; ?>
+														<?php if($ticket['status'] == "Answered") echo "<span class='badge bg-teal'>".__("Answered")."</span>"; ?>
+														<?php if($ticket['status'] == "Reopened") echo "<span class='badge bg-orange'>".__("Reopened")."</span>"; ?>
+														<?php if($ticket['status'] == "Closed") echo "<span class='badge bg-gray'>".__("Closed")."</span>"; ?>
+													</td>
+													<td><?php echo Ticket::lastReply($ticket['id']); ?></td>
+													<td>
+														<div class='pull-right'>
+														  <?php if(in_array("manageTicket",$perms)) { ?><a href='?route=tickets/manage&id=<?php echo $ticket['id']; ?>' class='btn-right text-dark'><i class='fa fa-eye'></i></a>&nbsp;<?php } ?>
+			  											  <?php if(in_array("editTicket",$perms)) { ?><a href="#" onClick='showM("index.php?modal=tickets/edit&reroute=clients/manage&routeid=<?php echo $client['id']; ?>&id=<?php echo $ticket['id']; ?>&section=tickets");return false' class='btn-right text-dark'><i class='fa fa-edit'></i></a>&nbsp;<?php } ?>
+			  											  <?php if(in_array("deleteTicket",$perms)) { ?><a href="#" onClick='showM("index.php?modal=tickets/delete&reroute=clients/manage&routeid=<?php echo $client['id']; ?>&id=<?php echo $ticket['id']; ?>&section=tickets");return false' class='btn-right text-red'><i class='fa fa-trash-o'></i></a><?php } ?>
+			  										  	</div>
+													</td>
+												</tr>
+											<?php } ?>
+										</tbody>
+		  							</table>
+								</div>
+				              </div>
+				              <!-- /.tab-pane -->
+							  <?php } ?>
+							  <?php if(in_array("viewCredentials",$perms)) { ?>
+							  <div class="tab-pane <?php if ($section == "credentials") echo 'active'; ?>" id="tab-credentials">
+								  	<div class="table-responsive">
+										  <table id="dataTablesFull3" class="table table-striped table-hover">
+		  		                            <thead>
+		  		                                <tr>
+													<th><?php _e('Asset'); ?></th>
+		  		                                    <th><?php _e('Type'); ?></th>
+		  		                                    <th><?php _e('Username'); ?></th>
+		  											<th><?php _e('Password'); ?></th>
+		  											<th class="text-right"></th>
+		  		                                </tr>
+		  		                            </thead>
+		  		                            <tbody>
+		  										<?php
+		  										foreach ($credentials as $credential) {
+		  		                                echo "<tr>";
+													echo "<td><a href='?route=inventory/assets/manage&id=".$credential['assetid']."'>".getSingleValue("assets","tag",$credential['assetid'])."</a></td>";
+		  		                                    echo "<td>".$credential['type']."</td>";
+		  		                                    echo "<td>".$credential['username']."</td>";
+		  											echo "<td>";
+														if(in_array("viewCredential",$perms)) echo "<a href='#' onClick='showM(\"index.php?modal=credentials/view&reroute=clients/manage&routeid=".$client['id']."&id=".$credential['id']."&section=\");return false' class='btn-right text-dark'>".__("Click to view")."</a>";
+													echo "</td>";
+		  											echo "<td><div class='pull-right'>";
+																if(in_array("viewCredential",$perms)) echo "<a href='#' onClick='showM(\"index.php?modal=credentials/view&reroute=clients/manage&routeid=".$client['id']."&id=".$credential['id']."&section=\");return false' class='btn-right text-dark'><i class='fa fa-eye'></i></a>&nbsp;";
+																if(in_array("editCredential",$perms)) echo "<a href='#' onClick='showM(\"index.php?modal=credentials/edit&reroute=clients/manage&routeid=".$client['id']."&id=".$credential['id']."&section=credentials\");return false' class='btn-right text-dark'><i class='fa fa-edit'></i></a>&nbsp;";
+																if(in_array("deleteCredential",$perms)) echo "<a href='#' onClick='showM(\"index.php?modal=credentials/delete&reroute=clients/manage&routeid=".$client['id']."&id=".$credential['id']."&section=credentials\");return false' class='btn-right text-red'><i class='fa fa-trash-o'></i></a>";
+		  											echo "</div></td>";
+		  		                                echo "</tr>";
+		  										}
+		  										?>
+		  									</tbody>
+		  								</table>
+									 </div>
+				              </div>
+							  <?php } ?>
+							  <?php if(in_array("viewUsers",$perms)) { ?>
+							  <div class="tab-pane <?php if ($section == "users") echo 'active'; ?>" id="tab-users">
+								  <div class="table-responsive">
+									  <table id="dataTablesFull4" class="table table-striped table-hover">
+			                              <thead>
+			                                  <tr>
+			                                    <th><?php _e('ID'); ?></th>
+			                                    <th><?php _e('Name'); ?></th>
+			  									<th><?php _e('Email'); ?></th>
+			  									<th class="text-right"></th>
+			                                  </tr>
+			                              </thead>
+			                              <tbody>
+			  								<?php
+			  								foreach ($users as $user) {
+			                                  echo "<tr>";
+			                                      echo "<td>".$user['id']."</td>";
+			                                      echo "<td>".$user['name']."</td>";
+			  									  echo "<td>".$user['email']."</td>";
+			  									  echo "<td><div class='pull-right'>";
+
+															if(in_array("editUser",$perms)) echo "<a href='?route=people/users/edit&id=".$user['id']."' class='btn-right text-dark'><i class='fa fa-eye'></i></a>&nbsp;";
+															if(in_array("deleteUser",$perms)) echo "<a href='#' onClick='showM(\"index.php?modal=users/delete&section=users&reroute=clients/manage&routeid=".$client['id']."&id=".$user['id']."\");return false' class='btn-right text-red'><i class='fa fa-trash-o'></i></a>";
+
+			  									  echo "</div></td>";
+			                                  echo "</tr>";
+			  								}
+			  								?>
+			  							</tbody>
+			  						</table>
+			            		</div>
+		          			</div>
+							<?php } ?>
+							<?php if(in_array("viewFiles",$perms)) { ?>
+							<div class="tab-pane <?php if ($section == "files") echo 'active'; ?>" id="tab-files">
+								 <?php if(empty($files)) { ?>
+									 <div class="alert alert-info">
+										  <i class="icon fa fa-info"></i> <?php _e('No files have been uploaded yet!'); ?>
+									  </div>
+								 <?php } ?>
+
+								<ul class="todo-list list-inline" id="fileslist">
+									<?php foreach($files as $file) { ?>
+										<li id="" style="width:28%;margin:10px;padding:12px;">
+											  <div class="row">
+												  <div class="col-xs-1" style="vertical-align:middle"><i class="fa fa-<?php echo File::icon($file['file']); ?>"></i></div>
+												  <div class="col-xs-10">
+													  <?php echo $file['name'] . "<br><small>" . $file['file'] . "</small>"; ?>
+												  </div>
+											  </div>
+												  <div class="pull-right">
+													  <?php if(in_array("downloadFile",$perms)) { ?><a href="<?php echo "index.php?qa=download&id=" . $file['id']; ?>" class='btn-right text-dark'><i class='fa fa-download'></i></a>&nbsp;<?php } ?>
+													  <?php if(in_array("deleteFile",$perms)) { ?><a href="#" onClick='showM("index.php?modal=files/delete&reroute=clients/manage&routeid=<?php echo $client['id']; ?>&id=<?php echo $file['id']; ?>&section=files");return false' class='btn-right text-red'><i class='fa fa-trash-o'></i></a><?php } ?>
+												  </div>
+										</li>
+									<?php } ?>
+								</ul>
+							</div>
+							<!-- /.tab-pane -->
+							<?php } ?>
+						</div>
+					</div>
+	        </div>
+		</div>
+
+	</section><!-- /.content -->
+</aside><!-- /.right-side -->
+
+
+<!-- ChartJS 1.0.1 -->
+<script src="template/assets/plugins/chartjs/Chart.min.js"></script>
+
+<?php
+	$first  = strtotime('first day next month');
+	$last6F = array();
+	for ($i = 6; $i >= 1; $i--) { array_push($last6F, date('F', strtotime("-$i month", $first))); }
+
+	$last6YM = array();
+	for ($i = 6; $i >= 1; $i--) { array_push($last6YM, date('Y-m', strtotime("-$i month", $first))); }
+?>
+
+<script>
+  $(function () {
+    var areaChartData = {
+      labels: ["<?php echo $last6F[0]; ?>", "<?php echo $last6F[1]; ?>", "<?php echo $last6F[2]; ?>", "<?php echo $last6F[3]; ?>", "<?php echo $last6F[4]; ?>", "<?php echo $last6F[5]; ?>"],
+      datasets: [
+        {
+          fillColor: "rgba(60,141,188,0.9)",
+          data: [<?php echo workHoursByMonth($last6YM[0],$client['id']); ?>, <?php echo workHoursByMonth($last6YM[1],$client['id']); ?>, <?php echo workHoursByMonth($last6YM[2],$client['id']); ?>, <?php echo workHoursByMonth($last6YM[3],$client['id']); ?>, <?php echo workHoursByMonth($last6YM[4],$client['id']); ?>, <?php echo workHoursByMonth($last6YM[5],$client['id']); ?>]
+        }
+      ]
+    };
+
+    //-------------
+    //- BAR CHART -
+    //-------------
+    var barChartCanvas = $("#Client6Chart").get(0).getContext("2d");
+    var barChart = new Chart(barChartCanvas);
+    var barChartData = areaChartData;
+
+    var barChartOptions = {
+      scaleBeginAtZero: true,
+      scaleShowGridLines: true,
+      scaleGridLineColor: "rgba(0,0,0,.05)",
+      scaleGridLineWidth: 1,
+      scaleShowHorizontalLines: true,
+      scaleShowVerticalLines: true,
+      barShowStroke: true,
+      barStrokeWidth: 2,
+      barValueSpacing: 5,
+      barDatasetSpacing: 1,
+      legendTemplate: "<ul class=\"<%=name.toLowerCase()%>-legend\"><% for (var i=0; i<datasets.length; i++){%><li><span style=\"background-color:<%=datasets[i].fillColor%>\"></span><%if(datasets[i].label){%><%=datasets[i].label%><%}%></li><%}%></ul>",
+      responsive: true,
+      maintainAspectRatio: true
+    };
+    barChartOptions.datasetFill = false;
+    barChart.Bar(barChartData, barChartOptions);
+  });
+
+
+
+
+    //-------------
+    //- PIE CHART -
+    //-------------
+    var PieData = [
+		<?php foreach($categories as $category) { ?>
+			{
+			  value: <?php echo countAssetsByCategory($category['id'],$client['id']); ?>,
+			  color: "<?php echo $category['color']; ?>",
+			  label: "<?php echo $category['name']; ?>"
+			},
+		<?php } ?>
+    ];
+	var pieOptions = {
+		  segmentShowStroke: true,
+		  segmentStrokeColor: "#fff",
+		  segmentStrokeWidth: 1,
+		  percentageInnerCutout: 50,
+		  animationSteps: 100,
+		  animationEasing: "easeOutBounce",
+		  animateRotate: true,
+		  animateScale: true,
+		  responsive: true,
+		  maintainAspectRatio: false
+	};
+
+	var pieChartCanvas = $("#pieChart").get(0).getContext("2d");
+	var pieChart = new Chart(pieChartCanvas).Doughnut(PieData, pieOptions);
+	document.getElementById('js-legend').innerHTML = pieChart.generateLegend();
+</script>

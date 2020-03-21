@@ -1,0 +1,50 @@
+<!-- Right side column. Contains the navbar and content of the page -->
+<aside class="right-side">
+	<!-- Content Header (Page header) -->
+	<section class="content-header">
+		<h1 class="pull-left"><?php _e('Asset Categories'); ?><small> <?php _e('Manage asset categories'); ?></small></h1>
+		<div class="pull-right"><a onClick='showM("?modal=assetcategories/add&reroute=inventory/attributes/assetcategories");return false' data-toggle="modal" class="btn btn-primary btn-sm"><i class="fa fa-plus"></i> <?php _e('NEW ASSET CATEGORY'); ?></a></div>
+		<div style="clear:both"></div>
+	</section>
+	<!-- Main content -->
+	<section class="content">
+		<?php if(!empty($statusmessage)): ?>
+				<div class="row"><div class='col-md-12'><div class="alert alert-<?php print $statusmessage["type"]; ?> alert-auto" role="alert"><?php print __($statusmessage["message"]); ?></div></div></div>
+		<?php endif; ?>
+		<div class="row">
+			<div class="col-xs-12">
+				<div class="box box-primary">
+                    <div class="box-body">
+						<div class="table-responsive">
+	                        <table id="dataTablesFull" class="table table-striped table-hover">
+	                            <thead>
+	                                <tr>
+	                                    <th><?php _e('ID'); ?></th>
+	                                    <th><?php _e('Name'); ?></th>
+										<th class="text-right"></th>
+	                                </tr>
+	                            </thead>
+	                            <tbody>
+									<?php
+									foreach ($categories as $category) {
+	                                echo "<tr>";
+	                                    echo "<td>".$category['id']."</td>";
+	                                    echo "<td><span class='badge' style='background-color:#FFF;color:".$category['color'].";border:1px solid ".$category['color']."'>".$category['name']."</span></td>";
+										echo "<td>
+												<div class='btn-group pull-right'>
+													<a href='#' onClick='showM(\"?modal=assetcategories/edit&reroute=inventory/attributes/assetcategories&id=".$category['id']."\");return false' class='btn-right text-dark'><i class='fa fa-edit'></i></a>&nbsp;
+													<a href='#' onClick='showM(\"?modal=assetcategories/delete&reroute=inventory/attributes/assetcategories&id=".$category['id']."\");return false' class='btn-right text-red'><i class='fa fa-trash-o'></i></a>
+												</div>
+											  </td>";
+	                                echo "</tr>";
+									}
+									?>
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section><!-- /.content -->
+</aside><!-- /.right-side -->

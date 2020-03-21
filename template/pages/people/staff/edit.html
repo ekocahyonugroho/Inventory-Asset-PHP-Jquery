@@ -1,0 +1,154 @@
+<aside class="right-side">
+	<!-- Content Header (Page header) -->
+	<section class="content-header">
+		<h1><?php echo $admin['name']; ?><small> <?php _e('Edit staff account'); ?></small></h1>
+		<ol class="breadcrumb"><li><a href="?route=dashboard"><i class="fa fa-dashboard"></i> <?php _e('Home'); ?></a></li><li><?php _e('People'); ?></li><li class="active"><?php _e('Admins'); ?></li></ol>
+	</section>
+
+	<!-- Main content -->
+	<section class="content">
+		<?php if(!empty($statusmessage)): ?>
+				<div class="row"><div class='col-md-12'><div class="alert alert-<?php print $statusmessage["type"]; ?> alert-auto" role="alert"><?php print __($statusmessage["message"]); ?></div></div></div>
+		<?php endif; ?>
+		<div class="row">
+			<div class="col-xs-12">
+				<div class="box box-default">
+                    <div class="box-body">
+						<div class="row">
+							<form role="form" method="post" class="form-horizontal">
+
+								<div class="form-group">
+									<label for="roleid" class="col-sm-2 control-label"><?php _e('Role'); ?></label>
+									<div class="col-sm-8">
+										<select class="form-control select2 select2-hidden-accessible" id="roleid" name="roleid" style="width: 100%;" tabindex="-1" aria-hidden="true">
+											<?php foreach ($roles as $role) { ?>
+												<option value='<?php echo $role['id']; ?>' <?php if($role['id'] == $admin['roleid']) echo "selected"; ?> ><?php echo $role['name']; ?></option>
+											<?php } ?>
+										</select>
+									</div>
+								</div>
+
+								<div class="form-group">
+									<label for="name" class="col-sm-2 control-label"><?php _e('Name'); ?> *</label>
+									<div class="col-sm-8">
+										<input type="text" class="form-control" id="name" name="name" value="<?php echo $admin['name']; ?>" required>
+									</div>
+								</div>
+								<div class="form-group">
+									<label for="email" class="col-sm-2 control-label"><?php _e('Email Address'); ?> *</label>
+									<div class="col-sm-8">
+										<input type="email" class="form-control" id="email" name="email" value="<?php echo $admin['email']; ?>" required>
+									</div>
+								</div>
+								<div class="form-group">
+									<label for="mobile" class="col-sm-2 control-label"><?php _e('Mobile Number'); ?></label>
+									<div class="col-sm-8">
+										<input type="text" class="form-control" id="mobile" name="mobile" value="<?php echo $admin['mobile']; ?>">
+									</div>
+								</div>
+								<div class="form-group">
+									<label for="title" class="col-sm-2 control-label"><?php _e('Job Title'); ?></label>
+									<div class="col-sm-8">
+										<input type="text" class="form-control" id="title" value="<?php echo $admin['title']; ?>" autocomplete="off" name="title">
+									</div>
+								</div>
+								<div class="form-group">
+									<label for="password" class="col-sm-2 control-label"><?php _e('Password'); ?></label>
+									<div class="col-sm-8">
+										<input type="password" class="form-control" id="password" name="password" placeholder="<?php _e('Enter to change'); ?>">
+									</div>
+								</div>
+								<div class="form-group">
+									<label for="lang" class="col-sm-2 control-label"><?php _e('Language'); ?></label>
+									<div class="col-sm-8">
+										<select class="form-control select2 select2-hidden-accessible" id="lang" name="lang" style="width: 100%;" tabindex="-1" aria-hidden="true">
+											<?php foreach ($languages as $language) { ?>
+												<option <?php if($admin['lang'] == $language['code']) echo 'selected'; ?> value="<?php echo $language['code']; ?>"><?php echo $language['name']; ?></option>
+											<?php } ?>
+										</select>
+									</div>
+								</div>
+								<div class="form-group">
+									<label for="ticketsnotification" class="col-sm-2 control-label"><?php _e('Receive Tickets Notifications'); ?></label>
+									<div class="col-sm-8">
+										<select class="form-control select2 select2-hidden-accessible" id="ticketsnotification" name="ticketsnotification" style="width: 100%;" tabindex="-1" aria-hidden="true">
+											<option value="1" <?php if($admin['ticketsnotification']=="1") echo "selected"; ?>><?php _e('Yes'); ?></option>
+											<option value="0" <?php if($admin['ticketsnotification']=="0") echo "selected"; ?>><?php _e('No'); ?></option>
+										</select>
+									</div>
+								</div>
+								<div class="form-group">
+									<label for="theme" class="col-sm-2 control-label"><?php _e('Theme'); ?></label>
+									<div class="col-sm-8">
+										<select class="form-control select2 select2-hidden-accessible" id="theme" name="theme" style="width: 100%;" tabindex="-1" aria-hidden="true">
+											<option value="skin-blue" <?php if($admin['theme']=="skin-blue") echo "selected"; ?>><?php _e('Blue'); ?></option>
+											<option value="skin-black" <?php if($admin['theme']=="skin-black") echo "selected"; ?>><?php _e('Black'); ?></option>
+											<option value="skin-purple" <?php if($admin['theme']=="skin-purple") echo "selected"; ?>><?php _e('Purple'); ?></option>
+											<option value="skin-green" <?php if($admin['theme']=="skin-green") echo "selected"; ?>><?php _e('Green'); ?></option>
+											<option value="skin-red" <?php if($admin['theme']=="skin-red") echo "selected"; ?>><?php _e('Red'); ?></option>
+											<option value="skin-yellow" <?php if($admin['theme']=="skin-yellow") echo "selected"; ?>><?php _e('Yellow'); ?></option>
+											<option value="skin-blue-light" <?php if($admin['theme']=="skin-blue-light") echo "selected"; ?>><?php _e('Blue Light'); ?></option>
+											<option value="skin-black-light" <?php if($admin['theme']=="skin-black-light") echo "selected"; ?>><?php _e('Black Light'); ?></option>
+											<option value="skin-purple-light" <?php if($admin['theme']=="skin-purple-light") echo "selected"; ?>><?php _e('Purple Light'); ?></option>
+											<option value="skin-green-light" <?php if($admin['theme']=="skin-green-light") echo "selected"; ?>><?php _e('Green Light'); ?></option>
+											<option value="skin-red-light" <?php if($admin['theme']=="skin-red-light") echo "selected"; ?>><?php _e('Red Light'); ?></option>
+											<option value="skin-yellow-light" <?php if($admin['theme']=="skin-yellow-light") echo "selected"; ?>><?php _e('Yellow Light'); ?></option>
+										</select>
+									</div>
+								</div>
+								<div class="form-group">
+									<label for="sidebar" class="col-sm-2 control-label"><?php _e('Sidebar'); ?></label>
+									<div class="col-sm-8">
+										<select class="form-control select2 select2-hidden-accessible" id="sidebar" name="sidebar" style="width: 100%;" tabindex="-1" aria-hidden="true">
+											<option value="opened" <?php if($admin['sidebar']=="opened") echo "selected"; ?>><?php _e('Opened'); ?></option>
+											<option value="collapsed" <?php if($admin['sidebar']=="collapsed") echo "selected"; ?>><?php _e('Collapsed'); ?></option>
+										</select>
+									</div>
+								</div>
+								<div class="form-group">
+									<label for="layout" class="col-sm-2 control-label"><?php _e('Layout'); ?></label>
+									<div class="col-sm-8">
+										<select class="form-control select2 select2-hidden-accessible" id="layout" name="layout" style="width: 100%;" tabindex="-1" aria-hidden="true">
+											<option value="" <?php if($admin['layout']== "") echo "selected"; ?>><?php _e('Standard'); ?></option>
+											<option value="fixed" <?php if($admin['layout']=="fixed") echo "selected"; ?>><?php _e('Fixed'); ?></option>
+											<option value="layout-boxed" <?php if($admin['layout']=="layout-boxed") echo "selected"; ?>><?php _e('Boxed'); ?></option>
+										</select>
+									</div>
+								</div>
+								<div class="form-group">
+									<label for="signature" class="col-sm-2 control-label"><?php _e('Signature'); ?></label>
+									<div class="col-sm-8">
+										<textarea class="form-control" id="signature" rows="3" name="signature"><?php echo $admin['signature']; ?></textarea>
+									</div>
+								</div>
+								<div class="form-group">
+									<label for="notes" class="col-sm-2 control-label"><?php _e('Notes'); ?></label>
+									<div class="col-sm-8">
+										<textarea class="form-control summernote" id="notes" name="notes"><?php echo $admin['notes']; ?></textarea>
+									</div>
+								</div>
+
+								<input type="hidden" name="action" value="editAdmin">
+								<input type="hidden" name="route" value="people/staff/edit">
+								<input type="hidden" name="routeid" value="<?php echo $admin['id']; ?>">
+								<input type="hidden" name="id" value="<?php echo $admin['id']; ?>">
+
+							<div class="col-sm-2"></div><div class="col-sm-8">
+								<button type="submit" class="btn btn-success"><i class="fa fa-save"></i> <?php _e('Save'); ?></button>
+							</div>
+
+							</form><!-- /.form -->
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+
+
+
+
+
+
+	</section><!-- /.content -->
+</aside><!-- /.right-side -->

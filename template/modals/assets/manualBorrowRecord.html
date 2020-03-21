@@ -1,0 +1,134 @@
+<link rel="stylesheet" type="text/css" href="https://<?php echo $_SERVER['SERVER_NAME'] ?>/plugin/clockpicker/dist/bootstrap-clockpicker.min.css">
+<div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button><h4 class="modal-title"><?php _e('Add Manual Record'); ?></h4></div>
+<div class="modal-body">
+    <div class="row">
+        <div class="col-xs-6">
+            <div class="form-group">
+                <label for="userid"><?php _e('Borrowed By'); ?></label>
+                <select class="form-control select2 select2-hidden-accessible" id="userid" name="userid" style="width: 100%;" tabindex="-1" aria-hidden="true">
+                    <option value="0"><?php _e('None'); ?></option>
+                    <?php foreach ($people as $user) { ?>
+                    <option value='<?php echo $user['id']; ?>'><?php echo $user['name']; ?></option>
+                    <?php } ?>
+                </select>
+            </div>
+        </div>
+        <div class="col-xs-6">
+            <?php if($isAdmin) { ?>
+            <div class="form-group">
+                <label for="usergiven"><?php _e('Given By'); ?></label>
+                <select class="form-control select2 select2-hidden-accessible" id="usergiven" name="usergiven" style="width: 100%;" tabindex="-1" aria-hidden="true">
+                    <option value="0"><?php _e('Nobody'); ?></option>
+                    <?php foreach ($admins as $admin) { ?>
+                    <option value='<?php echo $admin['id']; ?>' <?php if(isset($liu['id'])) { if($liu['id'] == $admin['id']) echo "selected"; }  ?>><?php echo $admin['name']; ?></option>
+                    <?php } ?>
+                </select>
+            </div>
+            <?php } ?>
+            <?php if(!$isAdmin) { ?><input type="hidden" name="adminid" value="0"><?php } ?>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-xs-6">
+            <div class="form-group">
+                <label for="startdate"><?php _e('Start Date'); ?></label>
+                <div class="input-group">
+                    <input type="text" class="form-control duedate" id="startdate" name="startdate">
+                    <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                </div>
+            </div>
+        </div>
+        <div class="col-xs-6">
+            <div class="form-group">
+                <label for="enddate"><?php _e('End Date'); ?></label>
+                <div class="input-group">
+                    <input type="text" class="form-control duedate" id="enddate" name="enddate">
+                    <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-xs-6">
+            <div class="form-group">
+                <label for="startdate"><?php _e('Start Time'); ?></label>
+                <div class="input-group clockpicker">
+                    <input name="starttime" id="starttime" type="text" class="form-control">
+                    <span class="input-group-addon">
+                    <span class="glyphicon glyphicon-time"></span>
+                    </span>
+                </div>
+            </div>
+        </div>
+        <div class="col-xs-6">
+            <div class="form-group">
+                <label for="endtime"><?php _e('End Time'); ?></label>
+                <div class="input-group clockpicker">
+                    <input name="endtime" id="endtime" type="text" class="form-control">
+                    <span class="input-group-addon">
+                    <span class="glyphicon glyphicon-time"></span>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label for="purpose" class="control-label"><?php _e('Purpose'); ?></label>
+        <textarea class="form-control summernote" id="purpose" name="purpose"></textarea>
+    </div>
+
+    <input type="hidden" name="id" value="<?php echo $_GET['assetid']; ?>">
+    <input type="hidden" name="assetid" value="<?php echo $_GET['assetid']; ?>">
+    <input type="hidden" name="action" value="manualBorrowRecord">
+
+    <input type="hidden" name="route" value="<?php echo $_GET['reroute']; ?>">
+    <input type="hidden" name="routeid" value="<?php echo $_GET['routeid']; ?>">
+    <input type="hidden" name="section" value="borrow">
+</div>
+<div class="modal-footer">
+    <button type="button" class="btn btn-default" data-dismiss="modal"><?php _e('No'); ?></button>
+    <button type="submit" class="btn btn-danger" ><?php _e('Yes'); ?></button>
+</div>
+<script type="text/javascript" src="https://<?php echo $_SERVER['SERVER_NAME'] ?>/plugin/clockpicker/dist/bootstrap-clockpicker.min.js"></script>
+<script type="text/javascript">
+    $(document).ready(function() {
+        $(".select2").select2();
+
+        function formatIcon(icon) {
+            if (!icon.id) { return icon.text; }
+            var originalOption = icon.element;
+            var $icon = $('<span></span>').append($('<i class="fa ' + $(originalOption).data('icon') + '"></i>') ).append(icon.text);
+            return $icon;
+        }
+
+        $('.select2-icon').select2({
+            templateResult: formatIcon,
+            templateSelection: formatIcon
+        });
+
+        $(function() {
+            $('.duedate').datepicker({
+                format: 'yyyy-mm-dd',
+                clearBtn: 'true',
+                weekStart: '<?php echo getConfigValue("week_start"); ?>',
+                autoclose: true
+            });
+        });
+
+        $(function() {
+            $('.duedate').datepicker({
+                format: 'yyyy-mm-dd',
+                clearBtn: 'true',
+                weekStart: '<?php echo getConfigValue("week_start"); ?>',
+                autoclose: true
+            });
+        });
+
+        $('.clockpicker').clockpicker({
+            donetext: 'Done'
+        });
+    });
+</script>

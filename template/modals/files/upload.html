@@ -1,0 +1,32 @@
+<div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button><h4 class="modal-title"><?php _e('Upload File'); ?></h4></div>
+<div class="modal-body">
+
+    <div class="form-group">
+        <label for="name"><?php _e('Name'); ?></label>
+        <input type="text" class="form-control" id="name" name="name" value="">
+    </div>
+
+    <div class="form-group">
+        <label for="file"><?php _e('File'); ?></label>
+        <input type="file" id="file" name="file[]" multiple required>
+        <p class="help-block"><?php _e('Max upload file size on your server is'); ?> <?php echo ini_get('upload_max_filesize'); ?>.</p>
+    </div>
+
+    <input type="hidden" name="action" value="uploadFile">
+    <input type="hidden" name="clientid" value="<?php if(isset($_GET['clientid'])) echo $_GET['clientid']; else echo "0"; ?>">
+    <input type="hidden" name="projectid" value="<?php if(isset($_GET['projectid'])) echo $_GET['projectid']; else echo "0"; ?>">
+    <input type="hidden" name="assetid" value="<?php if(isset($_GET['assetid'])) echo $_GET['assetid']; else echo "0"; ?>">
+    <input type="hidden" name="ticketreplyid" value="0">
+
+    <input type="hidden" name="route" value="<?php echo $_GET['reroute']; ?>">
+    <input type="hidden" name="routeid" value="<?php echo $_GET['routeid']; ?>">
+    <input type="hidden" name="section" value="<?php if(isset($_GET['section'])) echo $_GET['section']; else echo ""; ?>">
+</div>
+<div class="modal-footer">
+    <button type="button" class="btn btn-default" data-dismiss="modal"><i class="fa fa-times"></i> <?php _e('Cancel'); ?></button>
+    <button type="submit" class="btn btn-primary"><i class="fa fa-upload"></i> <?php _e('Upload'); ?></button>
+</div>
+
+<script type="text/javascript">
+		$(".select2").select2();
+</script>

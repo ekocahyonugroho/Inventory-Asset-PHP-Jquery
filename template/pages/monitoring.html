@@ -1,0 +1,155 @@
+<!-- Right side column. Contains the navbar and content of the page -->
+<aside class="right-side">
+	<!-- Content Header (Page header) -->
+	<section class="content-header">
+		<h1><?php _e('Monitoring'); ?><small></small></h1>
+		<ol class="breadcrumb"><li><a href="?route=dashboard"><i class="fa fa-dashboard"></i> <?php _e('Home'); ?></a></li><li class="active"><?php _e('Monitoring'); ?></li></ol>
+	</section>
+	<!-- Main content -->
+	<section class="content">
+		<?php if(!empty($statusmessage)): ?>
+				<div class="row"><div class='col-md-12'><div class="alert alert-<?php print $statusmessage["type"]; ?> alert-auto" role="alert"><?php print __($statusmessage["message"]); ?></div></div></div>
+		<?php endif; ?>
+		<div class="row">
+	        <div class="col-md-4 col-sm-6 col-xs-12">
+	          <div class="info-box bg-green">
+	            <span class="info-box-icon"><i class="fa fa-thumbs-o-up"></i></span>
+
+	            <div class="info-box-content">
+	              <span class="info-box-text"><?php _e('UP'); ?></span>
+	              <span class="info-box-number"><?php echo $sumHostsUp; ?>  <?php //echo $sumHosts; ?></span>
+
+	              <div class="progress">
+	                <div class="progress-bar" style="width: <?php echo $percUp; ?>%"></div>
+	              </div>
+	                  <span class="progress-description">
+	                    <?php echo $percUp; ?>% <?php _e('UP'); ?>
+	                  </span>
+	            </div>
+	            <!-- /.info-box-content -->
+	          </div>
+	          <!-- /.info-box -->
+	        </div>
+	        <!-- /.col -->
+	        <div class="col-md-4 col-sm-6 col-xs-12">
+	          <div class="info-box bg-yellow">
+	            <span class="info-box-icon"><i class="fa fa-warning"></i></span>
+
+	            <div class="info-box-content">
+	              <span class="info-box-text"><?php _e('WARNING'); ?></span>
+	              <span class="info-box-number"><?php echo $sumHostsWarning; ?>  <?php //echo $sumHosts; ?></span>
+
+	              <div class="progress">
+	                <div class="progress-bar" style="width: <?php echo $percWarning; ?>%"></div>
+	              </div>
+	                  <span class="progress-description">
+	                    <?php echo $percWarning; ?>% <?php _e('WARNING'); ?>
+	                  </span>
+	            </div>
+	            <!-- /.info-box-content -->
+	          </div>
+	          <!-- /.info-box -->
+	        </div>
+	        <!-- /.col -->
+	        <div class="col-md-4 col-sm-6 col-xs-12">
+	          <div class="info-box bg-red">
+	            <span class="info-box-icon"><i class="fa fa-thumbs-o-down"></i></span>
+
+	            <div class="info-box-content">
+	              <span class="info-box-text"><?php _e('DOWN'); ?></span>
+	              <span class="info-box-number"><?php echo $sumHostsDown; ?>  <?php //echo $sumHosts; ?></span>
+
+	              <div class="progress">
+	                <div class="progress-bar" style="width: <?php echo $percDown; ?>%"></div>
+	              </div>
+	                  <span class="progress-description">
+	                    <?php echo $percDown; ?>% <?php _e('DOWN'); ?>
+	                  </span>
+	            </div>
+	            <!-- /.info-box-content -->
+	          </div>
+	          <!-- /.info-box -->
+	        </div>
+	        <!-- /.col -->
+	      </div>
+	      <!-- /.row -->
+
+
+		<div class="row">
+			<div class="col-xs-12">
+				<div class="box box-primary">
+          			<div class="box-header with-border">
+						<h3 class="box-title"><?php _e('All Hosts'); ?></h3>
+						<div class="box-tools pull-right">
+							<?php if(in_array("addHost",$perms)) { ?><a onClick='showM("index.php?modal=hosts/add&reroute=monitoring");return false' data-toggle="modal" class="btn btn-primary btn-sm"><i class="fa fa-heartbeat"></i> <?php _e('NEW HOST'); ?></a><?php } ?>
+						</div>
+					</div><!-- /.box-header -->
+                    <div class="box-body">
+                        <div class="table-responsive"><table id="hostsTable" class="table">
+                            <thead>
+                                <tr>
+									<th><?php _e('Client'); ?></th>
+									<th><?php _e('Host'); ?></th>
+									<th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+								<?php
+								foreach ($hostsDown as $host) {
+                                echo "<tr class='bg-red'>";
+                                    echo "<td class='notopborder'>".getSingleValue("clients","name",$host['clientid'])."</td>";
+									echo "<td class='notopborder'>".$host['name']." (".$host['address'].")</td>";
+									echo "<td class='notopborder'><div class='pull-right'>";
+												if(in_array("manageHost",$perms)) echo "<a href='?route=monitoring/manage&id=".$host['id']."' class='btn whitetext'><i class='fa fa-cogs'></i></a>";
+												if(in_array("editHost",$perms)) echo "<a onClick='showM(\"index.php?modal=hosts/edit&reroute=monitoring&id=".$host['id']."\");return false' class='btn whitetext'><i class='fa fa-edit'></i></a>";
+												if(in_array("deleteHost",$perms)) echo "<a onClick='showM(\"index.php?modal=hosts/delete&reroute=monitoring&id=".$host['id']."\");return false' class='btn whitetext'><i class='fa fa-trash-o'></i></a>";
+
+									echo "</div></td>";
+                                echo "</tr>";
+								}
+								foreach ($hostsWarning as $host) {
+                                echo "<tr class='bg-yellow'>";
+                                    echo "<td class='notopborder'>".getSingleValue("clients","name",$host['clientid'])."</td>";
+									echo "<td class='notopborder'>".$host['name']." (".$host['address'].")</td>";
+									echo "<td class='notopborder'><div class='pull-right'>";
+												if(in_array("manageHost",$perms)) echo "<a href='?route=monitoring/manage&id=".$host['id']."' class='btn whitetext'><i class='fa fa-cogs'></i></a>";
+												if(in_array("editHost",$perms)) echo "<a onClick='showM(\"index.php?modal=hosts/edit&reroute=monitoring&id=".$host['id']."\");return false' class='btn whitetext'><i class='fa fa-edit'></i></a>";
+												if(in_array("deleteHost",$perms)) echo "<a onClick='showM(\"index.php?modal=hosts/delete&reroute=monitoring&id=".$host['id']."\");return false' class='btn whitetext'><i class='fa fa-trash-o'></i></a>";
+
+									echo "</div></td>";
+                                echo "</tr>";
+								}
+								foreach ($hostsUp as $host) {
+                                echo "<tr class='bg-green'>";
+                                    echo "<td class='notopborder'>".getSingleValue("clients","name",$host['clientid'])."</td>";
+									echo "<td class='notopborder'>".$host['name']." (".$host['address'].")</td>";
+									echo "<td class='notopborder'><div class='pull-right'>";
+												if(in_array("manageHost",$perms)) echo "<a href='?route=monitoring/manage&id=".$host['id']."' class='btn whitetext'><i class='fa fa-cogs'></i></a>";
+												if(in_array("editHost",$perms)) echo "<a onClick='showM(\"index.php?modal=hosts/edit&reroute=monitoring&id=".$host['id']."\");return false' class='btn whitetext'><i class='fa fa-edit'></i></a>";
+												if(in_array("deleteHost",$perms)) echo "<a onClick='showM(\"index.php?modal=hosts/delete&reroute=monitoring&id=".$host['id']."\");return false' class='btn whitetext'><i class='fa fa-trash-o'></i></a>";
+
+									echo "</div></td>";
+                                echo "</tr>";
+								}
+								foreach ($hosts as $host) {
+                                echo "<tr>";
+                                    echo "<td>".getSingleValue("clients","name",$host['clientid'])."</td>";
+									echo "<td>".$host['name']." (".$host['address'].")</td>";
+									echo "<td><div class='pull-right'>";
+												if(in_array("manageHost",$perms)) echo "<a href='?route=monitoring/manage&id=".$host['id']."' class='btn'><i class='fa fa-cogs'></i></a>";
+												if(in_array("editHost",$perms)) echo "<a onClick='showM(\"index.php?modal=hosts/edit&reroute=monitoring&id=".$host['id']."\");return false' class='btn'><i class='fa fa-edit'></i></a>";
+												if(in_array("deleteHost",$perms)) echo "<a onClick='showM(\"index.php?modal=hosts/delete&reroute=monitoring&id=".$host['id']."\");return false' class='btn'><i class='fa fa-trash-o'></i></a>";
+
+									echo "</div></td>";
+                                echo "</tr>";
+								}
+								?>
+							</tbody>
+						</table></div>
+						<?php if(empty($hosts) && empty($hostsUp) && empty($hostsWarning) && empty($hostsDown)) _e("There are no hosts to display."); ?>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section><!-- /.content -->
+</aside><!-- /.right-side -->

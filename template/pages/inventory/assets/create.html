@@ -1,0 +1,227 @@
+<!-- Right side column. Contains the navbar and content of the page -->
+<aside class="right-side">
+	<!-- Content Header (Page header) -->
+	<section class="content-header">
+		<h1><?php _e('Assets'); ?><small> <?php _e('Manage assets'); ?></small></h1>
+		<ol class="breadcrumb"><li><a href="?route=dashboard"><i class="fa fa-dashboard"></i> <?php _e('Home'); ?></a></li><li><?php _e('Inventory'); ?></li><li><a href="?route=inventory/assets"><?php _e('Assets'); ?></a></li><li class="active"><?php _e('Create'); ?></li></ol>
+	</section>
+
+	<!-- Main content -->
+	<section class="content">
+		<?php if(!empty($statusmessage)): ?>
+				<div class="row"><div class='col-md-12'><div class="alert alert-<?php print $statusmessage["type"]; ?> alert-auto" role="alert"><?php print __($statusmessage["message"]); ?></div></div></div>
+		<?php endif; ?>
+		<div class="row">
+			<div class="col-xs-12">
+				<div class="box box-primary">
+          			<div class="box-header with-border"><h3 class="box-title"><?php _e('Create New Asset'); ?></h3></div><!-- /.box-header -->
+                    <div class="box-body">
+						<div class="container-fluid">
+						<div class="row">
+							<form role="form" method="post" class="">
+								<div class="row">
+								<div class="col-md-6">
+									<?php if($isAdmin) { ?>
+										<div class="form-group">
+											<label for="clientid"><?php _e('Client'); ?></label>
+											<select onchange='generateTag(this)' class="form-control select2 select2-hidden-accessible" id="clientid" name="clientid" style="width: 100%;" tabindex="-1" aria-hidden="true">
+												<option data-tagprefix='<?php echo getConfigValue("asset_tag_prefix"); ?>' value="0"><?php _e('None'); ?></option>
+												<?php foreach ($clients as $client) { echo "<option data-tagprefix='".$client['asset_tag_prefix']."' value='".$client['id']."'>".$client['name']."</option>"; } ?>
+											</select>
+										</div>
+									<?php } ?>
+									<?php if(!$isAdmin) { ?><input type="hidden" name="clientid" value="<?php echo $liu['clientid']; ?>"><?php } ?>
+
+									<div class="form-group">
+										<label for="tag"><?php _e('Asset Tag'); ?> *</label>
+										<input type="text" class="form-control" id="tag" name="tag" value="<?php echo getConfigValue("asset_tag_prefix"); ?><?php echo Asset::nextAssetTag(); ?>" required>
+									</div>
+
+									<div class="form-group">
+										<label for="name"><?php _e('Asset Name'); ?></label>
+										<input type="text" class="form-control" id="name" name="name">
+									</div>
+
+									<?php if($isAdmin) { ?>
+										<div class="form-group">
+											<label for="location"><?php _e('Location'); ?></label>
+											<select class="form-control select2tag select2-hidden-accessible" id="location" name="location" style="width: 100%;" tabindex="-1" aria-hidden="true" multiple>
+												<?php foreach ($locations as $location) {
+													$locationclient = getSingleValue("clients","name",$location['clientid']);
+													if($locationclient != "") $locationclient = $locationclient . " / ";
+													echo "<option value='".$location['name']."'>".$locationclient . $location['name']."</option>";
+												} ?>
+											</select>
+										</div>
+									<?php } ?>
+
+									<?php if(!$isAdmin) { ?>
+										<div class="form-group">
+											<label for="location"><?php _e('Location'); ?></label>
+											<select class="form-control select2tag select2-hidden-accessible" id="location" name="location" style="width: 100%;" tabindex="-1" aria-hidden="true" multiple>
+												<?php foreach ($locations as $location) { echo "<option value='".$location['name']."'>".$location['name']."</option>"; } ?>
+											</select>
+										</div>
+									<?php } ?>
+
+									<div class="form-group">
+										<label for="serial"><?php _e('Serial Number'); ?></label>
+										<input type="text" class="form-control" id="serial" name="serial">
+									</div>
+
+									<div class="form-group">
+										<label for="purchase_date"><?php _e('Purchase Date'); ?></label>
+										<div class="input-group">
+											<input type="text" class="form-control" id="purchase_date" name="purchase_date">
+											<span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+										</div>
+									</div>
+
+									<div class="form-group">
+										<label for="purchase_order"><?php _e('Purchase Order Number'); ?></label>
+										<select class="form-control select2tag select2-hidden-accessible" id="purchase_order" name="purchase_order" style="width: 100%;" tabindex="-1" aria-hidden="true" multiple>
+											<?php foreach ($po_numbers as $po) {
+													echo "<option value='".$po['po_code']."'>".$po['po_code']."</option>";
+											} ?>
+										</select>
+									</div>
+
+									<div class="form-group">
+										<label for="value"><?php _e('Value'); ?></label>
+										<input type="text" class="form-control" id="value" name="value">
+									</div>
+									<!--
+									<div class="form-group">
+										<label for="category"><?php _e('Purchase Category'); ?> *</label>
+										<select class="form-control select2tag select2-hidden-accessible" id="purchasecategory" name="purchasecategory" style="width: 100%;" tabindex="-1" aria-hidden="true" multiple>
+											<?php foreach ($assets_types as $type) { echo "<option value='".$type['id']."'>".$type['type']."</option>"; } ?>
+										</select>
+									</div>
+									-->
+
+								</div>
+
+								<div class="col-md-6">
+									<div class="form-group">
+										<label for="category"><?php _e('Category'); ?> *</label>
+										<select class="form-control select2tag select2-hidden-accessible" id="category" name="category" style="width: 100%;" tabindex="-1" aria-hidden="true" multiple>
+											<?php foreach ($categories as $category) { echo "<option value='".$category['name']."'>".$category['name']."</option>"; } ?>
+										</select>
+									</div>
+
+									<div class="row">
+										<div class="col-xs-6">
+											<div class="form-group">
+												<label for="manufacturer"><?php _e('Manufacturer'); ?></label>
+												<select class="form-control select2tag select2-hidden-accessible" id="manufacturer" name="manufacturer" style="width: 100%;" tabindex="-1" aria-hidden="true" multiple>
+													<?php foreach ($manufacturers as $manufacturer) { echo "<option value='".$manufacturer['name']."'>".$manufacturer['name']."</option>"; } ?>
+												</select>
+											</div>
+										</div>
+
+										<div class="col-xs-6">
+											<div class="form-group">
+												<label for="model"><?php _e('Model'); ?></label>
+												<select class="form-control select2tag select2-hidden-accessible" id="model" name="model" style="width: 100%;" tabindex="-1" aria-hidden="true" multiple>
+													<?php foreach ($models as $model) { echo "<option value='".$model['name']."'>".$model['name']."</option>"; } ?>
+												</select>
+											</div>
+										</div>
+									</div>
+
+									<div class="form-group">
+										<label for="supplier"><?php _e('Supplier'); ?></label>
+										<select class="form-control select2tag select2-hidden-accessible" id="supplier" name="supplier" style="width: 100%;" tabindex="-1" aria-hidden="true" multiple>
+											<?php foreach ($suppliers as $supplier) { echo "<option value='".$supplier['name']."'>".$supplier['name']."</option>"; } ?>
+										</select>
+									</div>
+
+									<div class="form-group">
+										<label for="statusid"><?php _e('Status'); ?> *</label>
+										<select class="form-control select2 select2-hidden-accessible" id="statusid" name="statusid" style="width: 100%;" tabindex="-1" aria-hidden="true">
+											<?php foreach ($labels as $label) { echo "<option value='".$label['id']."'>".$label['name']."</option>"; } ?>
+										</select>
+									</div>
+
+									<?php if($isAdmin) { ?>
+										<div class="form-group">
+											<label for="adminid"><?php _e('Asset Admin'); ?></label>
+											<select class="form-control select2 select2-hidden-accessible" id="adminid" name="adminid" style="width: 100%;" tabindex="-1" aria-hidden="true">
+												<option value="0"><?php _e('None'); ?></option>
+												<?php foreach ($admins as $admin) { echo "<option value='".$admin['id']."'>".$admin['name']."</option>"; } ?>
+											</select>
+										</div>
+									<?php } ?>
+									<?php if(!$isAdmin) { ?><input type="hidden" name="adminid" value="0"><?php } ?>
+
+									<div class="form-group">
+										<label for="userid"><?php _e('Asset User'); ?></label>
+										<select class="form-control select2 select2-hidden-accessible" id="userid" name="userid" style="width: 100%;" tabindex="-1" aria-hidden="true">
+											<option value="0"><?php _e('None'); ?></option>
+											<?php foreach ($users as $user) { echo "<option value='".$user['id']."'>".$user['name']."</option>"; } ?>
+										</select>
+									</div>
+
+									<div class="form-group">
+										<label for="removal_date"><?php _e('Removal Date'); ?></label>
+										<div class="input-group">
+											<input type="text" class="form-control" id="removal_date" name="removal_date">
+											<span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+										</div>
+									</div>
+
+									<div class="form-group">
+										<label for="condition"><?php _e('Condition'); ?></label>
+										<input type="text" class="form-control" id="condition" name="condition">
+									</div>
+
+									<div class="form-group">
+										<label for="warranty_months"><?php _e('Warranty'); ?></label>
+										<div class="input-group">
+											<input type="number" class="form-control" id="warranty_months" name="warranty_months">
+											<span class="input-group-addon"><?php _e('months'); ?></span>
+										</div>
+									</div>
+
+								</div>
+								</div>
+
+								<div class="col-md-12">
+									<div class="form-group">
+										<label for="notes"><?php _e('Notes'); ?></label>
+										<textarea class="form-control summernote" id="notes" name="notes"></textarea>
+									</div>
+								</div>
+
+								<div class="col-md-12">
+									<div class="form-group">
+										<button type="submit" class="btn btn-primary"><i class="fa fa-check"></i> <?php _e('Create'); ?></button>
+									</div>
+								</div>
+
+								<input type="hidden" name="action" value="addAsset">
+								<input type="hidden" name="route" value="inventory/assets">
+								<input type="hidden" name="routeid" value="">
+
+
+							</form><!-- /.form -->
+						</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section><!-- /.content -->
+</aside><!-- /.right-side -->
+
+<script type="text/javascript">
+
+        function generateTag(_this) {
+
+            var tagprefix = $(_this).find(':selected').data("tagprefix");
+			var tagsufix = '<?php echo Asset::nextAssetTag(); ?>';
+
+            document.getElementById("tag").value = tagprefix + tagsufix;
+        }
+
+</script>

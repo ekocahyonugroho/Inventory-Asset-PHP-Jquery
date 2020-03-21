@@ -1,0 +1,108 @@
+<div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button><h4 class="modal-title"><?php _e('Edit Project'); ?></h4></div>
+<div class="modal-body">
+
+    <div class="row">
+        <div class="col-xs-4">
+            <div class="form-group">
+                <label for="tag"><?php _e('Project Tag'); ?> *</label>
+                <input type="text" class="form-control" id="tag" name="tag" value="<?php echo $project['tag']; ?>" required>
+            </div>
+        </div>
+        <div class="col-xs-8">
+            <div class="form-group">
+                <label for="name"><?php _e('Project Name'); ?> *</label>
+                <input type="text" class="form-control" id="name" name="name" value="<?php echo $project['name']; ?>" required>
+            </div>
+        </div>
+    </div>
+
+    <?php if($isAdmin) { ?>
+        <div class="form-group">
+            <label for="clientid"><?php _e('Client'); ?></label>
+            <select class="form-control select2 select2-hidden-accessible" id="clientid" name="clientid" style="width: 100%;" tabindex="-1" aria-hidden="true">
+                <option value="0"><?php _e('None'); ?></option>
+                <?php foreach ($clients as $client) { ?>
+                    <option value='<?php echo $client['id']; ?>' <?php if($project['clientid'] == $client['id']) echo "selected"; ?>><?php echo $client['name']; ?></option>
+                <?php } ?>
+            </select>
+        </div>
+    <?php } ?>
+    <?php if(!$isAdmin) { ?><input type="hidden" name="clientid" value="<?php echo $project['clientid']; ?>"><?php } ?>
+
+    <div class="row">
+        <div class="col-xs-6">
+            <div class="form-group">
+                <label for="startdate"><?php _e('Start Date'); ?></label>
+                <div class="input-group">
+                    <input type="text" class="form-control" id="startdate" name="startdate" value="<?php echo $project['startdate']; ?>">
+                    <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                </div>
+            </div>
+        </div>
+        <div class="col-xs-6">
+            <div class="form-group">
+                <label for="deadline"><?php _e('Deadline'); ?></label>
+                <div class="input-group">
+                    <input type="text" class="form-control" id="deadline" name="deadline" value="<?php echo $project['deadline']; ?>">
+                    <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <div class="checkbox"><label><input type="checkbox" class="sliderToggle" name="issuesprogress" value="true" <?php if($project['progress'] == -1) echo "checked"; ?>> <?php _e('Calculate progress through tasks'); ?></label></div>
+    </div>
+
+
+    <input style="width:100%" value="" type="text" name="pslider" id="pslider" class="bootstrap-slider form-control" data-slider-min="0" data-slider-max="100" data-slider-step="1" data-slider-value="<?php if($project['progress'] != -1) echo $project['progress']; else echo "10"; ?>" data-slider-orientation="horizontal" data-slider-selection="before" data-slider-tooltip="show" data-slider-tooltip_position="top" data-slider-id="green" <?php if($project['progress'] == -1) echo "data-slider-enabled=\"false\""; ?> >
+    <br>
+    <br>
+
+    <div class="form-group">
+        <label for="description" class="control-label"><?php _e('Description'); ?></label>
+        <textarea class="form-control summernote-modal" id="description" name="description"><?php echo $project['description']; ?></textarea>
+    </div>
+
+    <input type="hidden" name="id" value="<?php echo $project['id']; ?>">
+    <input type="hidden" name="action" value="editProject">
+    <input type="hidden" name="route" value="<?php echo $_GET['reroute']; ?>">
+    <input type="hidden" name="routeid" value="<?php echo $_GET['routeid']; ?>">
+    <input type="hidden" name="section" value="<?php echo $_GET['section']; ?>">
+</div>
+<div class="modal-footer">
+    <button type="button" class="btn btn-default" data-dismiss="modal"><i class="fa fa-times"></i> <?php _e('Cancel'); ?></button>
+    <button type="submit" class="btn btn-success"><i class="fa fa-save"></i> <?php _e('Save'); ?></button>
+</div>
+
+<script type="text/javascript">
+
+
+        $(document).ready(function() {
+             $('.summernote-modal').summernote({height: 200});
+             $('.bootstrap-slider').bootstrapSlider();
+
+             $(".sliderToggle").click(function() {
+                if(this.checked) {
+                    // With JQuery
+                    $(".bootstrap-slider").bootstrapSlider("disable");
+                }
+                else {
+                    // With JQuery
+                    $(".bootstrap-slider").bootstrapSlider("enable");
+                }
+             });
+         });
+
+        $(function() {
+            $(".select2").select2();
+
+            $('#startdate, #deadline').datepicker({
+                format: 'yyyy-mm-dd',
+                clearBtn: 'true',
+                weekStart: '<?php echo getConfigValue("week_start"); ?>',
+                autoclose: true
+            });
+        });
+
+</script>

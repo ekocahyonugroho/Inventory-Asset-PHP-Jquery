@@ -1,0 +1,62 @@
+<!-- Right side column. Contains the navbar and content of the page -->
+<aside class="right-side">
+	<!-- Content Header (Page header) -->
+	<section class="content-header">
+			<h1 class="pull-left"><?php _e('Clients'); ?><small> <?php _e('Manage clients'); ?></small></h1>
+			<div class="pull-right"><?php if(in_array("addClient",$perms)) { ?><a onClick='showM("index.php?modal=clients/add&reroute=clients");return false' data-toggle="modal" class="btn btn-primary btn-sm"><i class="fa fa-briefcase"></i> <?php _e('NEW CLIENT'); ?></a><?php } ?></div>
+			<div style="clear:both"></div>
+	</section>
+	<!-- Main content -->
+	<section class="content">
+		<?php if(!empty($statusmessage)): ?>
+				<div class="row"><div class='col-md-12'><div class="alert alert-<?php print $statusmessage["type"]; ?> alert-auto" role="alert"><?php print __($statusmessage["message"]); ?></div></div></div>
+		<?php endif; ?>
+		<div class="row">
+			<div class="col-xs-12">
+				<div class="box box-primary">
+
+                    <div class="box-body">
+						<div class="table-responsive">
+	                        <table id="dataTablesFull" class="table table-striped table-hover">
+	                            <thead>
+	                                <tr>
+	                                    <th><?php _e('ID'); ?></th>
+	                                    <th><?php _e('Name'); ?></th>
+										<th><?php _e('Assets'); ?></th>
+										<th><?php _e('Licenses'); ?></th>
+										<th><?php _e('Projects'); ?></th>
+										<th><?php _e('Users'); ?></th>
+										<th><?php _e('Tickets'); ?></th>
+										<th><?php _e('Issues'); ?></th>
+										<th class="text-right"></th>
+	                                </tr>
+	                            </thead>
+	                            <tbody>
+									<?php foreach ($clients as $client) { ?>
+		                                <tr>
+		                                    <td><?php if(in_array("manageClient",$perms)) { ?><a href='?route=clients/manage&id=<?php echo $client['id']; ?>'><?php echo $client['id']; ?></a><?php } else echo $client['id']; ?></td>
+		                                    <td><?php if(in_array("manageClient",$perms)) { ?><a href='?route=clients/manage&id=<?php echo $client['id']; ?>'><?php echo $client['name']; ?></a><?php } else echo $client['name']; ?></td>
+											<td><span class='label bg-blue'><?php echo countTableFiltered("assets","clientid",$client['id']); ?></span></td>
+											<td><span class='label bg-green'><?php echo countTableFiltered("licenses","clientid",$client['id']); ?></span></td>
+											<td><span class='label bg-yellow'><?php echo countTableFiltered("projects","clientid",$client['id']); ?></span></td>
+											<td><span class='label bg-purple'><?php echo countTableFiltered("people","clientid",$client['id']); ?></span></td>
+											<td><span class='label bg-gray'><?php echo countTableFiltered("tickets","clientid",$client['id']); ?></span></td>
+											<td><span class='label bg-gray'><?php echo countTableFiltered("issues","clientid",$client['id']); ?></span></td>
+											<td>
+												<div class='pull-right'>
+													<?php if(in_array("manageClient",$perms)) { ?><a href='?route=clients/manage&id=<?php echo $client['id']; ?>' class='btn-right text-dark'><i class='fa fa-eye'></i></a>&nbsp;<?php } ?>
+													<?php if(in_array("editClient",$perms)) { ?><a href='#' onClick='showM("index.php?modal=clients/edit&reroute=clients&id=<?php echo $client['id']; ?>");return false' class='btn-right text-dark'><i class='fa fa-edit'></i></a>&nbsp;<?php } ?>
+													<?php if(in_array("deleteClient",$perms)) { ?><a href='#' onClick='showM("index.php?modal=clients/delete&reroute=clients&id=<?php echo $client['id']; ?>");return false' class='btn-right text-red'><i class='fa fa-trash-o'></i></a><?php } ?>
+												</div>
+											</td>
+		                                </tr>
+									<?php } ?>
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section><!-- /.content -->
+</aside><!-- /.right-side -->

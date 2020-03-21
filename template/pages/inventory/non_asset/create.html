@@ -1,0 +1,130 @@
+<!-- Right side column. Contains the navbar and content of the page -->
+<aside class="right-side">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <h1><?php _e('Non Assets'); ?><small> <?php _e('Manage Non Assets'); ?></small></h1>
+        <ol class="breadcrumb"><li><a href="?route=dashboard"><i class="fa fa-dashboard"></i> <?php _e('Home'); ?></a></li><li><?php _e('Inventory'); ?></li><li><a href="?route=inventory/non_asset"><?php _e('Non Asset'); ?></a></li><li class="active"><?php _e('Create'); ?></li></ol>
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+        <?php if(!empty($statusmessage)): ?>
+        <div class="row"><div class='col-md-12'><div class="alert alert-<?php print $statusmessage["type"]; ?> alert-auto" role="alert"><?php print __($statusmessage["message"]); ?></div></div></div>
+        <?php endif; ?>
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="box box-primary">
+                    <div class="box-header with-border"><h3 class="box-title"><?php _e('Create New Non Asset'); ?></h3></div><!-- /.box-header -->
+                    <div class="box-body">
+                        <div class="container-fluid">
+                            <div class="row">
+                                <form role="form" method="post" class="">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <?php if($isAdmin) { ?>
+                                            <div class="form-group">
+                                                <label for="ownerid"><?php _e('Owner Department/Unit'); ?></label>
+                                                <select class="form-control select2 select2-hidden-accessible" id="ownerid" name="ownerid" style="width: 100%;" tabindex="-1" aria-hidden="true">
+                                                    <option value="0"><?php _e('Choose'); ?></option>
+                                                    <?php foreach ($clients as $client) { echo "<option value='".$client['id']."'>".$client['name']."</option>"; } ?>
+                                                </select>
+                                            </div>
+                                            <?php } ?>
+                                            <?php if(!$isAdmin) { ?><input type="hidden" name="clientid" value="<?php echo $liu['clientid']; ?>"><?php } ?>
+
+                                            <div class="form-group">
+                                                <label for="name"><?php _e('Type'); ?></label>
+                                                <select class="form-control select2 select2-hidden-accessible" id="typeid" name="typeid" style="width: 100%;" tabindex="-1" aria-hidden="true">
+                                                    <option value="0"><?php _e('Choose'); ?></option>
+                                                    <?php foreach ($types as $type) { echo "<option value='".$type['id']."'>".$type['name']."</option>"; } ?>
+                                                </select>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label for="name"><?php _e('Goods Name'); ?></label>
+                                                <input type="text" class="form-control" id="name" name="name">
+                                            </div>
+
+                                            <?php if($isAdmin) { ?>
+                                            <div class="form-group">
+                                                <label for="location"><?php _e('Store Location'); ?></label>
+                                                <select class="form-control select2tag select2-hidden-accessible" id="location" name="location" style="width: 100%;" tabindex="-1" aria-hidden="true" multiple>
+                                                    <?php foreach ($locations as $location) {
+													$locationclient = getSingleValue("clients","name",$location['clientid']);
+													if($locationclient != "") $locationclient = $locationclient . " / ";
+													echo "<option value='".$location['id']."'>".$locationclient . $location['name']."</option>";
+                                                    } ?>
+                                                </select>
+                                            </div>
+                                            <?php } ?>
+
+                                            <?php if(!$isAdmin) { ?>
+                                            <div class="form-group">
+                                                <label for="location"><?php _e('Store Location'); ?></label>
+                                                <select class="form-control select2tag select2-hidden-accessible" id="location" name="location" style="width: 100%;" tabindex="-1" aria-hidden="true" multiple>
+                                                    <?php foreach ($locations as $location) { echo "<option value='".$location['id']."'>".$location['name']."</option>"; } ?>
+                                                </select>
+                                            </div>
+                                            <?php } ?>
+
+                                            <div class="form-group">
+                                                <label for="name"><?php _e('Units ( Satuan )'); ?></label>
+                                                <input type="text" class="form-control" id="units" name="units">
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label for="name"><?php _e('Maximum Stock Number'); ?></label>
+                                                <input type="number" class="form-control" id="maximumStock" name="maximumStock">
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-6">
+
+                                            <div class="form-group">
+                                                <label for="notes"><?php _e('Specification'); ?></label>
+                                                <textarea class="form-control summernote" id="spec" name="spec"></textarea>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="notes"><?php _e('Notes'); ?></label>
+                                                <textarea class="form-control summernote" id="notes" name="notes"></textarea>
+                                            </div>
+
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-12">
+
+                                    </div>
+
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <button type="submit" class="btn btn-primary"><i class="fa fa-check"></i> <?php _e('Create'); ?></button>
+                                        </div>
+                                    </div>
+
+                                    <input type="hidden" name="action" value="addNonAsset">
+                                    <input type="hidden" name="route" value="inventory/non_asset">
+                                    <input type="hidden" name="routeid" value="">
+
+
+                                </form><!-- /.form -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section><!-- /.content -->
+</aside><!-- /.right-side -->
+
+<script type="text/javascript">
+
+    function generateTag(_this) {
+
+        var tagprefix = $(_this).find(':selected').data("tagprefix");
+        var tagsufix = '<?php echo Asset::nextAssetTag(); ?>';
+
+        document.getElementById("tag").value = tagprefix + tagsufix;
+    }
+
+</script>

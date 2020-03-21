@@ -1,0 +1,41 @@
+<div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button><h4 class="modal-title"><?php _e('Add Comment'); ?></h4></div>
+<div class="modal-body">
+
+
+    <?php if(in_array("assignComment",$perms)) { ?>
+        <div class="form-group">
+            <label for="peopleid"><?php _e('Account'); ?></label>
+            <select class="form-control select2 select2-hidden-accessible" id="peopleid" name="peopleid" style="width: 100%;" tabindex="-1" aria-hidden="true">
+                <?php foreach ($people as $item) { ?>
+                    <option value='<?php echo $item['id']; ?>' <?php if(isset($liu['id'])) { if($liu['id'] == $item['id']) echo "selected"; }  ?>><?php echo $item['name']; ?></option>
+                <?php } ?>
+            </select>
+        </div>
+    <?php } ?>
+    <?php if(!in_array("assignComment",$perms)) { ?><input type="hidden" name="peopleid" value="<?php echo $liu['id']; ?>"><?php } ?>
+
+    <div class="form-group">
+        <label for="comment" class="control-label"><?php _e('Comment'); ?></label>
+        <textarea class="form-control summernote-modal" id="comment" name="comment"></textarea>
+    </div>
+
+    <input type="hidden" name="action" value="addComment">
+    <input type="hidden" name="route" value="<?php echo $_GET['reroute']; ?>">
+    <input type="hidden" name="routeid" value="<?php echo $_GET['routeid']; ?>">
+    <input type="hidden" name="section" value="<?php echo $_GET['section']; ?>">
+    <input type="hidden" name="clientid" value="<?php if (isset($_GET['clientid'])) echo $_GET['clientid']; else echo "0"; ?>">
+    <input type="hidden" name="projectid" value="<?php if (isset($_GET['projectid'])) echo $_GET['projectid']; else echo "0"; ?>">
+    <input type="hidden" name="ticketid" value="<?php if (isset($_GET['ticketid'])) echo $_GET['ticketid']; else echo "0"; ?>">
+</div>
+<div class="modal-footer">
+    <button type="button" class="btn btn-default" data-dismiss="modal"><i class="fa fa-times"></i> <?php _e('Cancel'); ?></button>
+    <button type="submit" class="btn btn-primary"><i class="fa fa-check"></i> <?php _e('Create'); ?></button>
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function() {
+         $('.summernote-modal').summernote({height: 300});
+
+         $(".select2").select2();
+     });
+</script>

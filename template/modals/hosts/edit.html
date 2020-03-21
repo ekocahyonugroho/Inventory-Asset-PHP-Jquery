@@ -1,0 +1,40 @@
+<div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button><h4 class="modal-title"><?php _e('Edit Model'); ?></h4></div>
+<div class="modal-body">
+
+    <?php if($isAdmin) { ?>
+        <div class="form-group">
+            <label for="clientid" class="control-label"><?php _e('Client'); ?></label>
+                <select class="form-control select2 select2-hidden-accessible" id="clientid" name="clientid" style="width: 100%;" tabindex="-1" aria-hidden="true">
+                    <option value="0"><?php _e('None'); ?></option>
+                    <?php foreach ($clients as $client) { ?>
+                        <option value='<?php echo $client['id']; ?>' <?php if($client['id'] == $host['clientid']) echo "selected"; ?> ><?php echo $client['name']; ?></option>
+                    <?php } ?>
+                </select>
+        </div>
+    <?php } ?>
+    <?php if(!$isAdmin) { ?><input type="hidden" name="clientid" value="<?php echo $host['clientid']; ?>"><?php } ?>
+
+    <div class="form-group">
+        <label for="name" class="control-label"><?php _e('Name'); ?> *</label>
+            <input type="text" class="form-control" id="name" value="<?php echo $host['name']; ?>" name="name" required>
+    </div>
+
+    <div class="form-group">
+        <label for="address" class="control-label"><?php _e('Address'); ?> *</label>
+            <input type="text" class="form-control" id="address" value="<?php echo $host['address']; ?>" name="address" placeholder="<?php _e('IP Address or Hostname'); ?>" required>
+    </div>
+
+    <input type="hidden" name="id" value="<?php echo $host['id']; ?>">
+    <input type="hidden" name="action" value="editHost">
+    <input type="hidden" name="route" value="<?php echo $_GET['reroute']; ?>">
+    <input type="hidden" name="routeid" value="">
+    <input type="hidden" name="section" value="">
+</div>
+<div class="modal-footer">
+    <button type="button" class="btn btn-default" data-dismiss="modal"><i class="fa fa-times"></i> <?php _e('Cancel'); ?></button>
+    <button type="submit" class="btn btn-primary"><i class="fa fa-check"></i> <?php _e('Save'); ?></button>
+</div>
+
+<script type="text/javascript">
+		$(".select2").select2();
+</script>

@@ -1,0 +1,93 @@
+<!-- Right side column. Contains the navbar and content of the page -->
+<aside class="right-side">
+	<!-- Content Header (Page header) -->
+	<section class="content-header">
+		<h1 class="pull-left"><?php _e('Issues'); ?><small> <?php _e('Active issues'); ?></small></h1>
+		<div class="pull-right"><?php if(in_array("addIssue",$perms)) { ?><a onClick='showM("index.php?modal=issues/add&reroute=issues/active&routeid=&section=");return false' data-toggle="modal" class="btn btn-primary btn-sm"><i class="fa fa-tasks"></i> <?php _e('NEW ISSUE'); ?></a><?php } ?></div>
+		<div style="clear:both"></div>
+	</section>
+	<!-- Main content -->
+	<section class="content">
+		<?php if(!empty($statusmessage)): ?>
+				<div class="row"><div class='col-md-12'><div class="alert alert-<?php print $statusmessage["type"]; ?> alert-auto" role="alert"><?php print __($statusmessage["message"]); ?></div></div></div>
+		<?php endif; ?>
+		<div class="row">
+			<div class="col-xs-12">
+				<div class="box box-primary">
+                    <div class="box-body">
+						<div class="table-responsive">
+	                        <table id="dataTablesFullDesc" class="table table-striped table-hover">
+	                            <thead>
+	                                <tr>
+										<th><?php _e('ID'); ?></th>
+										<th class="no-sort" style="width:20px;"></th>
+										<th><?php _e('Name'); ?></th>
+										<th><?php _e('Assigned To'); ?></th>
+										<th><?php _e('Related Entities'); ?></th>
+										<th><?php _e('Status'); ?></th>
+										<th><?php _e('Due Date'); ?></th>
+										<th class="text-right"></th>
+	                                </tr>
+	                            </thead>
+								<tbody>
+									<?php foreach ($issues as $issue) { ?>
+										<tr>
+											<td><?php echo $issue['id']; ?></td>
+											<td>
+												<?php if($issue['priority'] == "High") echo "<i class='fa fa-flag fa-fw text-red' data-toggle='tooltip' title='".__("High priority")."'></i>&nbsp;"; ?>
+												<?php if($issue['priority'] == "Normal") echo "<i class='fa fa-flag fa-fw text-yellow' data-toggle='tooltip' title='".__("Normal priority")."'></i>&nbsp;"; ?>
+												<?php if($issue['priority'] == "Low") echo "<i class='fa fa-flag fa-fw text-blue' data-toggle='tooltip' title='".__("Low priority")."'></i>&nbsp;"; ?>
+
+												<?php if($issue['issuetype'] == "Task") echo "<i class='fa fa-check-square fa-fw text-blue' data-toggle='tooltip' title='".__("Task")."'></i>"; ?>
+												<?php if($issue['issuetype'] == "Maintenance") echo "<i class='fa fa-minus-square fa-fw text-yellow' data-toggle='tooltip' title='".__("Maintenance")."'></i>"; ?>
+												<?php if($issue['issuetype'] == "Bug") echo "<i class='fa fa-bug fa-fw text-red' data-toggle='tooltip' title='".__("Bug")."'></i>"; ?>
+												<?php if($issue['issuetype'] == "Improvement") echo "<i class='fa fa-external-link fa-fw text-teal' data-toggle='tooltip' title='".__("Improvement")."'></i>"; ?>
+												<?php if($issue['issuetype'] == "New Feature") echo "<i class='fa fa-plus-square fa-fw text-green' data-toggle='tooltip' title='".__("New Feature")."'></i>"; ?>
+												<?php if($issue['issuetype'] == "Story") echo "<i class='fa fa-circle fa-fw text-red' data-toggle='tooltip' title='".__("Story")."'></i>"; ?>
+											</td>
+											<td><?php if(in_array("editIssue",$perms)) { ?><a href="#" onClick='showM("index.php?modal=issues/edit&reroute=issues/active&routeid=&id=<?php echo $issue['id']; ?>&section=");return false'><?php echo $issue['name']; ?></a><?php } else echo $issue['name']; ?></td>
+											<td><?php if($issue['adminid'] != 0) echo getSingleValue("people","name",$issue['adminid']); else echo "<span class='text-muted'>".__("Nobody")."</span>"; ?></td>
+											<td>
+												<?php if($issue['clientid'] != 0) { ?>
+													<a href='<?php if(in_array("manageClient",$perms)) { ?>?route=clients/manage&id=<?php echo $issue['clientid']; ?><?php } else echo "#"; ?>'>
+														<span class='label' style="background-color:#FFF;color:#0073b7;border:1px solid #0073b7;"><?php echo getSingleValue("clients","name",$issue['clientid']); ?></span>
+													</a>&nbsp;
+												<?php } ?>
+
+												<?php if($issue['assetid'] != 0) { ?>
+													<a href='<?php if(in_array("manageAsset",$perms)) { ?>?route=inventory/assets/manage&id=<?php echo $issue['assetid']; ?><?php } else echo "#"; ?>'>
+														<span class='label' style="background-color:#FFF;color:#001F3F;border:1px solid #001F3F;"><i class='fa fa-barcode'></i> <?php echo getSingleValue("assets","tag",$issue['assetid']); ?> </span>
+													</a>&nbsp;
+												<?php } ?>
+
+												<?php if($issue['projectid'] != 0) { ?>
+													<a href='<?php if(in_array("manageProject",$perms)) { ?>?route=projects/manage&id=<?php echo $issue['projectid']; ?><?php } else echo "#"; ?>'>
+														<span class='label' style="background-color:#FFF;color:#ff851b;border:1px solid #ff851b;"><i class='fa fa-lightbulb-o'></i> <?php echo getSingleValue("projects","tag",$issue['projectid']); ?> </span>
+													</a>
+												<?php } ?>
+
+											</td>
+											<td>
+												<?php if($issue['status'] == "To Do") echo "<span class='badge bg-green'>".__("To Do")."</span>"; ?>
+												<?php if($issue['status'] == "In Progress") echo "<span class='badge bg-blue'>".__("In Progress")."</span>"; ?>
+												<?php if($issue['status'] == "Done") echo "<span class='badge bg-gray'>".__("Done")."</span>"; ?>
+												<?php if($issue['status'] != "Done" && $issue['duedate'] < date('Y-m-d') && $issue['duedate'] != "") echo "<span class='badge bg-red'>".__("Overdue")."</span>"; ?>
+											</td>
+											<td><?php if($issue['duedate'] != "") echo $issue['duedate']; else echo "<span class='text-muted'>".__("None")."</span>" ?></td>
+											<td>
+												<div class='pull-right'>
+	  											  <?php if(in_array("editIssue",$perms)) { ?><a href="#" onClick='showM("index.php?modal=issues/edit&reroute=issues/active&routeid=&id=<?php echo $issue['id']; ?>&section=");return false' class='btn-right text-dark'><i class='fa fa-edit'></i></a>&nbsp;<?php } ?>
+	  											  <?php if(in_array("deleteIssue",$perms)) { ?><a href="#" onClick='showM("index.php?modal=issues/delete&reroute=issues/active&routeid=&id=<?php echo $issue['id']; ?>&section=");return false' class='btn-right text-red'><i class='fa fa-trash-o'></i></a><?php } ?>
+	  										  	</div>
+											</td>
+										</tr>
+									<?php } ?>
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section><!-- /.content -->
+</aside><!-- /.right-side -->

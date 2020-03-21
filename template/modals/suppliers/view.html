@@ -1,0 +1,38 @@
+<div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button><h4 class="modal-title"><?php _e('View Supplier'); ?></h4></div>
+<div class="modal-body">
+
+
+    <table class="table table-bordered table-hover">
+            <tr>
+                <td class="text-bold"><?php _e('Name'); ?></td>
+                <td><?php echo $supplier['name']; ?></td>
+            </tr>
+            <tr>
+                <td class="text-bold"><?php _e('Contact Name'); ?></td>
+                <td><?php echo $supplier['contactname']; ?></td>
+            </tr>
+            <tr>
+                <td class="text-bold"><?php _e('Phone'); ?></td>
+                <td><?php echo $supplier['phone']; ?></td>
+            </tr>
+            <tr>
+                <td class="text-bold"><?php _e('Email Address'); ?></td>
+                <td><?php echo $supplier['email']; ?></td>
+            </tr>
+            <tr>
+                <td class="text-bold"><?php _e('Web Address'); ?></td>
+                <td><?php echo $supplier['web']; ?></td>
+            </tr>
+            <tr>
+                <td class="text-bold"><?php _e('Address'); ?></td>
+                <td><?php echo $supplier['address']; ?></td>
+            </tr>
+
+    </table>
+
+    <p><?php echo $supplier['notes']; ?></p>
+
+</div>
+<div class="modal-footer">
+    <button type="button" class="btn btn-default" data-dismiss="modal"><i class="fa fa-times"></i> <?php _e('Close'); ?></button>
+</div>
